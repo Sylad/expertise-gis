@@ -34,9 +34,10 @@ lots:
     finished: 2026-11-16
   - id: L4
     title: "Mécanique des écrans avec carte : les 13 invariants, les règles d'interface utilisable sur carte, gabarits de tests légende = rendu (D-1)"
-    status: todo
+    status: doing
     estimate: 0.5
     created: 2026-11-16
+    started: 2026-11-16
   - id: L5
     title: "Plugin Claude Code : skill qui sert les fiches et clés references: prêtes à copier dans le cadence.yaml d'un projet ; installable par les comptes perso et pro (D-1)"
     status: todo
