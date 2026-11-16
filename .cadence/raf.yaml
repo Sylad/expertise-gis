@@ -46,6 +46,7 @@ lots:
     estimate: 0.5
     created: 2026-11-16
     started: 2026-11-16
+    review: { date: 2026-11-16, verdict: "non conforme : 1 bloquant (bloc references: illisible par cadence, attend une liste de {mots, docs} avec fichiers locaux) + 1 majeur (chemin cache/<version> de --local)", commit: 2411ca8847ee07451b32eefb70616e134a86fe8a }
   - id: L6
     title: Reprendre les mémoires de dépannage d'un autre compte (GeoServer 8 entrées, OpenLayers 4) par l'échange entre sessions, au même format (D-1)
     status: todo
