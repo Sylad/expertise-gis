@@ -6,7 +6,7 @@ Une fiche par piège : symptôme, cause, détection, geste, version, source. Rie
 
 ## Contenu
 
-- `fiches/<domaine>/<slug>.md` — les fiches (`geoserver`, `postgis`, `sld`, `openlayers`, `maplibre`…), indexées par symptôme dans [`fiches/README.md`](fiches/README.md).
+- `fiches/<domaine>/<slug>.md` — les fiches (`geoserver`, `postgis`, `sld`, `openlayers`, `maplibre`…, et `symbologie/<sous-domaine>/` pour la symbologie OACI/OMM), indexées par symptôme dans [`fiches/README.md`](fiches/README.md).
 - `docs/format-fiche.md` — le format d'une fiche et les règles du dépôt public.
 - `tests/test_fiches.py` — vérifie chaque fiche (sections, statut, source, liens, index) et l'absence de termes privés dans tous les fichiers suivis.
 

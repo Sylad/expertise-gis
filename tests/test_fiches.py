@@ -27,6 +27,7 @@ RACINE = Path(__file__).resolve().parent.parent
 FICHES = RACINE / "fiches"
 DOCS = RACINE / "docs"
 INDEX = FICHES / "README.md"
+SYMBOLOGIE = FICHES / "symbologie"
 
 SECTIONS = [
     "Symptôme",
@@ -101,6 +102,23 @@ MOTIFS_CLIENT = {
 }
 
 
+# Symbologie (L3) : une citation de norme complète, et la preuve qu'elle a été
+# recontrôlée sur le texte pour une fiche « prouvé ».
+SOUS_DOMAINES_SYMBOLOGIE = ("sigwx", "fronts-et-centres", "station", "zones-d-avis")
+CITATION = {
+    "le paragraphe (§, ou note, table ou modèle numéroté)":
+        re.compile(r"§\s*\S|\b(?:note|Table|MODEL|Model)\s+[A-Z0-9]"),
+    "la page imprimée (« p. … »)": re.compile(r"\bpp?\.\s*[A-Z]?-?\d+"),
+    "la page PDF (« PDF n »)": re.compile(r"\bPDF\s+\d+"),
+    "la figure (« figure », « fig. » ou « planche »)": re.compile(r"(?i)\b(figure|fig\.|planche)"),
+}
+CITATION_VERIFIEE = re.compile(r"citation vérifiée le 20\d\d-\d\d-\d\d")
+
+
+def fiches_symbologie():
+    return sorted(SYMBOLOGIE.rglob("*.md"))
+
+
 def versions_vecues(texte, motif):
     """Majeures des versions citées avec « (vécu » ou « (code relu et mesure »."""
     return [int(m) for m in motif.findall(texte)]
@@ -113,8 +131,13 @@ class TestFiches(unittest.TestCase):
     def test_emplacement_et_nom(self):
         for f in fiches():
             with self.subTest(fiche=str(f.relative_to(RACINE))):
-                self.assertEqual(f.parent.parent, FICHES,
-                                 "une fiche vit dans fiches/<domaine>/")
+                if f.parent.parent == SYMBOLOGIE:
+                    self.assertRegex(f.parent.name + ".md", SLUG,
+                                     "sous-dossier de symbologie en kebab-case")
+                else:
+                    self.assertEqual(f.parent.parent, FICHES,
+                                     "une fiche vit dans fiches/<domaine>/ "
+                                     "(ou fiches/symbologie/<sous-domaine>/)")
                 self.assertRegex(f.name, SLUG, "slug en kebab-case minuscule")
 
     def test_format(self):
@@ -187,6 +210,48 @@ class TestFiches(unittest.TestCase):
                                     f"« prouvé » exige une version ≥ {minimum} vécue "
                                     "(« (vécu » ou « (code relu et mesure ») en Versions "
                                     "concernées ; sinon « à reprouver »")
+
+    def test_domaine_symbologie(self):
+        """L3 : la symbologie normalisée a ses fiches, rangées par sous-domaine."""
+        for sous in SOUS_DOMAINES_SYMBOLOGIE:
+            with self.subTest(sous_domaine=sous):
+                self.assertTrue(list((SYMBOLOGIE / sous).glob("*.md")),
+                                f"aucune fiche dans fiches/symbologie/{sous}/")
+
+    def test_source_symbologie_citation_complete(self):
+        """Une fiche de symbologie cite la norme : document, §, page imprimée
+        (« p. … »), page PDF (« PDF n ») et figure (ou « figure : aucune »)."""
+        for f in fiches_symbologie():
+            with self.subTest(fiche=str(f.relative_to(RACINE))):
+                _, contenu = sections(f.read_text(encoding="utf-8"))
+                source = contenu.get("Source", "")
+                for nom, motif in CITATION.items():
+                    self.assertRegex(source, motif, f"Source sans {nom}")
+
+    def test_prouve_symbologie_citation_verifiee(self):
+        """« prouvé » n'est permis que si la citation a été recontrôlée sur le
+        texte (« citation vérifiée le AAAA-MM-JJ ») : sinon « à reprouver »."""
+        for f in fiches_symbologie():
+            with self.subTest(fiche=str(f.relative_to(RACINE))):
+                _, contenu = sections(f.read_text(encoding="utf-8"))
+                if not contenu.get("Statut", "").startswith("prouvé"):
+                    continue
+                self.assertRegex(contenu.get("Source", ""), CITATION_VERIFIEE,
+                                 "« prouvé » exige « citation vérifiée le AAAA-MM-JJ » "
+                                 "en Source ; sinon « à reprouver »")
+
+    def test_motifs_de_citation(self):
+        bonne = ("WMO-No. 49 Vol. II, partie IV § 4.3.10, p. 189 (PDF 203), "
+                 "figure : Model SN ; citation vérifiée le 2026-11-16")
+        for nom, motif in CITATION.items():
+            with self.subTest(element=nom):
+                self.assertRegex(bonne, motif)
+        self.assertNotRegex("WMO-No. 49, page 189", CITATION["la page PDF (« PDF n »)"])
+        self.assertRegex("Table A6-1A, note 22, p. 143 (PDF 157)",
+                         CITATION["le paragraphe (§, ou note, table ou modèle numéroté)"])
+        self.assertNotRegex("WMO-No. 49, p. 143 (PDF 157)",
+                            CITATION["le paragraphe (§, ou note, table ou modèle numéroté)"])
+        self.assertNotRegex("citation vérifiée", CITATION_VERIFIEE)
 
     def test_versions_vecues_seules(self):
         """Une version citée « non vérifié », « relu » ou « documenté » ne compte

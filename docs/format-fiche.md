@@ -1,7 +1,8 @@
 # Format d'une fiche
 
 Une fiche décrit **un piège** : ce qu'on voit, pourquoi, comment le prouver, quoi faire.
-Elle vit dans `fiches/<domaine>/<slug>.md` (`geoserver`, `postgis`, `sld`, `openlayers`, `maplibre`, …), le slug en
+Elle vit dans `fiches/<domaine>/<slug>.md` (`geoserver`, `postgis`, `sld`, `openlayers`, `maplibre`, …), ou
+`fiches/symbologie/<sous-domaine>/<slug>.md` (`sigwx`, `fronts-et-centres`, `station`, `zones-d-avis`), le slug en
 kebab-case minuscule, et elle est listée dans l'index `fiches/README.md`, rangé par symptôme.
 
 Le test `tests/test_fiches.py` vérifie ce format pour chaque fiche.
@@ -61,6 +62,15 @@ compte pas (contrôlé par le test).
 
 ## Source
 Au moins un lien (doc officielle, ticket, code source) ou un « vécu » daté `AAAA-MM-JJ`.
+
+Fiches de **symbologie normalisée** (`fiches/symbologie/`, contrôlé par le test) : la Source cite
+le document, le **§** (ou, pour un tableau ou un modèle de carte, la `Table`, la `note` ou le
+`Model` numérotés), la **page imprimée** (`p. 189`, `p. A-453`) **et** la **page PDF** (`PDF 203`),
+et la **figure** (`figure : …`, ou `figure : aucune (règle de texte)`). La fiche dit ce que dit la
+norme et ses pièges de lecture, jamais comment un projet l'a codée ; elle résume la règle et ne
+recopie pas de longs extraits. Elle n'est « prouvé » que si la citation a été recontrôlée sur le
+texte — la Source le dit par « citation vérifiée le AAAA-MM-JJ » ; une citation reprise d'une
+étude sans contrôle sur le document donne « à reprouver ».
 
 ## Statut
 Première ligne : `prouvé` ou `à reprouver`, éventuellement suivi d'une raison.

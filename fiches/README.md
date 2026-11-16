@@ -130,3 +130,49 @@ Statut : ✅ prouvé · 🔁 à reprouver (établi sur une version ancienne, ou 
 
 - ✅ Traînées jamais effacées, effacement partiel, carte cassée après la couche → [couche-personnalisee-etat-gl-herite](maplibre/couche-personnalisee-etat-gl-herite.md)
 - ✅ Couche personnalisée invisible en globe, « 'PI' : redefinition » → [couche-personnalisee-globe-prelude-shader](maplibre/couche-personnalisee-globe-prelude-shader.md)
+
+## Symbologie normalisée : centres, fronts et lignes (WMO-No. 306 Att. IV)
+
+- ✅ Centre de pression en cercle, valeur abrégée, A/D refusé → [centre-de-pression-croix-lettre-dessus-valeur-dessous](symbologie/fronts-et-centres/centre-de-pression-croix-lettre-dessus-valeur-dessous.md)
+- ✅ Beaucoup de L, presque aucun H : seuil de détection pris pour une norme → [centre-de-pression-aucun-seuil-normalise](symbologie/fronts-et-centres/centre-de-pression-aucun-seuil-normalise.md)
+- ✅ Isobares à 1 002, 1 006… : 1 000 hPa hors de la série → [isobares-1000-hpa-dans-la-serie](symbologie/fronts-et-centres/isobares-1000-hpa-dans-la-serie.md)
+- ✅ Un seul glyphe de cyclone tropical, ou un troisième inventé → [cyclone-tropical-deux-glyphes-cherches-au-mauvais-paragraphe](symbologie/fronts-et-centres/cyclone-tropical-deux-glyphes-cherches-au-mauvais-paragraphe.md)
+- ✅ Thalweg en tireté, dorsale en trait simple → [thalweg-trait-plein-dorsale-en-zigzag](symbologie/fronts-et-centres/thalweg-trait-plein-dorsale-en-zigzag.md)
+- ✅ Front en altitude, frontogenèse ou frontolyse dessinés comme au sol → [front-en-altitude-genese-lyse-confondus-avec-le-front-de-surface](symbologie/fronts-et-centres/front-en-altitude-genese-lyse-confondus-avec-le-front-de-surface.md)
+- ✅ Maximum de vent marqué d'une croix au lieu de « J 120 » → [maximum-de-vent-j-sans-croix](symbologie/fronts-et-centres/maximum-de-vent-j-sans-croix.md)
+
+## Symbologie normalisée : modèle de station
+
+- ✅ Hampe de barbule qui pointe sous le vent (rotation de 180°) → [barbule-hampe-du-cote-ou-va-le-vent](symbologie/station/barbule-hampe-du-cote-ou-va-le-vent.md)
+- ✅ Barbules du mauvais côté, pas de miroir dans l'hémisphère sud → [barbules-a-gauche-de-la-hampe-dans-l-hemisphere-nord](symbologie/station/barbules-a-gauche-de-la-hampe-dans-l-hemisphere-nord.md)
+- ✅ Calme en cercle simple, vent manquant omis ou à zéro → [calme-et-vent-manquant](symbologie/station/calme-et-vent-manquant.md)
+- ✅ Station automatique sans triangle, temps présent lu en table 4677 → [station-automatique-triangle-autour-du-cercle](symbologie/station/station-automatique-triangle-autour-du-cercle.md)
+- ✅ Faux temps présent, ou case vide au lieu de « // » → [temps-present-case-vide-ou-double-barre](symbologie/station/temps-present-case-vide-ou-double-barre.md)
+- ✅ Pression en haut à droite, ou finissant toujours par 0 (QNH) → [pression-cellule-a-droite-du-cercle-mslp-pas-qnh](symbologie/station/pression-cellule-a-droite-du-cercle-mslp-pas-qnh.md)
+- ✅ Brouillard à 4 barres, éclair pour l'orage, verglas comme pluie → [symboles-de-temps-dessines-a-la-main](symbologie/station/symboles-de-temps-dessines-a-la-main.md)
+- 🔁 Ciel obscurci et nébulosité inconnue du même symbole → [nebulosite-9-et-barre-oblique-confondus](symbologie/station/nebulosite-9-et-barre-oblique-confondus.md)
+
+## Symbologie normalisée : SIGMET et avis (cyclones, cendres)
+
+- ✅ Zone SIGMET décalée de kilomètres sur les côtés longs → [sigmet-aretes-en-loxodromie](symbologie/zones-d-avis/sigmet-aretes-en-loxodromie.md)
+- ✅ Flèche de mouvement ET position prévue sur le même SIGMET → [sigmet-mouvement-ou-position-prevue-jamais-les-deux](symbologie/zones-d-avis/sigmet-mouvement-ou-position-prevue-jamais-les-deux.md)
+- 🔁 Zone amputée à la frontière de la FIR, ou demi-plan qui déborde → [sigmet-decoupe-par-la-fir-selon-la-forme](symbologie/zones-d-avis/sigmet-decoupe-par-la-fir-selon-la-forme.md)
+- 🔁 Deux disques « nuage radioactif » superposés, cyclone tronqué → [sigmet-cercle-radioactif-coupe-cyclone-non](symbologie/zones-d-avis/sigmet-cercle-radioactif-coupe-cyclone-non.md)
+- 🔁 Couleurs de SIGMET dites « conformes », TEST / EXER affichés comme réels → [sigmet-figures-du-guide-non-normatives-pour-l-affichage](symbologie/zones-d-avis/sigmet-figures-du-guide-non-normatives-pour-l-affichage.md)
+- ✅ Avis de cendres : tireté lu comme « prévu », « NO VA EXP » invisible → [avis-cendres-tirete-distingue-les-couches-pas-la-prevision](symbologie/zones-d-avis/avis-cendres-tirete-distingue-les-couches-pas-la-prevision.md)
+- ✅ Symbole de volcan centré à côté du cratère → [volcan-ancre-au-point-de-sa-base](symbologie/zones-d-avis/volcan-ancre-au-point-de-sa-base.md)
+- ✅ Cône d'incertitude présenté comme l'avis de cyclone OACI → [avis-cyclone-aucun-cone-dans-la-norme](symbologie/zones-d-avis/avis-cyclone-aucun-cone-dans-la-norme.md)
+- ✅ Intensité d'un cyclone qui change selon la source → [avis-cyclone-vent-moyen-sur-10-minutes](symbologie/zones-d-avis/avis-cyclone-vent-moyen-sur-10-minutes.md)
+
+## Symbologie normalisée : cartes SIGWX
+
+- ✅ Points haut / bas de tropopause hors pentagone → [tropopause-h-l-dans-un-pentagone](symbologie/sigwx/tropopause-h-l-dans-un-pentagone.md)
+- ✅ Axe de jet continu sous le symbole, paliers de 20 kt non marqués → [jet-trait-interrompu-et-double-barre-de-changement](symbologie/sigwx/jet-trait-interrompu-et-double-barre-de-changement.md)
+- ✅ Niveaux écrits « base – sommet » sur une ligne → [niveaux-sommet-au-dessus-de-la-base](symbologie/sigwx/niveaux-sommet-au-dessus-de-la-base.md)
+- ✅ Symbole de turbulence dans chaque zone, pas de clé en marge → [zone-de-turbulence-numero-encadre-et-cle-en-marge](symbologie/sigwx/zone-de-turbulence-numero-encadre-et-cle-en-marge.md)
+- ✅ Λ de turbulence trop pointu, chapeau de la forte détaché → [symbole-de-turbulence-proportions-model-sn](symbologie/sigwx/symbole-de-turbulence-proportions-model-sn.md)
+- 🔁 Cartouches qui se chevauchent ou couvrent un jet → [cartouches-dans-la-zone-sinon-renvoi-sans-recouvrement](symbologie/sigwx/cartouches-dans-la-zone-sinon-renvoi-sans-recouvrement.md)
+- 🔁 « 490 » affiché sur une carte FL250–450 au lieu de XXX → [xxx-niveau-hors-plage-de-la-planche](symbologie/sigwx/xxx-niveau-hors-plage-de-la-planche.md)
+- 🔁 Festons de CB inversés aux coins rentrants → [cb-feston-vers-l-exterieur-joint-aux-coins](symbologie/sigwx/cb-feston-vers-l-exterieur-joint-aux-coins.md)
+- 🔁 Ticks de la ligne de givrage vers l'extérieur → [givrage-ligne-t-ticks-cote-rempli](symbologie/sigwx/givrage-ligne-t-ticks-cote-rempli.md)
+- 🔁 Jet de l'hémisphère sud : fanions et étiquettes du mauvais côté → [jet-cote-des-fanions-et-ordre-des-etiquettes-selon-l-hemisphere](symbologie/sigwx/jet-cote-des-fanions-et-ordre-des-etiquettes-selon-l-hemisphere.md)

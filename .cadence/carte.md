@@ -37,3 +37,10 @@ Pas d'écran : un dépôt de fiches Markdown et un test.
 - `cluster-masque-la-regle-d-echelle` : `clusterMaxZoom` ≤ floor(seuil) − 1 (arrondi `Math.round` de l'option, tuiles GeoJSON de zoom `floor(Z)`, lu dans le code 5.24 et 6.18).
 - `denominateur-d-echelle-en-zoom-tuiles-512` : les 512 px sont la constante de la caméra (monde = 512 × 2^zoom), pas l'option `tileSize` d'une source.
 - La liste des termes privés vient de `EXPERTISE_GIS_TERMES_PRIVES` dans les sessions déléguées : pas de `.termes-prives` créé.
+
+## Décisions (L3, D-1, 2026-11-16)
+- 34 fiches de symbologie normalisée dans `fiches/symbologie/{fronts-et-centres,station,zones-d-avis,sigwx}/` (7 / 8 / 9 / 10 ; 25 prouvées, 9 à reprouver), tirées des cinq études de normes et de l'agent de symbologie ; 4 sections « Symbologie normalisée » dans l'index.
+- Une fiche = ce que dit la norme et son piège de lecture ; aucun nom de couche, style, service ou fichier de projet ; règles résumées, pas d'extraits longs.
+- Citations recontrôlées le 2026-11-16 avant « prouvé » : WMO-No. 49 Vol. II (2018 mise à jour 2021) par pdftotext sur une copie publique (page PDF = page imprimée + 14, toutes les pages citées vérifiées) ; WMO-No. 306 Att. IV (2019, sans copie publique) par le texte identique de l'appendice II-4 du Manuel du GDPFS, pagination 2019 reprise de l'étude. EUR Doc 014 (icao.int en 403) et guides WAFC / BUFR / SADIS (copies injoignables) : fiches « à reprouver ». Table 2700 : le texte public diffère de l'édition 2019 → « à reprouver ».
+- Test : `fiches/symbologie/<sous-domaine>/` admis par `test_emplacement_et_nom` (modifié) ; nouveaux `test_domaine_symbologie`, `test_source_symbologie_citation_complete` (§ ou note/Table/Model, `p. …`, `PDF n`, figure), `test_prouve_symbologie_citation_verifiee` (« citation vérifiée le AAAA-MM-JJ »), `test_motifs_de_citation`. Règle reportée dans `docs/format-fiche.md`.
+- Écartés : faits d'implémentation (plugin, SLD, décodeur, placement multi-échelles), cône NHC (pratique d'un producteur, citée seulement comme hors norme), TEMSI national et F215 (pas de norme), choix « maison » (seuil θ = 45° des festons, position du tick).
