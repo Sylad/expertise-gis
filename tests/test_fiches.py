@@ -320,6 +320,45 @@ class TestFiches(unittest.TestCase):
                 with self.subTest(fiche=str(f.relative_to(RACINE)), lien=lien):
                     self.assertTrue((f.parent / lien).resolve().exists(), "lien mort")
 
+    def test_regles_recontrolees_revue_l3(self):
+        """Règles corrigées après la revue de L3, recontrôlées sur le texte de la norme.
+
+        Chaque entrée : fiche, motifs exigés (règle de la norme), motifs interdits
+        (l'erreur relevée par la revue). Garde contre un retour de l'erreur.
+        """
+        cas = {
+            # Appendice II-4 § 1 (= WMO-306 Att. IV § 1) : PPPP sur la rangée de TTT et C_M,
+            # ppp puis a sur la rangée du cercle.
+            "station/pression-en-haut-a-droite-du-cercle-mslp-pas-qnh.md": (
+                [r"rangée de `TTT` et de `C_M`", r"`ppp` puis `a`"],
+                [r"sur la ligne du cercle", r"pression à dy ≈ 0"]),
+            # § 2.1 ddff : la hampe est dirigée vers le centre du cercle.
+            "station/barbules-a-gauche-de-la-hampe-dans-l-hemisphere-nord.md": (
+                [r"vers la station", r"aval du vent", r"vent d'ouest"],
+                [r"depuis la station vers son extrémité libre", r"vers l'amont"]),
+            # Model SN : cotes remesurées sur les tracés vectoriels du PDF.
+            "sigwx/symbole-de-turbulence-proportions-model-sn.md": (
+                [r"tracés vectoriels du PDF", r"mesure refaite le 20\d\d-\d\d-\d\d"],
+                [r"mesurés sur le dessin vectoriel par l'étude"]),
+            # WMO-49 § 4.3.1 : SWM entre FL 100 et FL 250 ; produit WAFC à part.
+            "sigwx/xxx-niveau-hors-plage-de-la-planche.md": (
+                [r"FL 100 et FL 250", r"§ 4\.3\.1"],
+                [r"FL100–450", r"FL250–450"]),
+            # § 4.2.4 : « J » suivi de la vitesse ; la croix n'est pas dans le texte.
+            "fronts-et-centres/maximum-de-vent-j-sans-croix.md": (
+                [r"le texte ne prévoit pas de croix"],
+                [r"sur une seule ligne, sans croix"]),
+        }
+        for chemin, (exiges, interdits) in cas.items():
+            fiche = SYMBOLOGIE / chemin
+            with self.subTest(fiche=chemin):
+                self.assertTrue(fiche.exists(), "fiche absente")
+                texte = fiche.read_text(encoding="utf-8")
+                for motif in exiges:
+                    self.assertRegex(texte, motif)
+                for motif in interdits:
+                    self.assertNotRegex(texte, motif)
+
     def test_format_documente(self):
         doc = DOCS / "format-fiche.md"
         self.assertTrue(doc.exists(), "docs/format-fiche.md manquant")

@@ -43,4 +43,13 @@ Pas d'écran : un dépôt de fiches Markdown et un test.
 - Une fiche = ce que dit la norme et son piège de lecture ; aucun nom de couche, style, service ou fichier de projet ; règles résumées, pas d'extraits longs.
 - Citations recontrôlées le 2026-11-16 avant « prouvé » : WMO-No. 49 Vol. II (2018 mise à jour 2021) par pdftotext sur une copie publique (page PDF = page imprimée + 14, toutes les pages citées vérifiées) ; WMO-No. 306 Att. IV (2019, sans copie publique) par le texte identique de l'appendice II-4 du Manuel du GDPFS, pagination 2019 reprise de l'étude. EUR Doc 014 (icao.int en 403) et guides WAFC / BUFR / SADIS (copies injoignables) : fiches « à reprouver ». Table 2700 : le texte public diffère de l'édition 2019 → « à reprouver ».
 - Test : `fiches/symbologie/<sous-domaine>/` admis par `test_emplacement_et_nom` (modifié) ; nouveaux `test_domaine_symbologie`, `test_source_symbologie_citation_complete` (§ ou note/Table/Model, `p. …`, `PDF n`, figure), `test_prouve_symbologie_citation_verifiee` (« citation vérifiée le AAAA-MM-JJ »), `test_motifs_de_citation`. Règle reportée dans `docs/format-fiche.md`.
-- Écartés : faits d'implémentation (plugin, SLD, décodeur, placement multi-échelles), cône NHC (pratique d'un producteur, citée seulement comme hors norme), TEMSI national et F215 (pas de norme), choix « maison » (seuil θ = 45° des festons, position du tick).
+- Écartés : faits d'implémentation (plugin, SLD, décodeur, placement multi-échelles), cône NHC (pratique d'un producteur, citée seulement comme hors norme), TEMSI national et F215 (pas de norme), choix d'implémentation non normatifs.
+
+## Décisions (correction de la revue L3, 2026-11-16)
+- Chaque correction relue sur le texte : appendice II-4 du Manuel du GDPFS (texte et figure rendue du § 1), WMO-No. 49 Vol. II 2018 mise à jour 2021 (pdftotext, tracés vectoriels du PDF). Bilan symbologie : 26 prouvées, 8 à reprouver.
+- Pression du modèle de station : `PPPP` sur la rangée de `TTT` et `C_M` (en haut à droite du cercle), `ppp` puis `a` sur la rangée du cercle ; fiche renommée `station/pression-en-haut-a-droite-du-cercle-mslp-pas-qnh`.
+- Barbules : la gauche se prend en regardant de l'extrémité libre vers la station (hampe « directed … towards the centre »), face à l'aval du vent ; exemple vent d'ouest → barbules au nord.
+- Turbulence (Model SN) : cotes remesurées sur les coordonnées des segments du PDF (hauteur 0,26 L, base 0,25 L, forte 0,52 L ; clé SWH 0,15 L) → reste « prouvé ».
+- XXX : règle tirée de WMO-49 § 4.3.1 (SWM FL 100–FL 250, SWH au-dessus de FL 250) et Model SN § 3.3 ; le guide WAFC n'est plus la source (hors norme, non recontrôlé) → « prouvé ».
+- `J 120` : « sans croix » écrit comme une déduction (le texte ne prévoit pas de croix).
+- Test : `test_regles_recontrolees_revue_l3` (motifs exigés / interdits par fiche corrigée).

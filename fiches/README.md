@@ -148,7 +148,7 @@ Statut : ✅ prouvé · 🔁 à reprouver (établi sur une version ancienne, ou 
 - ✅ Calme en cercle simple, vent manquant omis ou à zéro → [calme-et-vent-manquant](symbologie/station/calme-et-vent-manquant.md)
 - ✅ Station automatique sans triangle, temps présent lu en table 4677 → [station-automatique-triangle-autour-du-cercle](symbologie/station/station-automatique-triangle-autour-du-cercle.md)
 - ✅ Faux temps présent, ou case vide au lieu de « // » → [temps-present-case-vide-ou-double-barre](symbologie/station/temps-present-case-vide-ou-double-barre.md)
-- ✅ Pression en haut à droite, ou finissant toujours par 0 (QNH) → [pression-cellule-a-droite-du-cercle-mslp-pas-qnh](symbologie/station/pression-cellule-a-droite-du-cercle-mslp-pas-qnh.md)
+- ✅ Pression posée à droite du cercle (case de la tendance), ou finissant toujours par 0 (QNH) → [pression-en-haut-a-droite-du-cercle-mslp-pas-qnh](symbologie/station/pression-en-haut-a-droite-du-cercle-mslp-pas-qnh.md)
 - ✅ Brouillard à 4 barres, éclair pour l'orage, verglas comme pluie → [symboles-de-temps-dessines-a-la-main](symbologie/station/symboles-de-temps-dessines-a-la-main.md)
 - 🔁 Ciel obscurci et nébulosité inconnue du même symbole → [nebulosite-9-et-barre-oblique-confondus](symbologie/station/nebulosite-9-et-barre-oblique-confondus.md)
 
@@ -171,8 +171,8 @@ Statut : ✅ prouvé · 🔁 à reprouver (établi sur une version ancienne, ou 
 - ✅ Niveaux écrits « base – sommet » sur une ligne → [niveaux-sommet-au-dessus-de-la-base](symbologie/sigwx/niveaux-sommet-au-dessus-de-la-base.md)
 - ✅ Symbole de turbulence dans chaque zone, pas de clé en marge → [zone-de-turbulence-numero-encadre-et-cle-en-marge](symbologie/sigwx/zone-de-turbulence-numero-encadre-et-cle-en-marge.md)
 - ✅ Λ de turbulence trop pointu, chapeau de la forte détaché → [symbole-de-turbulence-proportions-model-sn](symbologie/sigwx/symbole-de-turbulence-proportions-model-sn.md)
+- ✅ « 300 » affiché sur une carte SWM (FL 100 – FL 250) au lieu de XXX → [xxx-niveau-hors-plage-de-la-planche](symbologie/sigwx/xxx-niveau-hors-plage-de-la-planche.md)
 - 🔁 Cartouches qui se chevauchent ou couvrent un jet → [cartouches-dans-la-zone-sinon-renvoi-sans-recouvrement](symbologie/sigwx/cartouches-dans-la-zone-sinon-renvoi-sans-recouvrement.md)
-- 🔁 « 490 » affiché sur une carte FL250–450 au lieu de XXX → [xxx-niveau-hors-plage-de-la-planche](symbologie/sigwx/xxx-niveau-hors-plage-de-la-planche.md)
 - 🔁 Festons de CB inversés aux coins rentrants → [cb-feston-vers-l-exterieur-joint-aux-coins](symbologie/sigwx/cb-feston-vers-l-exterieur-joint-aux-coins.md)
 - 🔁 Ticks de la ligne de givrage vers l'extérieur → [givrage-ligne-t-ticks-cote-rempli](symbologie/sigwx/givrage-ligne-t-ticks-cote-rempli.md)
 - 🔁 Jet de l'hémisphère sud : fanions et étiquettes du mauvais côté → [jet-cote-des-fanions-et-ordre-des-etiquettes-selon-l-hemisphere](symbologie/sigwx/jet-cote-des-fanions-et-ordre-des-etiquettes-selon-l-hemisphere.md)

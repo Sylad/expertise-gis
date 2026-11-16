@@ -9,14 +9,17 @@ tort.
 Att. IV § 2.1 `ddff` (répété au § 2.2 pour les vents en altitude) : fanions et barbules sont **à
 gauche de la hampe dans l'hémisphère nord** et **à droite dans l'hémisphère sud** ; barbules à
 **environ 120°** de la hampe ; fanion = triangle à base sur la hampe ; barbule 10 kt, demi-barbule
-5 kt, fanion 50 kt. Piège de lecture : « à gauche » se lit **en regardant le long de la hampe
-depuis la station vers son extrémité libre** (dos au vent, vers l'amont) ; avec la hampe vers le
-haut (vent du nord), les barbules sont donc à **droite de l'image**. Le côté dépend de la latitude
-de la station, pas d'un réglage global.
+5 kt, fanion 50 kt. Piège de lecture : la hampe est **dirigée vers le centre du cercle de
+station** (« directed … towards the centre of the station circle ») ; « à gauche » se prend donc
+**en regardant le long de la hampe, de son extrémité libre vers la station**, c'est-à-dire face à
+l'**aval du vent** (le vent dans le dos). Avec
+la hampe vers le haut (vent du nord, on regarde vers le sud), les barbules sont à **droite de
+l'image** (est) ; par vent d'ouest (on regarde vers l'est), elles sont **au nord** de la hampe.
+Le côté dépend de la latitude de la station, pas d'un réglage global.
 
 ## Détection
-Station HN, vent du nord : barbules côté est de l'icône ; même station placée en HS : côté
-ouest. Le jeu de symboles public de l'OGC (World Weather Symbols, `WindArrowNH_*` /
+Station HN, vent du nord : barbules côté est de l'icône ; vent d'ouest : côté nord ; même
+station placée en HS : côté ouest (vent du nord), côté sud (vent d'ouest). Le jeu de symboles public de l'OGC (World Weather Symbols, `WindArrowNH_*` /
 `WindArrowSH_*`) sert de témoin indépendant.
 
 ## Geste
@@ -30,7 +33,7 @@ WMO-No. 306 Vol. I.1, édition 2019, Attachment IV (pagination A-441 à A-456 = 
   p. A-451 (PDF 475) ; figure : exemples de barbules de la même page.
 - Texte identique : Manuel du GDPFS, appendice II-4 § 2.1 et § 2.2 — https://old.wmo.int/extranet/pages/prog/www/ISS/Meetings/IPET-DRMM_Beijing2015/Documents/IPET-DRMM-III_Doc11-5_GDPFS_Manual_Appendix_II-4.pdf
 - Témoin : https://github.com/OGCMetOceanDWG/WorldWeatherSymbols (dossier `ddff_WindArrows`).
-- citation vérifiée le 2026-11-16 sur le texte public de l'appendice II-4 (mot pour mot) ; pagination de l'édition 2019 relevée sur la page rendue le 2026-09-09.
+- citation vérifiée le 2026-11-16 sur le texte public de l'appendice II-4 (mot pour mot), règle de lecture recontrôlée le 2026-11-16 sur la phrase de la hampe du § 2.1 `ddff` ; pagination de l'édition 2019 relevée sur la page rendue le 2026-09-09.
 
 ## Statut
 prouvé
