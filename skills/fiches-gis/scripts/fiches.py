@@ -9,13 +9,20 @@ Deux commandes, sans dépendance :
       Affiche, de la plus pertinente à la moins, le statut (prouvé / à
       reprouver), le chemin local de la fiche et son titre.
 
-  fiches.py references [--domaines a,b] [--base URL | --local]
-      Écrit le bloc « references: » à copier dans le cadence.yaml d'un projet :
-      une entrée par domaine de fiches (geoserver, postgis, sld, openlayers,
-      maplibre, symbologie) et pour la mécanique des écrans avec carte
-      (ecrans-carte). Par défaut les adresses pointent sur le dépôt public
-      (stables d'une machine et d'un compte à l'autre) ; --local donne les
-      chemins de la copie installée sur cette machine.
+  fiches.py references [--domaines a,b] [--racine DOSSIER]
+      Écrit le bloc « references: » à copier dans le cadence.yaml d'un projet,
+      au format que lit cadence run : une liste de { mots: [...], docs: [...] },
+      une entrée par domaine (geoserver, postgis, sld, openlayers, maplibre,
+      symbologie, ecrans-carte). Quand un mot apparaît dans une demande, cadence
+      fait lire les docs ; un doc doit être un fichier présent sur la machine
+      (cadence écarte sans erreur une URL ou un fichier absent).
+      Les docs visent une copie stable : lancé depuis la copie installée du
+      plugin (…/plugins/cache/<place>/<plugin>/<version>/, purgée à chaque mise
+      à jour), le script écrit le clone de la place de marché
+      (…/plugins/marketplaces/<place>/), sans numéro de version ; lancé depuis
+      un clone ordinaire, ce clone. --racine impose un autre dossier. Un chemin
+      sous le dossier personnel s'écrit « ~/… » (le même sur toute machine).
+      Code 3 si un doc est absent de la racine choisie (le bloc est écrit quand même).
 
   fiches.py domaines
       Liste les domaines connus, avec leur nombre de fiches.
@@ -25,53 +32,69 @@ Le dépôt se trouve à partir de l'emplacement du script
 """
 
 import argparse
+import json
 import os
 import re
 import sys
 import unicodedata
 from pathlib import Path
 
-DEPOT_PUBLIC = "https://github.com/Sylad/expertise-gis/blob/main"
+# Le dépôt public (place de marché et plugin), pour l'installation.
+DEPOT_GITHUB = "Sylad/expertise-gis"
 
-# Un domaine = un dossier sous fiches/ (ou ecrans-carte/), et ce qu'il couvre.
-# Un dossier de fiches sans entrée ici fait échouer les tests : un domaine
-# ajouté au dépôt doit dire quand le lire.
+# Un domaine = un dossier sous fiches/ (ou ecrans-carte/), ce qu'il couvre, et les
+# mots qui, dans une demande, le font lire par cadence (comparés sans accents ni
+# casse, en mot entier). Un dossier de fiches sans entrée ici fait échouer les
+# tests : un domaine ajouté au dépôt doit dire quand le lire.
 DOMAINES = {
     "geoserver": (
         "fiches/geoserver",
         "GeoServer / GeoTools / GeoWebCache : WMS, styles, ImageMosaic, dimension TIME, "
         "catalogue JDBC, grappe, sécurité, modules Java",
+        ["geoserver", "geotools", "geowebcache", "gwc", "wms", "wmts", "wfs", "wcs", "imagemosaic", "getmap", "getcapabilities", "capabilities"],
     ),
     "postgis": (
         "fiches/postgis",
         "PostgreSQL / PostGIS / TimescaleDB : schémas, séquences, index, migrations",
+        ["postgis", "postgresql", "postgres", "timescaledb", "timescale"],
     ),
     "sld": (
         "fiches/sld",
         "SLD / SE : RasterSymbolizer, transformations de rendu, GetLegendGraphic, rotation de marques",
+        ["sld", "symbolizer", "rastersymbolizer", "getlegendgraphic", "colormap"],
     ),
     "openlayers": (
         "fiches/openlayers",
         "OpenLayers côté client : projections, sources WMS, couches vecteur, contrôles, performance",
+        ["openlayers"],
     ),
     "maplibre": (
         "fiches/maplibre",
         "MapLibre GL JS côté client : projection globe, styles portés d'un SLD, échelles, "
         "couches WebGL personnalisées, capture",
+        ["maplibre", "maplibre-gl"],
     ),
     "symbologie": (
         "fiches/symbologie",
         "Symbologie normalisée OACI / OMM : cartes SIGWX, fronts et centres, modèle de station, "
         "SIGMET et zones d'avis (norme, paragraphe, page et figure cités)",
+        ["sigwx", "temsi", "sigmet", "airmet", "gamet", "barbule", "barbules", "front", "fronts", "symbologie", "modèle de station"],
     ),
     "ecrans-carte": (
         "ecrans-carte",
         "Écran avec carte, toute bibliothèque : les 13 invariants (légende = rendu, unités, "
         "validité, temps, partage, export), interface utilisable, gabarits de tests",
+        ["carte", "cartes", "légende", "légendes", "globe", "couche", "couches"],
     ),
 }
 
 ICONES = {"prouvé": "✅", "à reprouver": "🔁"}
+
+# Les documents qu'un domaine fait lire. Les fiches : l'index par symptôme (le même
+# pour tous les domaines de fiches ; cadence ne lit qu'une fois un doc partagé) — un
+# domaine compte jusqu'à 51 fiches, l'index les range par symptôme et donne le chemin
+# de chacune. La mécanique des écrans : les invariants et les règles d'interface.
+DOCS_ECRANS = ["ecrans-carte/invariants.md", "ecrans-carte/interface.md"]
 
 
 def racine():
@@ -162,33 +185,69 @@ def taille(rac, nom):
     return "règles et gabarits"
 
 
-def references(rac, domaines=None, base=DEPOT_PUBLIC, local=False):
-    """Le bloc YAML « references: » pour les domaines demandés (tous par défaut)."""
+def docs_du_domaine(nom):
+    return ["fiches/README.md"] if DOMAINES[nom][0].startswith("fiches/") else DOCS_ECRANS
+
+
+def racine_stable(rac):
+    """La copie qui survit à une mise à jour du plugin.
+
+    Claude Code installe un plugin dans <config>/plugins/cache/<place>/<plugin>/<version>/
+    et purge ce dossier à la mise à jour ; le clone de la place de marché,
+    <config>/plugins/marketplaces/<place>/, garde son chemin. Un clone ordinaire est
+    rendu tel quel."""
+    parties = rac.parts
+    if len(parties) >= 5 and parties[-5:-3] == ("plugins", "cache"):
+        return Path(*parties[:-4]) / "marketplaces" / parties[-3]
+    return rac
+
+
+def raccourcir(chemin, accueil=None):
+    """« ~/… » sous le dossier personnel (le même texte d'une machine à l'autre)."""
+    accueil = Path(accueil or Path.home())
+    try:
+        return "~/" + chemin.relative_to(accueil).as_posix()
+    except ValueError:
+        return chemin.as_posix()
+
+
+def references(rac, domaines=None, racine_docs=None):
+    """Le bloc YAML « references: » de cadence pour les domaines demandés (tous par défaut).
+
+    Format lu par cadence run (aiguiller) : une liste de { mots: [...], docs: [...] }.
+    racine_docs : la copie que les docs visent (par défaut racine_stable(rac))."""
     noms = list(DOMAINES) if not domaines else domaines
     inconnus = [n for n in noms if n not in DOMAINES]
     if inconnus:
         raise ValueError(f"domaine(s) inconnu(s) : {', '.join(inconnus)} "
                          f"(connus : {', '.join(DOMAINES)})")
+    base = Path(racine_docs) if racine_docs else racine_stable(rac)
     lignes = [
         "# expertise-gis : pièges prouvés des outils de carte, une fiche par piège",
-        "# (symptôme, cause, détection, geste, version, source). Lire la fiche avant",
-        "# de diagnostiquer ; l'index fiches/README.md est rangé par symptôme.",
+        "# (symptôme, cause, détection, geste, version, source). Un mot de la liste",
+        "# dans la demande fait lire les docs à cadence run ; l'index est rangé par symptôme.",
         "references:",
     ]
     for nom in noms:
-        dossier, quand = DOMAINES[nom]
-        # Point d'entrée : l'index par symptôme pour les fiches, le README sinon.
-        entree = "fiches/README.md" if dossier.startswith("fiches/") else f"{dossier}/README.md"
-        adresse = (lambda chemin: (rac / chemin).as_posix()) if local else (
-            lambda chemin: f"{base.rstrip('/')}/{chemin}")
-        cle = "chemin" if local else "url"
+        _, quand, mots_cles = DOMAINES[nom]
+        docs = [raccourcir(base / d) for d in docs_du_domaine(nom)]
         lignes += [
-            f"  - nom: expertise-gis/{nom}",
-            f"    {cle}: {adresse(entree)}",
-            f"    dossier: {adresse(dossier)}",
-            f"    lire_quand: \"{quand} ({taille(rac, nom)})\"",
+            f"  # expertise-gis/{nom} : {quand} ({taille(rac, nom)})",
+            f"  - mots: {json.dumps(mots_cles, ensure_ascii=False)}",
+            f"    docs: {json.dumps(docs, ensure_ascii=False)}",
         ]
     return "\n".join(lignes) + "\n"
+
+
+def docs_absents(texte):
+    """Les docs du bloc qui ne sont pas des fichiers sur cette machine."""
+    absents = []
+    for ligne in texte.splitlines():
+        m = re.match(r"^    docs: (.+)$", ligne)
+        if m:
+            absents += [d for d in json.loads(m.group(1))
+                        if not Path(os.path.expanduser(d)).is_file()]
+    return absents
 
 
 def principal(argv=None):
@@ -199,9 +258,11 @@ def principal(argv=None):
     c.add_argument("--max", type=int, default=8)
     r = sous.add_parser("references", help="bloc references: pour cadence.yaml")
     r.add_argument("--domaines", default="", help="liste séparée par des virgules")
-    groupe = r.add_mutually_exclusive_group()
-    groupe.add_argument("--base", default=DEPOT_PUBLIC, help="adresse de base du dépôt")
-    groupe.add_argument("--local", action="store_true", help="chemins de la copie locale")
+    r.add_argument("--racine", default=None,
+                   help="copie visée par les docs (défaut : clone de la place de marché, "
+                        "ou ce clone)")
+    # Ancien nom (0.1.0) : écrit désormais la copie stable, comme le défaut.
+    r.add_argument("--local", action="store_true", help=argparse.SUPPRESS)
     sous.add_parser("domaines", help="domaines connus et nombre de fiches")
     args = p.parse_args(argv)
     rac = racine()
@@ -217,13 +278,20 @@ def principal(argv=None):
         return 0
     if args.commande == "references":
         domaines = [d.strip() for d in args.domaines.split(",") if d.strip()]
+        cible = Path(os.path.expanduser(args.racine)).resolve() if args.racine else None
         try:
-            sys.stdout.write(references(rac, domaines, args.base, args.local))
+            bloc = references(rac, domaines, cible)
         except ValueError as e:
             print(e, file=sys.stderr)
             return 2
+        sys.stdout.write(bloc)
+        absents = docs_absents(bloc)
+        if absents:
+            print("doc absent sur cette machine (cadence l'écarterait sans le dire) : "
+                  + ", ".join(absents), file=sys.stderr)
+            return 3
         return 0
-    for nom, (_, quand) in DOMAINES.items():
+    for nom, (_, quand, _) in DOMAINES.items():
         print(f"{nom:13} {taille(rac, nom):19} {quand}")
     return 0
 

@@ -14,7 +14,7 @@ Une fiche par piège : symptôme, cause, détection, geste, version, source. Rie
 - `.claude-plugin/` — le dépôt est à la fois une marketplace et un plugin Claude Code.
 - `docs/format-fiche.md` — le format d'une fiche et les règles du dépôt public.
 - `tests/test_fiches.py` — vérifie chaque fiche (sections, statut, source, liens, index) et l'absence de termes privés dans tous les fichiers suivis.
-- `tests/test_plugin.py` — vérifie les manifestes du plugin, le skill, la recherche par symptôme et le bloc `references:`.
+- `tests/test_plugin.py` — vérifie les manifestes du plugin, le skill, la recherche par symptôme et le bloc `references:`, passé à la fonction `aiguiller` de cadence quand son dépôt est à côté (`CADENCE_RACINE`) et Node présent.
 - `tests/test_ecrans_carte.py` — vérifie les 13 invariants et les règles sourcées d'`ecrans-carte/`, et fait tourner les gabarits (Python, et JavaScript par `node --test` si Node est présent).
 
 ```bash
@@ -42,7 +42,11 @@ python3 <dossier du skill>/scripts/fiches.py chercher capabilities lentes
 python3 <dossier du skill>/scripts/fiches.py references --domaines geoserver,sld,ecrans-carte
 ```
 
-Le bloc `references:` pointe par défaut sur le dépôt public (valable sur toute machine, à
-commiter) ; `--local` donne les chemins de la copie installée.
+Le bloc `references:` a le format que lit `cadence run` : une liste de
+`{ mots: [...], docs: [...] }` ; un mot de la liste dans une demande fait lire les `docs`.
+Ce sont des fichiers locaux (cadence écarte sans erreur une URL ou un fichier absent), pris
+dans le clone de la place de marché, `~/.claude/plugins/marketplaces/expertise-gis/` : sans
+numéro de version, il survit aux mises à jour du plugin. `--racine <dossier>` vise un autre
+clone ; le script sort avec le code 3 si un doc manque sur la machine.
 
 Termes privés (projets, machines, noms de société…) : aucun n'est écrit dans un fichier suivi par git. Le test les lit dans un fichier `.termes-prives` à la racine (une expression par ligne, ignoré par git) ou dans `EXPERTISE_GIS_TERMES_PRIVES="a,b"`. Sans liste, il échoue en disant quoi faire.
