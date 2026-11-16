@@ -34,10 +34,12 @@ lots:
     finished: 2026-11-16
   - id: L4
     title: "Mécanique des écrans avec carte : les 13 invariants, les règles d'interface utilisable sur carte, gabarits de tests légende = rendu (D-1)"
-    status: doing
+    status: done
     estimate: 0.5
     created: 2026-11-16
     started: 2026-11-16
+    review: { date: 2026-11-16, verdict: "conforme : 13 invariants fidèles, seuils WCAG/Android vérifiés sur leurs pages, gabarits corrigés (fb1be50, tests rouges avant), 45 tests verts, 0 terme privé ; non vérifié : mesurer() en navigateur, guides Material 3 / Apple HIG", commit: fb1be50f9a5d211d2e82cd8868d5dbc1bd28f0e6 }
+    finished: 2026-11-16
   - id: L5
     title: "Plugin Claude Code : skill qui sert les fiches et clés references: prêtes à copier dans le cadence.yaml d'un projet ; installable par les comptes perso et pro (D-1)"
     status: todo
