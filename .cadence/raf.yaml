@@ -24,9 +24,10 @@ lots:
     finished: 2026-11-16
   - id: L3
     title: "Fiches symbologie OACI / OMM (SIGWX, fronts, modèle de station, zones d'avis) extraites des agents de symbologie et des normes : figure et page citées (D-1)"
-    status: todo
+    status: doing
     estimate: 0.5
     created: 2026-11-16
+    started: 2026-11-16
   - id: L4
     title: "Mécanique des écrans avec carte : les 13 invariants, les règles d'interface utilisable sur carte, gabarits de tests légende = rendu (D-1)"
     status: todo
