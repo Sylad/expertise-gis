@@ -8,9 +8,10 @@ since: 2026-11-16 # raf check ignore les commits antérieurs à l'adoption
 lots:
   - id: L1
     title: "Fiches GeoServer / GeoTools / PostGIS / SLD extraites et triées des agents gis-expert et l’agent Java GeoServer et des mémoires GeoServer de Sylvain : génériques et prouvées seulement (D-1)"
-    status: todo
+    status: doing
     estimate: 0.5
     created: 2026-11-16
+    started: 2026-11-16
   - id: L2
     title: Fiches OpenLayers / MapLibre extraites de l'agent openlayers-expert, du skill sld-vers-maplibre et des mémoires front de carte (D-1)
     status: todo
