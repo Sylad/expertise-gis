@@ -24,13 +24,14 @@ lots:
     finished: 2026-11-16
   - id: L3
     title: "Fiches symbologie OACI / OMM (SIGWX, fronts, modèle de station, zones d'avis) extraites des agents de symbologie et des normes : figure et page citées (D-1)"
-    status: doing
+    status: done
     estimate: 0.5
     created: 2026-11-16
     started: 2026-11-16
-    review: { date: 2026-11-16, verdict: "non conforme : 2 majeurs (fiche pression du modèle de station : PPPP placée sur la ligne du cercle, la norme WMO-306 Att. IV la met en haut à droite ; fiche barbules : règle de lecture « à gauche » inversée) ; 0 fuite, pas d'extrait long, tests verts ; 4 mineurs dont une trace d'implémentation dans .cadence/carte.md ; rapport tmp/revues-16-11/L3-expertise-gis.md", commit: a8a19eb1ad720056b29cb307177fcf25bac53b54 }
+    review: { date: 2026-11-16, verdict: "conforme (passe 2) : 2 majeurs + 4 mineurs corrigés et recontrôlés sur l'appendice II-4 et WMO-49, 21 tests verts, 0 terme privé ; non vérifié : pagination WMO-306 2019, guides WAFC", commit: 6afd038ace173a1a7cc46915fefeb255e7ae5324 }
     notes:
       - { date: 2026-11-16, text: "16-11 soir : NON poussé (2 majeurs de revue) ; reprendre par un cadence run de correction avec le rapport en pièce et EXPERTISE_GIS_TERMES_PRIVES" }
+    finished: 2026-11-16
   - id: L4
     title: "Mécanique des écrans avec carte : les 13 invariants, les règles d'interface utilisable sur carte, gabarits de tests légende = rendu (D-1)"
     status: todo

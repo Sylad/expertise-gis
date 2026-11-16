@@ -1,38 +1,42 @@
 {
- "id": "D-1",
- "texte": "c'est bon on a le droit de lire nos depot eprso, on el fait déja pour cadence, meerkat etc...",
- "date": "2026-11-16",
- "etat": "ouverte",
- "preuve": "",
- "precisions": [
-  {
-   "date": "2026-11-16",
-   "texte": "Feu vert au dépôt commun expertise-gis (fiches GIS génériques lues par les sessions Claude de Sylvain). Seulement du savoir générique et prouvé, rien de propre à un projet ou à un employeur (fiche : piège, cause, détection, geste, version, source)."
-  },
-  {
-   "date": "2026-11-16",
-   "texte": "L1 livré : 62 fiches GeoServer/GeoTools/PostGIS/SLD dans fiches/, index par symptôme fiches/README.md, format docs/format-fiche.md, test tests/test_fiches.py (9 tests verts). La demande reste ouverte pour L2 à L7."
-  },
-  {
-   "date": "2026-11-16",
-   "texte": "L2 livré : 17 fiches OpenLayers (7) / MapLibre (10) dans fiches/openlayers et fiches/maplibre, indexées dans fiches/README.md ; test de version courante pour les bibliothèques client ; python3 -m unittest discover -s tests : 15 tests OK. La demande reste ouverte pour L3 à L7."
-  },
-  {
-   "date": "2026-11-16",
-   "texte": "L3 livré : 34 fiches de symbologie normalisée (OACI Annexe 3 / WMO-No. 49 Vol. II, WMO-No. 306 Att. IV, EUR Doc 014, guides WAFC) dans fiches/symbologie/{fronts-et-centres,station,zones-d-avis,sigwx}, indexées dans fiches/README.md ; 25 prouvées (citation recontrôlée le 2026-11-16), 9 à reprouver (source non recontrôlable ce jour) ; tests de citation ajoutés ; python3 -m unittest discover -s tests : 20 tests OK. La demande reste ouverte pour L4 à L7."
-  }
- ],
- "lots": [
-  "L1",
-  "L2",
-  "L3",
-  "L4",
-  "L5",
-  "L6",
-  "L7"
- ],
- "runs": [
-  "20261116150910-44395",
-  "20261116160149-1588978"
- ]
+  "id": "D-1",
+  "texte": "c'est bon on a le droit de lire nos depot eprso, on el fait déja pour cadence, meerkat etc...",
+  "date": "2026-11-16",
+  "etat": "ouverte",
+  "preuve": "",
+  "precisions": [
+    {
+      "date": "2026-11-16",
+      "texte": "Feu vert au dépôt commun expertise-gis (fiches GIS génériques lues par les sessions Claude de Sylvain). Seulement du savoir générique et prouvé, rien de propre à un projet ou à un employeur (fiche : piège, cause, détection, geste, version, source)."
+    },
+    {
+      "date": "2026-11-16",
+      "texte": "L1 livré : 62 fiches GeoServer/GeoTools/PostGIS/SLD dans fiches/, index par symptôme fiches/README.md, format docs/format-fiche.md, test tests/test_fiches.py (9 tests verts). La demande reste ouverte pour L2 à L7."
+    },
+    {
+      "date": "2026-11-16",
+      "texte": "L2 livré : 17 fiches OpenLayers (7) / MapLibre (10) dans fiches/openlayers et fiches/maplibre, indexées dans fiches/README.md ; test de version courante pour les bibliothèques client ; python3 -m unittest discover -s tests : 15 tests OK. La demande reste ouverte pour L3 à L7."
+    },
+    {
+      "date": "2026-11-16",
+      "texte": "L3 livré : 34 fiches de symbologie normalisée (OACI Annexe 3 / WMO-No. 49 Vol. II, WMO-No. 306 Att. IV, EUR Doc 014, guides WAFC) dans fiches/symbologie/{fronts-et-centres,station,zones-d-avis,sigwx}, indexées dans fiches/README.md ; 25 prouvées (citation recontrôlée le 2026-11-16), 9 à reprouver (source non recontrôlable ce jour) ; tests de citation ajoutés ; python3 -m unittest discover -s tests : 20 tests OK. La demande reste ouverte pour L4 à L7."
+    },
+    {
+      "date": "2026-11-16",
+      "texte": "Après la correction de L3 (6afd038) : symbologie 26 prouvées, 8 à reprouver ; 21 tests (le bilan « 25 prouvées, 9 à reprouver » et « 20 tests » plus haut date d'avant la revue)."
+    }
+  ],
+  "lots": [
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5",
+    "L6",
+    "L7"
+  ],
+  "runs": [
+    "20261116150910-44395",
+    "20261116160149-1588978"
+  ]
 }
