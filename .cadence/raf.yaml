@@ -66,3 +66,8 @@ lots:
     started: 2026-11-16
     review: { date: 2026-11-16, verdict: "conforme : frontend / front-end restent légers, front froid/chaud/occlus/stationnaire en complet, 72 tests verts, 0 terme privé ; notes : pluriels EN et « ligne de grains » non couverts", commit: 6fea2ced16073d79cf14efb8bd7e02564217579d }
     finished: 2026-11-16
+  - id: L9
+    title: "fiches.py references : écrire le bloc sous la forme unique de references: de cadence (L760, clé run:) — suite de la revue de L760 du 16-11"
+    status: todo
+    estimate: 0.1
+    created: 2026-11-16
