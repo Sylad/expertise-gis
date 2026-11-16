@@ -60,7 +60,9 @@ lots:
     created: 2026-11-16
   - id: L8
     title: "Mots de symbologie du bloc references: : « front » / « fronts » déclenchent le mode complet sur toute demande « frontend » — les remplacer par des expressions (front froid, front chaud, front occlus…) ; vu par la revue 2 de L5"
-    status: doing
+    status: done
     estimate: 0.1
     created: 2026-11-16
     started: 2026-11-16
+    review: { date: 2026-11-16, verdict: "conforme : frontend / front-end restent légers, front froid/chaud/occlus/stationnaire en complet, 72 tests verts, 0 terme privé ; notes : pluriels EN et « ligne de grains » non couverts", commit: 6fea2ced16073d79cf14efb8bd7e02564217579d }
+    finished: 2026-11-16
