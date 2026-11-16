@@ -12,6 +12,7 @@ lots:
     estimate: 0.5
     created: 2026-11-16
     started: 2026-11-16
+    review: { date: 2026-11-16, verdict: "non conforme : 2 bloquants (tests/test_fiches.py écrit en clair les termes privés qu'il doit interdire ; titre de L1 dans le plan cite un agent du projet privé) ; 4 majeurs (test des termes limité aux fiches ; fiche processfactory : cause fausse ; fiche endpoint-workspace-ignore-sld-body : GWC ignore SLD_BODY quelle que soit l'adresse ; fiche transformation-raster : version sans source)", commit: fd7d3efd82c6573e008b0b8f5804a4b9768df961 }
   - id: L2
     title: Fiches OpenLayers / MapLibre extraites de l'agent openlayers-expert, du skill sld-vers-maplibre et des mémoires front de carte (D-1)
     status: todo
