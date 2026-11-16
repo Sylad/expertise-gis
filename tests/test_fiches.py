@@ -150,6 +150,32 @@ class TestFiches(unittest.TestCase):
                                 "« prouvé » exige un lien en Source ou une version 3.x "
                                 "en Versions concernées ; sinon « à reprouver »")
 
+    def test_domaines_client(self):
+        """L2 : les bibliothèques de carte côté client ont leurs fiches."""
+        for domaine in ("openlayers", "maplibre"):
+            with self.subTest(domaine=domaine):
+                self.assertTrue(list((FICHES / domaine).glob("*.md")),
+                                f"aucune fiche dans fiches/{domaine}/")
+
+    def test_prouve_client_sur_version_courante(self):
+        """Un fait OpenLayers < 10 ou MapLibre < 5 est « à reprouver » : une fiche
+        client « prouvé » nomme la bibliothèque avec une version courante."""
+        regles = {
+            "openlayers": (re.compile(r"OpenLayers\s+v?(\d+)"), 10),
+            "maplibre": (re.compile(r"MapLibre(?:\s+GL\s+JS)?\s+v?(\d+)"), 5),
+        }
+        for domaine, (motif, minimum) in regles.items():
+            for f in sorted((FICHES / domaine).glob("*.md")):
+                with self.subTest(fiche=str(f.relative_to(RACINE))):
+                    _, contenu = sections(f.read_text(encoding="utf-8"))
+                    if not contenu.get("Statut", "").startswith("prouvé"):
+                        continue
+                    majeures = [int(m) for m in
+                                motif.findall(contenu.get("Versions concernées", ""))]
+                    self.assertTrue(majeures and max(majeures) >= minimum,
+                                    f"« prouvé » exige une version ≥ {minimum} citée en "
+                                    "Versions concernées ; sinon « à reprouver »")
+
     def test_statut_de_l_index_egal_a_la_fiche(self):
         index = INDEX.read_text(encoding="utf-8")
         for icone, lien in re.findall(r"^- (✅|🔁) .*\]\(([^)#\s]+\.md)\)", index, re.M):

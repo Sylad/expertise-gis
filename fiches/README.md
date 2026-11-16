@@ -97,3 +97,36 @@ Statut : ✅ prouvé · 🔁 à reprouver (établi sur une version ancienne, ou 
 - ✅ Bloc `DO` annulé en silence par un `ALTER SEQUENCE … OWNER` → [alter-sequence-owner-sequence-liee](postgis/alter-sequence-owner-sequence-liee.md)
 - ✅ « relation … already exists » après un RENAME TABLE → [rename-table-garde-les-noms-d-index](postgis/rename-table-garde-les-noms-d-index.md)
 - ✅ « cannot create a unique index without the column » sur une hypertable → [timescaledb-index-unique-sans-colonne-de-temps](postgis/timescaledb-index-unique-sans-colonne-de-temps.md)
+
+## Carte côté client : objets mal placés ou absents (OpenLayers, MapLibre)
+
+- ✅ Raster WMS en parallélogramme ou tuiles mal posées hors de EPSG:3857 → [source-wms-projection-de-la-vue](openlayers/source-wms-projection-de-la-vue.md)
+- ✅ Entités vecteur décalées dès que la vue n'est pas en EPSG:3857 → [entites-mal-placees-hors-3857](openlayers/entites-mal-placees-hors-3857.md)
+- ✅ Étiquette de zone posée hors de la forme → [etiquette-de-polygone-hors-de-la-forme](maplibre/etiquette-de-polygone-hors-de-la-forme.md)
+- ✅ Vue en EPSG:3035 ou autre : `View` en erreur, carte vide → [projection-personnalisee-non-enregistree](openlayers/projection-personnalisee-non-enregistree.md)
+- ✅ Couche vecteur cochée, visible, mais vide → [couche-vecteur-visible-mais-vide](openlayers/couche-vecteur-visible-mais-vide.md)
+- ✅ Globe demandé au constructeur, carte restée plate → [projection-globe-ignoree-au-constructeur](maplibre/projection-globe-ignoree-au-constructeur.md)
+
+## Carte côté client : interface (contrôles, popups, fiche au clic)
+
+- ✅ Popup en bas de page, contrôles disparus sous la carte → [css-absente-controles-sous-le-canvas](maplibre/css-absente-controles-sous-le-canvas.md)
+- ✅ Contrôles rangés par `target`, toujours superposés → [controles-hors-carte-restent-en-position-absolue](openlayers/controles-hors-carte-restent-en-position-absolue.md)
+- 🔁 Fiche au clic : `x.map is not a function`, propriété tableau reçue en chaîne → [proprietes-imbriquees-en-chaine-au-clic](maplibre/proprietes-imbriquees-en-chaine-au-clic.md)
+- ✅ Export ou image figée de la carte vide ou noire → [capture-du-canvas-vide](maplibre/capture-du-canvas-vide.md)
+- ✅ `new Map()` qui crée une carte au lieu d'un dictionnaire → [import-map-masque-map-global](openlayers/import-map-masque-map-global.md)
+
+## Carte côté client : style porté d'un SLD, échelles
+
+- ✅ Seuil d'échelle d'un SLD qui bascule un niveau trop tôt ou trop tard → [denominateur-d-echelle-en-zoom-tuiles-512](maplibre/denominateur-d-echelle-en-zoom-tuiles-512.md)
+- ✅ Tireté de SLD rendu continu ou démesuré → [line-dasharray-en-largeurs-de-trait](maplibre/line-dasharray-en-largeurs-de-trait.md)
+- ✅ Point et étiquette exigés à une échelle, seules des bulles visibles → [cluster-masque-la-regle-d-echelle](maplibre/cluster-masque-la-regle-d-echelle.md)
+
+## Carte côté client : animation et performance
+
+- ✅ Animation WMS : rafales de « source image could not be decoded » → [animation-wms-instants-sans-granule](maplibre/animation-wms-instants-sans-granule.md)
+- ✅ Carte figée au dézoom avec des milliers de points → [milliers-de-points-carte-figee](openlayers/milliers-de-points-carte-figee.md)
+
+## Carte côté client : couches WebGL personnalisées (MapLibre)
+
+- ✅ Traînées jamais effacées, effacement partiel, carte cassée après la couche → [couche-personnalisee-etat-gl-herite](maplibre/couche-personnalisee-etat-gl-herite.md)
+- ✅ Couche personnalisée invisible en globe, « 'PI' : redefinition » → [couche-personnalisee-globe-prelude-shader](maplibre/couche-personnalisee-globe-prelude-shader.md)

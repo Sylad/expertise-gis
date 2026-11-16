@@ -22,3 +22,11 @@ Pas d'écran : un dépôt de fiches Markdown et un test.
 - Titres du plan rendus génériques (L1, L2, L4, L6) ; registre `.cadence/demandes` laissé tel quel.
 - Fiches renommées : `gwc-integration-directe-ignore-sld-body` (condition = requête prise par GWC, pas l'adresse ; à reprouver), `dispatchercallback-init-service-et-requete-nuls` (les KVP sont déjà analysés à `init`).
 - `processfactory-bean-spring-seul-ignore` : deux voies (bean `GeoServerProcess` ramassé par `SpringBeanProcessFactory`, ou SPI).
+
+## Décisions (L2, D-1, 2026-11-16)
+- 17 fiches côté client : 7 `fiches/openlayers/`, 10 `fiches/maplibre/`, tirées de l'agent OpenLayers, du skill de portage SLD → MapLibre et des mémoires de carte ; 5 sections « Carte côté client » ajoutées à l'index.
+- Chaque fait de doc revérifié en ligne (doc OpenLayers 10.11, doc MapLibre GL JS 6.18, code source) ; chaque lien des fiches contrôlé (HTTP 200). Corrigé au passage : le positionnement des contrôles OpenLayers vient des classes d'`ol.css`, pas d'un style en ligne ; la fonction de mélange à l'entrée d'une couche personnalisée est `ONE, ONE_MINUS_SRC_ALPHA`.
+- Test : `test_domaines_client` (les deux domaines existent) et `test_prouve_client_sur_version_courante` (« prouvé » exige OpenLayers ≥ 10 ou MapLibre ≥ 5 cité en Versions concernées).
+- MapLibre GL JS 6 est la version publiée (6.18) : les faits vécus en 5.x restent « prouvé » (règle du lot : seul < 5 est à reprouver) et chaque fiche dit ce qui est vérifié ou non en 6.
+- « à reprouver » : propriétés imbriquées en chaîne au clic (mécanisme d'encodage non relu).
+- Écartés : WebGL générique sans lien à la bibliothèque (inversion du quad de ping-pong, anticrénelage des points, épaisseur HiDPI, algorithme de traînées), faits propres à un projet (table de correspondance d'identifiants de couches, couche activée par défaut dans un groupe replié, cible de build), goût (ombre du texte d'attribution), risques non mesurés (tuiles 256 contre 512), environnement (WebGL headless).

@@ -12,6 +12,10 @@
   {
    "date": "2026-11-16",
    "texte": "L1 livré : 62 fiches GeoServer/GeoTools/PostGIS/SLD dans fiches/, index par symptôme fiches/README.md, format docs/format-fiche.md, test tests/test_fiches.py (9 tests verts). La demande reste ouverte pour L2 à L7."
+  },
+  {
+   "date": "2026-11-16",
+   "texte": "L2 livré : 17 fiches OpenLayers (7) / MapLibre (10) dans fiches/openlayers et fiches/maplibre, indexées dans fiches/README.md ; test de version courante pour les bibliothèques client ; python3 -m unittest discover -s tests : 15 tests OK. La demande reste ouverte pour L3 à L7."
   }
  ],
  "lots": [
@@ -22,5 +26,8 @@
   "L5",
   "L6",
   "L7"
+ ],
+ "runs": [
+  "20261116150910-44395"
  ]
 }
