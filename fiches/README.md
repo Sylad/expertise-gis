@@ -100,7 +100,7 @@ Statut : ✅ prouvé · 🔁 à reprouver (établi sur une version ancienne, ou 
 
 ## Carte côté client : objets mal placés ou absents (OpenLayers, MapLibre)
 
-- ✅ Raster WMS en parallélogramme ou tuiles mal posées hors de EPSG:3857 → [source-wms-projection-de-la-vue](openlayers/source-wms-projection-de-la-vue.md)
+- 🔁 Raster WMS cisaillé ou tuiles mal posées hors de EPSG:3857 → [source-wms-projection-de-la-vue](openlayers/source-wms-projection-de-la-vue.md)
 - ✅ Entités vecteur décalées dès que la vue n'est pas en EPSG:3857 → [entites-mal-placees-hors-3857](openlayers/entites-mal-placees-hors-3857.md)
 - ✅ Étiquette de zone posée hors de la forme → [etiquette-de-polygone-hors-de-la-forme](maplibre/etiquette-de-polygone-hors-de-la-forme.md)
 - ✅ Vue en EPSG:3035 ou autre : `View` en erreur, carte vide → [projection-personnalisee-non-enregistree](openlayers/projection-personnalisee-non-enregistree.md)

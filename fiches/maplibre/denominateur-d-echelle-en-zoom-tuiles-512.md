@@ -6,8 +6,10 @@ dans MapLibre un niveau de zoom trop tôt ou trop tard : l'étiquette ou le symb
 à 1:2 500 000 au lieu de 1:5 000 000. Le seuil « calculé » ne correspond pas à ce qu'on voit.
 
 ## Cause
-Les niveaux de zoom de MapLibre sont définis sur des tuiles de **512 px** (taille de tuile
-par défaut, `tileSize: 512`) : à z0 la
+Le zoom de MapLibre est défini sur un monde de **512 px** à z0 : la taille du monde vaut
+`512 × 2^zoom` px, constante de la caméra (`tileSize = 512` dans `geo/transform_helper.ts`
+en 5.24, dans `geo/camera_state.ts` en 6.18), quelle que soit l'option `tileSize` des
+sources (celle-ci ne choisit que le zoom des tuiles chargées). À z0 la
 résolution à l'équateur vaut 40 075 016,686 / 512 = **78 271,517 m/px**. La valeur classique
 156 543,03 m/px correspond à des tuiles de 256 px et décale le résultat d'un niveau entier.
 Deuxième source d'écart : une expression `['zoom']` ne dépend pas de la latitude, alors que
@@ -29,11 +31,14 @@ par le nombre d'entités).
 - Annoncer un seuil seulement après l'avoir vu basculer dans un navigateur.
 
 ## Versions concernées
-MapLibre GL JS 5 (vécu, seuil vu basculer dans un navigateur) ; MapLibre GL JS 6 non
-vérifié (`tileSize` par défaut toujours 512 dans la spécification de style 6.x).
+MapLibre GL JS 5 (vécu, seuil vu basculer dans un navigateur) ; constante de 512 px relue
+dans le code de MapLibre GL JS 5.24 et 6.18.
 
 ## Source
-- https://maplibre.org/maplibre-style-spec/sources/ (`tileSize` : « Defaults to 512 »)
+- https://github.com/maplibre/maplibre-gl-js/blob/v5.24.0/src/geo/transform_helper.ts
+  (`this._tileSize = 512; // constant`, `worldSize = tileSize × scale`)
+- https://github.com/maplibre/maplibre-gl-js/blob/v6.18.0/src/geo/camera_state.ts
+  (`tileSize: 512`, `getWorldSize` = `tileSize × scale`)
 - https://www.ogc.org/standards/wms/ (WMS 1.3.0 et SLD 1.0 : pixel de rendu normalisé de 0,28 mm)
 - vécu 2026-09-17 (MapLibre GL JS 5, deux couches vecteur alignées sur leur SLD).
 

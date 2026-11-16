@@ -30,3 +30,10 @@ Pas d'écran : un dépôt de fiches Markdown et un test.
 - MapLibre GL JS 6 est la version publiée (6.18) : les faits vécus en 5.x restent « prouvé » (règle du lot : seul < 5 est à reprouver) et chaque fiche dit ce qui est vérifié ou non en 6.
 - « à reprouver » : propriétés imbriquées en chaîne au clic (mécanisme d'encodage non relu).
 - Écartés : WebGL générique sans lien à la bibliothèque (inversion du quad de ping-pong, anticrénelage des points, épaisseur HiDPI, algorithme de traînées), faits propres à un projet (table de correspondance d'identifiants de couches, couche activée par défaut dans un groupe replié, cible de build), goût (ombre du texte d'attribution), risques non mesurés (tuiles 256 contre 512), environnement (WebGL headless).
+
+## Décisions (correction de la revue L2, 2026-11-16)
+- `openlayers/source-wms-projection-de-la-vue` réécrite à partir du code d'OpenLayers 10.11.0 (fichiers et lignes cités) et d'une mesure scriptée des GetMap : projection égale ou absente = aucune reprojection client ; grille par défaut = celle de la vue ; un `tileGrid` sans `projection` sert pour toute vue (patchwork). L'ordre des axes (proj4 sans `+axis=neu` en WMS 1.3.0) reste une hypothèse pour le cisaillement vécu : fiche « à reprouver », 🔁 dans l'index.
+- `test_prouve_client_sur_version_courante` : ne compte que les versions suivies de « (vécu » ou « (code relu et mesure », et exige qu'au moins une soit courante (`any`, plus de `max()`) ; `test_versions_vecues_seules` teste ce filtre. Règle reportée dans `docs/format-fiche.md`.
+- `cluster-masque-la-regle-d-echelle` : `clusterMaxZoom` ≤ floor(seuil) − 1 (arrondi `Math.round` de l'option, tuiles GeoJSON de zoom `floor(Z)`, lu dans le code 5.24 et 6.18).
+- `denominateur-d-echelle-en-zoom-tuiles-512` : les 512 px sont la constante de la caméra (monde = 512 × 2^zoom), pas l'option `tileSize` d'une source.
+- La liste des termes privés vient de `EXPERTISE_GIS_TERMES_PRIVES` dans les sessions déléguées : pas de `.termes-prives` créé.

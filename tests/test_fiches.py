@@ -91,6 +91,21 @@ def sections(texte):
     return ordre, {k: "\n".join(v).strip() for k, v in resultat.items()}
 
 
+# Bibliothèques côté client : motif d'une version citée, et majeure minimale pour
+# « prouvé ». Une version ne compte que suivie de « (vécu » ou de « (code relu et
+# mesure » : « non vérifié », « documenté » ou « relu » seuls ne prouvent rien.
+SUFFIXE_VECU = r"(?:\.\d+)*\s*\((?:vécu|code relu et mesure)"
+MOTIFS_CLIENT = {
+    "openlayers": (re.compile(r"OpenLayers\s+v?(\d+)" + SUFFIXE_VECU), 10),
+    "maplibre": (re.compile(r"MapLibre(?:\s+GL\s+JS)?\s+v?(\d+)" + SUFFIXE_VECU), 5),
+}
+
+
+def versions_vecues(texte, motif):
+    """Majeures des versions citées avec « (vécu » ou « (code relu et mesure »."""
+    return [int(m) for m in motif.findall(texte)]
+
+
 class TestFiches(unittest.TestCase):
     def test_il_y_a_des_fiches(self):
         self.assertTrue(fiches(), "aucune fiche dans fiches/")
@@ -158,23 +173,33 @@ class TestFiches(unittest.TestCase):
                                 f"aucune fiche dans fiches/{domaine}/")
 
     def test_prouve_client_sur_version_courante(self):
-        """Un fait OpenLayers < 10 ou MapLibre < 5 est « à reprouver » : une fiche
-        client « prouvé » nomme la bibliothèque avec une version courante."""
-        regles = {
-            "openlayers": (re.compile(r"OpenLayers\s+v?(\d+)"), 10),
-            "maplibre": (re.compile(r"MapLibre(?:\s+GL\s+JS)?\s+v?(\d+)"), 5),
-        }
-        for domaine, (motif, minimum) in regles.items():
+        """Un fait établi seulement sur OpenLayers < 10 ou MapLibre < 5 est « à
+        reprouver » : une fiche client « prouvé » cite au moins une version
+        courante vécue (ou mesurée), pas seulement « non vérifié » ou « documenté »."""
+        for domaine, (motif, minimum) in MOTIFS_CLIENT.items():
             for f in sorted((FICHES / domaine).glob("*.md")):
                 with self.subTest(fiche=str(f.relative_to(RACINE))):
                     _, contenu = sections(f.read_text(encoding="utf-8"))
                     if not contenu.get("Statut", "").startswith("prouvé"):
                         continue
-                    majeures = [int(m) for m in
-                                motif.findall(contenu.get("Versions concernées", ""))]
-                    self.assertTrue(majeures and max(majeures) >= minimum,
-                                    f"« prouvé » exige une version ≥ {minimum} citée en "
-                                    "Versions concernées ; sinon « à reprouver »")
+                    vecues = versions_vecues(contenu.get("Versions concernées", ""), motif)
+                    self.assertTrue(any(v >= minimum for v in vecues),
+                                    f"« prouvé » exige une version ≥ {minimum} vécue "
+                                    "(« (vécu » ou « (code relu et mesure ») en Versions "
+                                    "concernées ; sinon « à reprouver »")
+
+    def test_versions_vecues_seules(self):
+        """Une version citée « non vérifié », « relu » ou « documenté » ne compte
+        pas : seules comptent celles suivies de « (vécu » ou « (code relu et mesure »."""
+        ol, ml = MOTIFS_CLIENT["openlayers"][0], MOTIFS_CLIENT["maplibre"][0]
+        self.assertEqual(versions_vecues(
+            "MapLibre GL JS 4 (vécu) ; MapLibre GL JS 6 non vérifié", ml), [4])
+        self.assertEqual(versions_vecues(
+            "MapLibre GL JS 5.24 (vécu, globe) ; MapLibre 6 documenté", ml), [5])
+        self.assertEqual(versions_vecues(
+            "OpenLayers 9 (vécu) ; OpenLayers 10.11 relu", ol), [9])
+        self.assertEqual(versions_vecues(
+            "OpenLayers 10.11.0 (code relu et mesure scriptée le 2026-11-16)", ol), [10])
 
     def test_statut_de_l_index_egal_a_la_fiche(self):
         index = INDEX.read_text(encoding="utf-8")

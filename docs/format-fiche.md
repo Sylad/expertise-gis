@@ -53,9 +53,11 @@ Le correctif, et sa preuve d'effet (la mesure de la détection qui change).
 ## Versions concernées
 Les versions exactes où le fait a été établi. Un fait établi sur une version ancienne
 (par exemple GeoServer 2.28 quand la version courante est 3.x) est marqué « à reprouver ».
-Pour les bibliothèques côté client, la fiche « prouvé » nomme la bibliothèque avec sa version
-(`OpenLayers 10`, `MapLibre GL JS 5`) : un fait établi seulement sur OpenLayers < 10 ou
-MapLibre < 5 est « à reprouver » (contrôlé par le test).
+Pour les bibliothèques côté client, la fiche « prouvé » nomme la bibliothèque avec une version
+courante suivie de « (vécu » ou « (code relu et mesure » (`OpenLayers 10 (vécu)`,
+`MapLibre GL JS 5.24 (vécu, …)`) : un fait établi seulement sur OpenLayers < 10 ou
+MapLibre < 5 est « à reprouver », et une version citée « non vérifié » ou « documenté » ne
+compte pas (contrôlé par le test).
 
 ## Source
 Au moins un lien (doc officielle, ticket, code source) ou un « vécu » daté `AAAA-MM-JJ`.
