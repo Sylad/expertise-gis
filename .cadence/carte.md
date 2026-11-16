@@ -83,3 +83,9 @@ Pas d'écran : un dépôt de fiches Markdown, la mécanique des écrans avec car
 - Chemins : `racine_stable` remplace `…/plugins/cache/<place>/<plugin>/<version>` par `…/plugins/marketplaces/<place>` (clone de la place de marché, sans version) ; un clone ordinaire reste tel quel ; `--racine` impose un dossier ; écrit en `~/…` sous le dossier personnel. `--local` gardé caché (même effet que le défaut). Code 3 si un doc est absent.
 - Test `TestLuParCadence` : le bloc écrit dans un `cadence.yaml` jetable, passé à la vraie `aiguiller` par Node (dépôt cadence : `CADENCE_RACINE` ou voisin `cadence`, sauté sinon) ; mode complet, docs retenus ; l'ancien format est refusé par cadence (témoin).
 - Hors lot : `cadence ref` (`src/config.ts`, `readReferencesConfig`) attend `references: { dir }`, incompatible avec la liste de `cadence run` ; le SKILL dit de ne pas coller sur un projet qui a la forme objet.
+
+## Décisions (L8, constat 1 de la revue L5 passe 2, 2026-11-16)
+- Mots du domaine `symbologie` : « front » et « fronts » seuls retirés (cadence coupe au tiret : « front-end », « refais le front de… » passaient en mode complet). Remplacés par des expressions FR et EN : front(s) froid(s) / chaud(s) / occlus / (quasi) stationnaire(s), cold / warm / occluded / stationary front, « symboles de fronts ». Les formes au pluriel sont listées à part : la comparaison de cadence est en mot entier.
+- Tests : `test_front_seulement_en_expression` (sans cadence) ; via la vraie `aiguiller`, `test_demande_frontend_ne_declenche_pas_la_symbologie` (frontend, front-end, front end, « le front de la page », « les fronts des deux applis » → léger) et `test_expressions_de_fronts_declenchent_la_symbologie`.
+- Version du plugin laissée à 0.1.0 (pas encore publiée sous une autre version).
+- Non traité (note de la revue, pas un constat) : « couche » / « carte » du domaine `ecrans-carte` restent larges, choix assumé pour un projet de carte.

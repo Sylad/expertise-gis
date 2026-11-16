@@ -78,7 +78,11 @@ DOMAINES = {
         "fiches/symbologie",
         "Symbologie normalisée OACI / OMM : cartes SIGWX, fronts et centres, modèle de station, "
         "SIGMET et zones d'avis (norme, paragraphe, page et figure cités)",
-        ["sigwx", "temsi", "sigmet", "airmet", "gamet", "barbule", "barbules", "front", "fronts", "symbologie", "modèle de station"],
+        ["sigwx", "temsi", "sigmet", "airmet", "gamet", "barbule", "barbules", "symbologie", "modèle de station",
+         # « front » seul attraperait « front-end » : des expressions seulement (revue L5).
+         "front froid", "fronts froids", "front chaud", "fronts chauds", "front occlus", "fronts occlus",
+         "front stationnaire", "fronts stationnaires", "front quasi stationnaire", "fronts quasi stationnaires",
+         "cold front", "warm front", "occluded front", "stationary front", "symboles de fronts"],
     ),
     "ecrans-carte": (
         "ecrans-carte",

@@ -201,6 +201,13 @@ class TestReferences(unittest.TestCase):
                 chemin = Path(os.path.expanduser(doc))
                 self.assertTrue(chemin.is_absolute() and chemin.is_file(), doc)
 
+    def test_front_seulement_en_expression(self):
+        """« front » / « fronts » seuls attrapent « front-end » (cadence coupe au tiret) : expressions seulement."""
+        for nom, (_, _, mots) in F.DOMAINES.items():
+            for m in mots:
+                with self.subTest(domaine=nom, mot=m):
+                    self.assertNotIn(F.normaliser(m), ("front", "fronts", "front-end", "frontend"))
+
     def test_mots_reperent_le_domaine(self):
         """Mots comparés comme cadence : sans accents ni casse, en mot entier."""
         par_nom = dict(zip(F.DOMAINES, entrees_references(self.bloc())))
@@ -317,6 +324,25 @@ class TestLuParCadence(unittest.TestCase):
     def test_demande_sans_mot_reste_legere(self):
         r = self.aiguiller(F.references(RACINE, racine_docs=RACINE), "corriger une faute dans le README")
         self.assertEqual(r["mode"], "leger", r)
+
+    def test_demande_frontend_ne_declenche_pas_la_symbologie(self):
+        """Revue L5 passe 2 : « front » seul faisait passer toute demande de frontend en mode complet."""
+        bloc = F.references(RACINE, racine_docs=RACINE)
+        for demande in ("corrige le frontend du login", "corrige le front-end du login",
+                        "le front end plante au démarrage", "refais le front de la page profil",
+                        "les fronts des deux applis divergent"):
+            with self.subTest(demande=demande):
+                r = self.aiguiller(bloc, demande)
+                self.assertEqual(r["mode"], "leger", r)
+
+    def test_expressions_de_fronts_declenchent_la_symbologie(self):
+        bloc = F.references(RACINE, racine_docs=RACINE)
+        for demande in ("le front froid est dessiné à l'envers", "les fronts chauds n'ont pas de demi-cercles",
+                        "front occlus mal orienté", "cold front symbols are reversed"):
+            with self.subTest(demande=demande):
+                r = self.aiguiller(bloc, demande)
+                self.assertEqual(r["mode"], "complet", r)
+                self.assertIn(F.raccourcir(RACINE / "fiches/README.md"), r["pieces"])
 
     def test_ancien_format_refuse_par_cadence(self):
         """Témoin : le format de la 0.1.0 (nom/url/dossier/lire_quand) faisait planter cadence."""
