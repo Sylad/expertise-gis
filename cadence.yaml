@@ -1,0 +1,3 @@
+# expertise-gis — porte de cadence run : le test de format des fiches (champs, termes interdits).
+orchestrate:
+  test: python3 -m unittest discover -s tests
