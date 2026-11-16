@@ -50,6 +50,7 @@ for (const option of OPTIONS.length ? OPTIONS : ['(aucune option)']) {
     const legende = legendeAffichee(option);
     if (!rempli(legende)) { t.skip('modèle non rempli'); return; }
     const seuils = legende.map(([s]) => s).filter((s) => typeof s === 'number');
+    if (!seuils.length) { t.skip('aucun seuil numérique (légende catégorielle)'); return; }
     const valeurs = valeursAutourDesSeuils(seuils, DECIMALES_AFFICHEES);
     assert.deepEqual(classesChangeesParArrondi(valeurs, seuils, afficher,
       classer ? (v) => classer(v, seuils) : (v) => classe(v, seuils)), []);

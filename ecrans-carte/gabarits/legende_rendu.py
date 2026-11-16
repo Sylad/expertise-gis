@@ -84,6 +84,8 @@ def entrees_depuis_sld(texte_sld):
     sortie = []
     for e in racine.iter():
         if e.tag.rsplit("}", 1)[-1] == "ColorMapEntry":
+            if e.get("quantity") is None:
+                raise ValueError(f"ColorMapEntry sans quantity : {ET.tostring(e, 'unicode')}")
             sortie.append((float(e.get("quantity")),
                            normaliser_couleur(e.get("color", "#000000"), e.get("opacity"))))
     if not sortie:

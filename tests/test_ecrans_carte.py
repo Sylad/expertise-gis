@@ -10,6 +10,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -113,6 +114,16 @@ class TestGabaritPython(unittest.TestCase):
         with self.assertRaises(ValueError):
             lr.entrees_depuis_sld("<ColorMap/>")
 
+    def test_entrees_sld_commentees_ignorees(self):
+        """Même résultat que le gabarit JS (gabarits.test.mjs) sur le même texte."""
+        commente = ('<ColorMap><!-- <ColorMapEntry color="#fff" quantity="5"/> -->'
+                    '<ColorMapEntry color="#000" quantity="10"/></ColorMap>')
+        self.assertEqual(lr.entrees_depuis_sld(commente), [(10.0, "#000000")])
+
+    def test_entree_sld_sans_quantity_refusee(self):
+        with self.assertRaisesRegex(ValueError, "quantity"):
+            lr.entrees_depuis_sld('<ColorMap><ColorMapEntry color="#000"/></ColorMap>')
+
     def test_ecarts_legende(self):
         attendu = lr.entrees_depuis_maplibre(STEP)
         self.assertEqual(lr.ecarts_legende(attendu, [(None, "#000"), (10, "#f00"), (20, "#0f0")]), [])
@@ -141,11 +152,11 @@ class TestGabaritPython(unittest.TestCase):
 class TestModelePython(unittest.TestCase):
     """Le modèle à copier saute à vide, passe rempli juste, échoue rempli faux."""
 
-    def _lancer(self, legende):
+    def _lancer(self, legende, expression=("step", ["get", "t"], "#00f", 273.15, "#f00")):
         modele = importlib.reload(importlib.import_module("modele_test_legende"))
-        modele.OPTIONS = ["K", "°C"]
+        modele.OPTIONS = list(legende)
         conversions = {"K": (lambda k: k, "K"), "°C": (lambda k: k - 273.15, "°C")}
-        modele.expression_couleur_du_rendu = lambda o: ["step", ["get", "t"], "#00f", 273.15, "#f00"]
+        modele.expression_couleur_du_rendu = lambda o: list(expression)
         modele.legende_affichee = lambda o: legende[o]
         modele.conversion_vers_l_unite_affichee = lambda o: conversions[o]
         modele.unite_affichee_par_la_legende = lambda o: o
@@ -175,6 +186,15 @@ class TestModelePython(unittest.TestCase):
         self.assertEqual(len(resultat.failures), 1)
         self.assertIn("seuil 273.15 dans la légende, 0.0 dans le rendu", resultat.failures[0][1])
 
+    def test_arrondi_saute_sans_seuil_numerique(self):
+        """Légende catégorielle (`match`) : le test d'arrondi est sauté, pas vert à vide."""
+        match = ["match", ["get", "k"], "a", "#f00", "#00f"]
+        resultat = self._lancer({"K": [("a", "#ff0000"), ("*", "#0000ff")]}, match)
+        self.assertTrue(resultat.wasSuccessful())
+        sautes = [str(t) for t, _ in resultat.skipped]
+        self.assertEqual(len(sautes), 1, sautes)
+        self.assertIn("arrondi", sautes[0])
+
 
 @unittest.skipUnless(shutil.which("node"), "node absent : gabarits JS non testés")
 class TestGabaritsJs(unittest.TestCase):
@@ -188,6 +208,62 @@ class TestGabaritsJs(unittest.TestCase):
                            capture_output=True, text=True)
         self.assertEqual(r.returncode, 0, r.stdout[-2000:] + r.stderr[-2000:])
         self.assertRegex(r.stdout, r"# skipped 3")
+
+
+@unittest.skipUnless(shutil.which("node"), "node absent : modèle JS non testé")
+class TestModeleJsRempli(unittest.TestCase):
+    """Le modèle JS, rempli dans une copie temporaire : juste → vert, faux → rouge,
+    légende catégorielle → arrondi sauté. Garde la condition `rempli` honnête."""
+
+    REMPLI = {
+        "const OPTIONS = [];": "const OPTIONS = ['K', '°C'];",
+        "const expressionCouleurDuRendu = (option) => NON_REMPLI;":
+            "const expressionCouleurDuRendu = (option) => EXPRESSION;",
+        "const legendeAffichee = (option) => NON_REMPLI;":
+            "const legendeAffichee = (option) => LEGENDES[option];",
+        "const conversionVersUniteAffichee = (option) => NON_REMPLI;":
+            "const conversionVersUniteAffichee = (option) => (option === 'K'"
+            " ? { conversion: (k) => k, unite: 'K' }"
+            " : { conversion: (k) => k - 273.15, unite: '°C' });",
+        "const uniteAfficheeParLaLegende = (option) => NON_REMPLI;":
+            "const uniteAfficheeParLaLegende = (option) => option;",
+        "const classer = null;": "const classer = (v, s) => classe(afficher(v), s);",
+    }
+
+    def _lancer(self, legendes, expression):
+        texte = (GABARITS / "modele-legende.test.mjs").read_text(encoding="utf-8")
+        for avant, apres in self.REMPLI.items():
+            self.assertIn(avant, texte, "le modèle JS a changé : mettre ce test à jour")
+            texte = texte.replace(avant, apres)
+        texte += f"\nconst EXPRESSION = {expression};\nconst LEGENDES = {legendes};\n"
+        with tempfile.TemporaryDirectory() as d:
+            shutil.copy(GABARITS / "legende-rendu.mjs", d)
+            Path(d, "modele-legende.test.mjs").write_text(texte, encoding="utf-8")
+            return subprocess.run(["node", "--test", "modele-legende.test.mjs"], cwd=d,
+                                  capture_output=True, text=True)
+
+    STEP_K = "['step', ['get', 't'], '#00f', 273.15, '#f00']"
+
+    def test_rempli_juste_passe(self):
+        r = self._lancer("{ K: [[null, '#0000ff'], [273.15, '#ff0000']],"
+                         " '°C': [[null, '#0000ff'], [0, '#ff0000']] }", self.STEP_K)
+        self.assertEqual(r.returncode, 0, r.stdout[-2000:] + r.stderr[-2000:])
+        self.assertRegex(r.stdout, r"# pass 6")
+        self.assertRegex(r.stdout, r"# skipped 0")
+
+    def test_rempli_faux_echoue(self):
+        r = self._lancer("{ K: [[null, '#0000ff'], [273.15, '#ff0000']],"
+                         " '°C': [[null, '#0000ff'], [273.15, '#ff0000']] }", self.STEP_K)
+        self.assertNotEqual(r.returncode, 0)
+        self.assertRegex(r.stdout, r"# fail 1")
+        self.assertIn("seuil 273.15 dans la légende, 0 dans le rendu", r.stdout)
+
+    def test_arrondi_saute_sans_seuil_numerique(self):
+        r = self._lancer("{ K: [['a', '#ff0000'], ['*', '#0000ff']],"
+                         " '°C': [['a', '#ff0000'], ['*', '#0000ff']] }",
+                         "['match', ['get', 'k'], 'a', '#f00', '#00f']")
+        self.assertEqual(r.returncode, 0, r.stdout[-2000:] + r.stderr[-2000:])
+        self.assertRegex(r.stdout, r"# skipped 2")
 
 
 if __name__ == "__main__":

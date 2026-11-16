@@ -2,19 +2,26 @@
 
 Règles à appliquer **en codant** un écran avec carte (couches, barre de temps, légende, fiche au
 clic), sur téléphone comme sur grand écran. Chaque nombre est un seuil tiré de la source citée
-dans la section, pas un goût. La charte de l'application (couleurs, typographie) reste la sienne.
+dans la section, pas un goût, sauf ceux marqués « * », qui sont un choix de ce document. La charte de l'application (couleurs, typographie) reste la sienne.
 
 ## 1. Une mise en page par largeur
 
 | Largeur de fenêtre | Mise en page |
 |---|---|
 | < 600 px | Carte plein écran ; panneaux (couches, fiche, réglages) dans une feuille en bas ; navigation en barre en bas. |
-| 600 – 839 px | Volets côte à côte (carte / panneau 50/50) ou rail de navigation latéral. |
-| ≥ 840 px | Volets côte à côte, carte / panneau 70/30. |
-| hauteur < 480 px (paysage) | Navigation en barre ; rien d'important sous le pli. |
+| 600 – 839 px | Volets côte à côte (carte / panneau 50/50)* ou rail de navigation latéral*. |
+| ≥ 840 px | Volets côte à côte, carte / panneau 70/30*. |
+| hauteur < 480 px (paysage) | Navigation en barre* ; rien d'important sous le pli. |
 
-Source : classes de taille de fenêtre (compact < 600, medium 600–839, expanded ≥ 840) —
-https://developer.android.com/develop/ui/compose/layouts/adaptive/use-window-size-classes
+Source : classes de taille de fenêtre (compact < 600, medium 600–839, expanded ≥ 840,
+hauteur compacte < 480) —
+https://developer.android.com/develop/ui/compose/layouts/adaptive/use-window-size-classes .
+Seuls ces seuils de largeur et de hauteur viennent de cette source.
+
+\* Choix de ce document, non tiré de la source : les partages 50/50 et 70/30 et le type
+de navigation (barre ou rail) par largeur. La page citée ne les donne pas, et les guides
+Material 3 qui pourraient les donner n'ont pas été relus ; à ajuster à la carte du projet,
+pas à recopier comme une norme.
 
 ## 2. Feuilles et fiche au clic
 

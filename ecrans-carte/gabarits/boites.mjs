@@ -10,6 +10,16 @@
 //   expect(ciblesTropPetites(cibles, 24)).toEqual([]);
 //
 // Une boîte est { nom, x, y, largeur, hauteur } en px CSS.
+//
+// Une liste mesurée vide (sélecteur qui ne trouve rien, capture du fond ratée) est
+// refusée par une exception : un contrôle sans mesure ne doit jamais passer au vert.
+
+function exigerMesure(liste, quoi) {
+  if (!Array.isArray(liste) || liste.length === 0) {
+    throw new Error(`${quoi} : rien de mesuré (sélecteur ou capture à vérifier)`);
+  }
+  return liste;
+}
 
 // Évaluée dans la page : boîtes visibles des éléments du sélecteur, avec leur texte
 // (ou aria-label) pour nommer chaque écart. Autonome, sans variable extérieure.
@@ -34,6 +44,7 @@ export function debordementHorizontal() {
 
 // Paires de boîtes dont l'intersection a une aire > 0 (bord commun permis).
 export function chevauchements(boites) {
+  exigerMesure(boites, 'aucune boîte');
   const sortie = [];
   for (let i = 0; i < boites.length; i += 1) {
     for (let j = i + 1; j < boites.length; j += 1) {
@@ -49,11 +60,11 @@ export function chevauchements(boites) {
 
 // Cibles plus petites que `minimum` px dans une dimension (24 = WCAG 2.5.8, 44 visés).
 export const ciblesTropPetites = (boites, minimum = 24) =>
-  boites.filter((b) => b.largeur < minimum || b.hauteur < minimum).map((b) => b.nom);
+  exigerMesure(boites, 'aucune boîte').filter((b) => b.largeur < minimum || b.hauteur < minimum).map((b) => b.nom);
 
 // Boîtes qui sortent de leur parent (texte coupé, contrôle hors du panneau).
 export const horsDuParent = (boites, parent) =>
-  boites
+  exigerMesure(boites, 'aucune boîte')
     .filter((b) => b.x < parent.x || b.y < parent.y
       || b.x + b.largeur > parent.x + parent.largeur
       || b.y + b.hauteur > parent.y + parent.hauteur)
@@ -85,4 +96,4 @@ export function contraste(c1, c2) {
 // Contraste le plus faible entre la bordure d'un contrôle et les pixels du fond de carte
 // mesurés autour de lui (capture lue à part, par exemple avec sharp ou un canvas).
 export const contrasteMinimal = (bordure, pixelsDuFond) =>
-  Math.min(...pixelsDuFond.map((p) => contraste(bordure, p)));
+  Math.min(...exigerMesure(pixelsDuFond, 'aucun pixel du fond').map((p) => contraste(bordure, p)));

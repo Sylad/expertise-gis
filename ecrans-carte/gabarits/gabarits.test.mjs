@@ -39,6 +39,19 @@ test('entrées SLD : attributs dans tout ordre, opacité gardée', () => {
   assert.throws(() => entreesDepuisSld('<sld:ColorMap/>'));
 });
 
+test('entrées SLD : les ColorMapEntry commentés sont ignorés, comme en Python', () => {
+  const commente = '<ColorMap><!-- <ColorMapEntry color="#fff" quantity="5"/> -->'
+    + '<ColorMapEntry color="#000" quantity="10"/></ColorMap>';
+  assert.deepEqual(entreesDepuisSld(commente), [[10, '#000000']]);
+  assert.throws(() => entreesDepuisSld('<ColorMap><!-- <ColorMapEntry color="#fff" quantity="5"/> --></ColorMap>'),
+    /aucun ColorMapEntry/);
+});
+
+test('entrées SLD : une entrée sans quantity est refusée (pas de NaN)', () => {
+  assert.throws(() => entreesDepuisSld('<ColorMap><ColorMapEntry color="#000"/></ColorMap>'),
+    /quantity/);
+});
+
 test('ecartsLegende : vide quand la légende suit le rendu, nommé sinon', () => {
   const attendu = entreesDepuisMaplibre(STEP);
   assert.deepEqual(ecartsLegende(attendu, [[null, '#000'], [10, '#f00'], [20, '#0f0']]), []);
@@ -80,4 +93,11 @@ test('contraste WCAG', () => {
   assert.ok(Math.abs(contraste([0, 0, 0], [255, 255, 255]) - 21) < 1e-9);
   assert.ok(Math.abs(contraste([119, 119, 119], [255, 255, 255]) - 4.48) < 0.01);
   assert.ok(contrasteMinimal([255, 255, 255], [[0, 0, 0], [240, 240, 240]]) < 3);
+});
+
+test('mesure vide : refusée, jamais verte sans mesure', () => {
+  assert.throws(() => contrasteMinimal([255, 255, 255], []), /aucun pixel/);
+  assert.throws(() => chevauchements([]), /aucune boîte/);
+  assert.throws(() => ciblesTropPetites([]), /aucune boîte/);
+  assert.throws(() => horsDuParent([], { x: 0, y: 0, largeur: 10, hauteur: 10 }), /aucune boîte/);
 });

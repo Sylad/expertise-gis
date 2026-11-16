@@ -57,15 +57,18 @@ export function entreesDepuisMaplibre(expression) {
   throw new Error(`expression de couleur non prise en charge : ${op}`);
 }
 
-// Lecture des ColorMapEntry d'un SLD / SE sans DOMParser (absent de Node) : chaque balise
-// est prise entière, puis ses attributs, dans n'importe quel ordre.
+// Lecture des ColorMapEntry d'un SLD / SE sans DOMParser (absent de Node) : les
+// commentaires XML sont ôtés (un parseur XML les ignore, comme legende_rendu.py), puis
+// chaque balise est prise entière, puis ses attributs, dans n'importe quel ordre.
 export function entreesDepuisSld(texteSld) {
   const sortie = [];
-  for (const balise of texteSld.matchAll(/<(?:[\w-]+:)?ColorMapEntry\b([^>]*)>/g)) {
+  const sansCommentaires = texteSld.replace(/<!--[\s\S]*?-->/g, '');
+  for (const balise of sansCommentaires.matchAll(/<(?:[\w-]+:)?ColorMapEntry\b([^>]*)>/g)) {
     const attrs = Object.fromEntries(
       [...balise[1].matchAll(/([\w:-]+)\s*=\s*("([^"]*)"|'([^']*)')/g)]
         .map((a) => [a[1], a[3] ?? a[4]]),
     );
+    if (attrs.quantity === undefined) throw new Error(`ColorMapEntry sans quantity : ${balise[0]}`);
     sortie.push([Number(attrs.quantity), normaliserCouleur(attrs.color ?? '#000000', attrs.opacity)]);
   }
   if (!sortie.length) throw new Error('aucun ColorMapEntry dans le style');

@@ -61,3 +61,10 @@ Pas d'écran : un dépôt de fiches Markdown, la mécanique des écrans avec car
 - `gabarits/` sans dépendance : `legende_rendu.py` et `legende-rendu.mjs` (même logique : entrées d'une expression MapLibre `step` / `interpolate` / `match` ou des `ColorMapEntry` d'un SLD, conversion d'unité, écarts nommés, valeur affichée dans la couleur d'une autre classe), modèles de test par option à remplir (sautés à vide, jamais verts à vide), `boites.mjs` (chevauchements, cibles, hors du panneau, fiche qui couvre l'objet, débordement, contraste WCAG).
 - Arrondi (invariant 2) : la fonction compare la classe qui choisit la couleur à la classe de la valeur affichée, avec le formatage du projet ; elle ne présume pas du remède (classer sur la valeur affichée, ou plus de décimales).
 - Test : `tests/test_ecrans_carte.py` (13 invariants dans l'ordre et complets, règles sourcées, seuils, liens, gabarits présentés, gabarit Python, modèle Python vide / juste / faux, gabarits JS par `node --test`, sauté sans Node).
+
+## Décisions (correction de la revue L4, 2026-11-16)
+- `boites.mjs` : `chevauchements`, `ciblesTropPetites`, `horsDuParent` et `contrasteMinimal` lèvent une exception sur une liste vide (plus d'`Infinity` ni de `[]` vert sans mesure).
+- `entreesDepuisSld` (JS) ôte les commentaires XML avant la lecture, comme ElementTree en Python ; une entrée sans `quantity` est refusée dans les deux langages (fini le NaN / TypeError).
+- Modèles de test : l'arrondi est sauté quand la légende n'a aucun seuil numérique (`match`).
+- `tests/test_ecrans_carte.py` : `TestModeleJsRempli` remplit une copie temporaire du modèle JS (juste → vert, faux → rouge, catégoriel → arrondi sauté).
+- `interface.md` : les partages 50/50, 70/30 et la navigation barre / rail sont marqués « * » comme choix du document (non tirés de la page Android citée ; Material 3 non relu).

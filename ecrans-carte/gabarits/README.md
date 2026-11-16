@@ -35,3 +35,10 @@ Fichiers sans dépendance, à copier dans le dépôt d'un projet. Chacun est tes
   choisir la couleur sur la valeur affichée, ou afficher plus de décimales.
 - Contraste : formule de la luminance relative et du rapport de contraste de WCAG 2.2
   (https://www.w3.org/TR/WCAG22/#dfn-relative-luminance).
+- Mesure vide : `chevauchements`, `ciblesTropPetites`, `horsDuParent` et `contrasteMinimal`
+  lèvent une exception sur une liste vide (sélecteur qui ne trouve rien, capture ratée) ;
+  un contrôle sans mesure n'est jamais vert.
+- SLD : les `ColorMapEntry` en commentaire sont ignorés et une entrée sans `quantity` est
+  refusée, en Python comme en JavaScript.
+- Arrondi : sans seuil numérique (légende catégorielle, `match`), le test d'arrondi des
+  modèles est sauté, pas vert à vide.

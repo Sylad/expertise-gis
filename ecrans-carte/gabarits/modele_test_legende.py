@@ -76,6 +76,8 @@ class TestLegendeEgaleRendu(unittest.TestCase):
             with self.subTest(option=option):
                 seuils = [s for s, _ in legende_affichee(option)
                           if isinstance(s, (int, float)) and not isinstance(s, bool)]
+                if not seuils:
+                    self.skipTest("aucun seuil numérique (légende catégorielle) : arrondi sans objet")
                 valeurs = valeurs_autour_des_seuils(seuils, DECIMALES_AFFICHEES)
                 fautes = classes_changees_par_arrondi(
                     valeurs, seuils, afficher,
