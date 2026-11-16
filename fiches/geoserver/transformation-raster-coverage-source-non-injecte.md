@@ -34,8 +34,9 @@ Pour une source raster, ce sont `invertGridGeometry` / `customizeReadParams` /
 [transformation-vecteur-invertquery](transformation-vecteur-invertquery.md).
 
 ## Versions concernées
-Introduit entre GeoServer 2.26.1 et 2.26.2 ; vérifié dans les sources GeoTools 35.1
-(GeoServer 3.0.1), logique de recherche par nom inchangée.
+Vu sur GeoServer 2.28 ; code relu en GeoTools 35.1 (GeoServer 3.0.1), recherche par nom
+présente. Versions antérieures non vérifiées : la recherche par `invertGridGeometry` /
+`invertQuery` est ancienne, le piège s'y applique probablement.
 
 ## Source
 - Code source : `org.geotools.process.factory.AnnotationDrivenProcessFactory#create`,

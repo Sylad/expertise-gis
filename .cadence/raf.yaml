@@ -7,14 +7,14 @@ prefix: L
 since: 2026-11-16 # raf check ignore les commits antérieurs à l'adoption
 lots:
   - id: L1
-    title: "Fiches GeoServer / GeoTools / PostGIS / SLD extraites et triées des agents gis-expert et l’agent Java GeoServer et des mémoires GeoServer de Sylvain : génériques et prouvées seulement (D-1)"
+    title: "Fiches GeoServer / GeoTools / PostGIS / SLD extraites et triées des agents d'expertise GIS et des mémoires de dépannage existantes : génériques et prouvées seulement (D-1)"
     status: doing
     estimate: 0.5
     created: 2026-11-16
     started: 2026-11-16
     review: { date: 2026-11-16, verdict: "non conforme : 2 bloquants (tests/test_fiches.py écrit en clair les termes privés qu'il doit interdire ; titre de L1 dans le plan cite un agent du projet privé) ; 4 majeurs (test des termes limité aux fiches ; fiche processfactory : cause fausse ; fiche endpoint-workspace-ignore-sld-body : GWC ignore SLD_BODY quelle que soit l'adresse ; fiche transformation-raster : version sans source)", commit: fd7d3efd82c6573e008b0b8f5804a4b9768df961 }
   - id: L2
-    title: Fiches OpenLayers / MapLibre extraites de l'agent openlayers-expert, du skill sld-vers-maplibre et des mémoires front de carte (D-1)
+    title: Fiches OpenLayers / MapLibre extraites des agents et skills de carte côté client et des mémoires front de carte (D-1)
     status: todo
     estimate: 0.5
     created: 2026-11-16
@@ -24,7 +24,7 @@ lots:
     estimate: 0.5
     created: 2026-11-16
   - id: L4
-    title: "Mécanique des écrans avec carte : les 13 invariants, le skill interface-utilisable, gabarits de tests légende = rendu (D-1)"
+    title: "Mécanique des écrans avec carte : les 13 invariants, les règles d'interface utilisable sur carte, gabarits de tests légende = rendu (D-1)"
     status: todo
     estimate: 0.5
     created: 2026-11-16
@@ -34,7 +34,7 @@ lots:
     estimate: 0.5
     created: 2026-11-16
   - id: L6
-    title: Reprendre les mémoires de dépannage du compte pro (GeoServer 8 entrées, OpenLayers 4) par la boîte entre-claudes, au même format (D-1)
+    title: Reprendre les mémoires de dépannage d'un autre compte (GeoServer 8 entrées, OpenLayers 4) par l'échange entre sessions, au même format (D-1)
     status: todo
     estimate: 0.5
     created: 2026-11-16

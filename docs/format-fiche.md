@@ -67,7 +67,8 @@ Un fait ni prouvé ni reprouvable n'a pas de fiche.
 
 - Rien de propre à un projet : ni nom de couche, d'espace de travail, de chart, de
   plugin maison, d'URL, de machine ; ni nom d'employeur ou de client.
-- Le test refuse une liste de termes publics ; les termes qu'on ne veut même pas écrire
-  ici (noms de société) se passent par `EXPERTISE_GIS_TERMES_PRIVES` (séparés par des
-  virgules) ou par un fichier `.termes-prives` à la racine, ignoré par git.
+- Aucun terme privé n'est écrit dans un fichier suivi par git, pas même dans le test.
+  Le test lit la liste dans un fichier `.termes-prives` à la racine (une expression par
+  ligne, ignoré par git) ou dans `EXPERTISE_GIS_TERMES_PRIVES` (séparés par des
+  virgules), et contrôle tous les fichiers suivis (`git ls-files`). Sans liste, il échoue.
 - Deux fiches qui décrivent le même piège sont fusionnées.

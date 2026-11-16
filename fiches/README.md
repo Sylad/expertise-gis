@@ -9,7 +9,7 @@ Statut : ✅ prouvé · 🔁 à reprouver (établi sur une version ancienne, ou 
 - 🔁 GetMap en erreur « No such resource: X.sld » avec `STYLES=` vide → [style-par-defaut-fichier-sld-absent](geoserver/style-par-defaut-fichier-sld-absent.md)
 - 🔁 Style listé par REST mais « StyleNotDefined » au rendu → [rest-style-cree-avec-raw-true-introuvable](geoserver/rest-style-cree-avec-raw-true-introuvable.md)
 - 🔁 Style modifié par REST, rendu avec l'ancienne version → [jdbcconfig-sld-disque-perime](geoserver/jdbcconfig-sld-disque-perime.md)
-- ✅ `SLD_BODY` sans effet, rendu avec le style par défaut → [endpoint-workspace-ignore-sld-body](geoserver/endpoint-workspace-ignore-sld-body.md)
+- 🔁 `SLD_BODY` sans effet, rendu avec le style par défaut → [gwc-integration-directe-ignore-sld-body](geoserver/gwc-integration-directe-ignore-sld-body.md)
 - 🔁 Image GeoTIFF rendue d'une seule couleur, sonde verte → [imagemosaic-suggestedspi-netcdf-sur-geotiff](geoserver/imagemosaic-suggestedspi-netcdf-sur-geotiff.md)
 - ✅ Image en trois bandes verticales répétées → [geotiff-multibande-planaire-bandes-repetees](geoserver/geotiff-multibande-planaire-bandes-repetees.md)
 - ✅ Flèches et barbules mal orientées hors de Web Mercator → [rotation-de-marque-azimut-vrai-hors-mercator](sld/rotation-de-marque-azimut-vrai-hors-mercator.md)
@@ -87,7 +87,7 @@ Statut : ✅ prouvé · 🔁 à reprouver (établi sur une version ancienne, ou 
 - 🔁 Transformations imbriquées : l'intérieure ne reçoit rien → [transformations-imbriquees-sans-injection](sld/transformations-imbriquees-sans-injection.md)
 - ✅ Processus absent des capabilities WPS, « Unable to find function » → [processfactory-bean-spring-seul-ignore](geoserver/processfactory-bean-spring-seul-ignore.md)
 - ✅ `MultipleBeansException`, `GWC.get()` nul, application qui ne démarre pas → [plugin-java-recherche-de-beans](geoserver/plugin-java-recherche-de-beans.md)
-- 🔁 `DispatcherCallback` qui ne se déclenche jamais → [dispatchercallback-init-avant-analyse-kvp](geoserver/dispatchercallback-init-avant-analyse-kvp.md)
+- 🔁 `DispatcherCallback` qui ne se déclenche jamais → [dispatchercallback-init-service-et-requete-nuls](geoserver/dispatchercallback-init-service-et-requete-nuls.md)
 - ✅ Messages INFO d'un module invisibles → [journal-plugin-hors-org-geoserver-filtre](geoserver/journal-plugin-hors-org-geoserver-filtre.md)
 
 ## PostgreSQL / PostGIS / TimescaleDB

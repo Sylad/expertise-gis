@@ -25,7 +25,7 @@ done
   (le cache `ResourcePool.wmsCache` remplacé par réflexion par une table qui enveloppe le client
   de chaque `WebMapServer` inséré) et réécrit l'URL amont avec le `TIME` lu dans
   `operationDispatched` (voir
-  [dispatchercallback-init-avant-analyse-kvp](dispatchercallback-init-avant-analyse-kvp.md)).
+  [dispatchercallback-init-service-et-requete-nuls](dispatchercallback-init-service-et-requete-nuls.md)).
   Fragile : dépend d'un champ privé.
 
 ## Versions concernées

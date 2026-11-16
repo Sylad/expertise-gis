@@ -14,8 +14,9 @@ garantie entre morceaux.
 Le message d'erreur ci-dessus à la création.
 
 ## Geste
-Clé composite qui inclut le temps, par exemple `PRIMARY KEY (ts, station_id)`. Une vue publiée
-dans GeoServer sur cette table expose ces colonnes avec `Expose primary keys` (voir
+Clé composite qui inclut le temps, par exemple `PRIMARY KEY (ts, station_id)`. Si la table est
+publiée directement dans GeoServer, les colonnes de cette clé ne sont exposées qu'avec
+`Expose primary keys` (voir
 [../geoserver/postgis-cle-primaire-non-exposee](../geoserver/postgis-cle-primaire-non-exposee.md)).
 
 ## Versions concernées
