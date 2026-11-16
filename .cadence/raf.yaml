@@ -1,0 +1,8 @@
+# Plan « reste à faire » tenu par raf (https://github.com/Sylad/cadence).
+# Édité par le CLI, mais les modifications à la main et les commentaires sont préservés.
+# Un commit appartient à un lot quand son message cite l'identifiant (L3, L3/t1).
+version: 1
+project: "expertise-gis"
+prefix: L
+since: 2026-11-16       # raf check ignore les commits antérieurs à l'adoption
+lots: []
