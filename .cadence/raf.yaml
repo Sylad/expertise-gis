@@ -42,11 +42,12 @@ lots:
     finished: 2026-11-16
   - id: L5
     title: "Plugin Claude Code : skill qui sert les fiches et clés references: prêtes à copier dans le cadence.yaml d'un projet ; installable par les comptes perso et pro (D-1)"
-    status: doing
+    status: done
     estimate: 0.5
     created: 2026-11-16
     started: 2026-11-16
-    review: { date: 2026-11-16, verdict: "non conforme : 1 bloquant (bloc references: illisible par cadence, attend une liste de {mots, docs} avec fichiers locaux) + 1 majeur (chemin cache/<version> de --local)", commit: 2411ca8847ee07451b32eefb70616e134a86fe8a }
+    review: { date: 2026-11-16, verdict: "conforme (passe 2) : le vrai aiguiller de cadence lit le bloc, chemin --local sans version survit à une mise à jour, 69 tests verts, 0 terme privé ; non vérifié : installation et mise à jour réelles depuis GitHub", commit: 162428d4e2ae9c8f87affba32744eb384910ae6e }
+    finished: 2026-11-16
   - id: L6
     title: Reprendre les mémoires de dépannage d'un autre compte (GeoServer 8 entrées, OpenLayers 4) par l'échange entre sessions, au même format (D-1)
     status: todo
@@ -56,4 +57,9 @@ lots:
     title: "Banc : 20 questions à réponse connue, session sans puis avec les fiches ; garder les fiches seulement si elles font gagner (D-1)"
     status: todo
     estimate: 0.5
+    created: 2026-11-16
+  - id: L8
+    title: "Mots de symbologie du bloc references: : « front » / « fronts » déclenchent le mode complet sur toute demande « frontend » — les remplacer par des expressions (front froid, front chaud, front occlus…) ; vu par la revue 2 de L5"
+    status: todo
+    estimate: 0.1
     created: 2026-11-16
