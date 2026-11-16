@@ -20,6 +20,7 @@ lots:
     estimate: 0.5
     created: 2026-11-16
     started: 2026-11-16
+    review: { date: 2026-11-16, verdict: "non conforme : 1 majeur — fiches/openlayers/source-wms-projection-de-la-vue.md : cause « prouvée » contredite par le code OL 10 (pas de reprojection client quand les projections sont équivalentes ; grille par défaut tirée de la projection de la vue) ; 0 fuite ; mineurs : test_prouve_client_sur_version_courante (ne compter que les versions vécues), clusterMaxZoom à seuil fractionnaire, source 512 px de la fiche d'échelle, max() du test", commit: 58600f692c2999d1f72c7994d726eb09d783dac0 }
   - id: L3
     title: "Fiches symbologie OACI / OMM (SIGWX, fronts, modèle de station, zones d'avis) extraites des agents de symbologie et des normes : figure et page citées (D-1)"
     status: todo
