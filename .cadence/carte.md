@@ -1,6 +1,6 @@
 # Carte du dépôt expertise-gis
 
-Pas d'écran : un dépôt de fiches Markdown et un test.
+Pas d'écran : un dépôt de fiches Markdown, la mécanique des écrans avec carte (`ecrans-carte/`, gabarits de tests compris) et leurs tests.
 
 ## Structure
 - `fiches/<domaine>/<slug>.md` : une fiche par piège (format `docs/format-fiche.md` : titre, Symptôme, Cause, Détection, Geste, Versions concernées, Source, Statut).
@@ -53,3 +53,11 @@ Pas d'écran : un dépôt de fiches Markdown et un test.
 - XXX : règle tirée de WMO-49 § 4.3.1 (SWM FL 100–FL 250, SWH au-dessus de FL 250) et Model SN § 3.3 ; le guide WAFC n'est plus la source (hors norme, non recontrôlé) → « prouvé ».
 - `J 120` : « sans croix » écrit comme une déduction (le texte ne prévoit pas de croix).
 - Test : `test_regles_recontrolees_revue_l3` (motifs exigés / interdits par fiche corrigée).
+
+## Décisions (L4, D-1, 2026-11-16)
+- `ecrans-carte/` hors de `fiches/` : ce sont des règles d'écran et des gabarits, pas des pièges d'un outil ; le format de fiche (Symptôme… Statut) ne s'y applique pas. Renvoi depuis `README.md` et `fiches/README.md`.
+- `invariants.md` : les 13 invariants d'un écran avec carte, chacun avec Symptôme, Cause, Contrôle et fiches liées quand il y en a ; écrits sans rien de propre à un projet.
+- `interface.md` : six familles de règles d'interface sur carte, chacune avec sa source liée (classes de taille de fenêtre, feuilles du bas, WCAG 2.2 par critère, MDN, NN/g, Crameri et al. 2020), et les contrôles sur la vraie page (largeurs, axe-core, mesure des boîtes, contraste sur fond WebGL, captures).
+- `gabarits/` sans dépendance : `legende_rendu.py` et `legende-rendu.mjs` (même logique : entrées d'une expression MapLibre `step` / `interpolate` / `match` ou des `ColorMapEntry` d'un SLD, conversion d'unité, écarts nommés, valeur affichée dans la couleur d'une autre classe), modèles de test par option à remplir (sautés à vide, jamais verts à vide), `boites.mjs` (chevauchements, cibles, hors du panneau, fiche qui couvre l'objet, débordement, contraste WCAG).
+- Arrondi (invariant 2) : la fonction compare la classe qui choisit la couleur à la classe de la valeur affichée, avec le formatage du projet ; elle ne présume pas du remède (classer sur la valeur affichée, ou plus de décimales).
+- Test : `tests/test_ecrans_carte.py` (13 invariants dans l'ordre et complets, règles sourcées, seuils, liens, gabarits présentés, gabarit Python, modèle Python vide / juste / faux, gabarits JS par `node --test`, sauté sans Node).

@@ -3,6 +3,9 @@
 Une fiche par piège, au format de [`docs/format-fiche.md`](../docs/format-fiche.md).
 Statut : ✅ prouvé · 🔁 à reprouver (établi sur une version ancienne, ou cause non démontrée).
 
+Les règles d'un écran avec carte (les 13 invariants, l'interface utilisable sur carte, les
+gabarits de tests légende = rendu) sont dans [`ecrans-carte/`](../ecrans-carte/README.md).
+
 ## La carte n'affiche rien, ou une image fausse
 
 - ✅ Le client dit « image cannot be decoded », la sonde voit 200 → [erreur-wms-http-200-en-xml](geoserver/erreur-wms-http-200-en-xml.md)
