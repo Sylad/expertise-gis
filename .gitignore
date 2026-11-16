@@ -1,1 +1,3 @@
 .playwright-mcp/
+.termes-prives
+__pycache__/
