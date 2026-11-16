@@ -1,0 +1,15 @@
+{
+  "name": "expertise-gis",
+  "owner": { "name": "Sylvain Ladoire" },
+  "metadata": {
+    "description": "Le dépôt expertise-gis sert à la fois de marketplace et de plugin."
+  },
+  "plugins": [
+    {
+      "name": "expertise-gis",
+      "source": "./",
+      "description": "Fiches de pièges prouvés des outils de carte et mécanique des écrans avec carte, servies par le skill fiches-gis.",
+      "version": "0.1.0"
+    }
+  ]
+}

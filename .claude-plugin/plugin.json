@@ -1,0 +1,9 @@
+{
+  "name": "expertise-gis",
+  "version": "0.1.0",
+  "description": "Pièges prouvés des outils de carte (GeoServer, GeoTools, PostGIS, SLD, OpenLayers, MapLibre, symbologie OACI/OMM) et mécanique des écrans avec carte : un skill qui trouve la fiche d'un symptôme et écrit le bloc references: d'un cadence.yaml.",
+  "author": { "name": "Sylvain Ladoire" },
+  "homepage": "https://github.com/Sylad/expertise-gis",
+  "repository": "https://github.com/Sylad/expertise-gis",
+  "keywords": ["gis", "geoserver", "postgis", "openlayers", "maplibre", "sld", "symbologie"]
+}

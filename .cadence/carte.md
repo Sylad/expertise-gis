@@ -5,6 +5,7 @@ Pas d'écran : un dépôt de fiches Markdown, la mécanique des écrans avec car
 ## Structure
 - `fiches/<domaine>/<slug>.md` : une fiche par piège (format `docs/format-fiche.md` : titre, Symptôme, Cause, Détection, Geste, Versions concernées, Source, Statut).
 - `fiches/README.md` : index par symptôme, ✅ prouvé / 🔁 à reprouver.
+- `.claude-plugin/{plugin.json,marketplace.json}` + `skills/fiches-gis/` : plugin Claude Code (le dépôt entier, fiches comprises, est copié à l'installation) ; `scripts/fiches.py` (`chercher`, `references`, `domaines`) sans dépendance ; `tests/test_plugin.py`.
 - `tests/test_fiches.py` (unittest, sans dépendance) : format, statut, source (lien ou « vécu » daté), liens internes, index complet, icône ✅/🔁 de l'index = statut de la fiche, « prouvé » exige un lien ou une version 3.x, aucun terme privé dans les fichiers suivis par git.
 
 ## Workflows
@@ -68,3 +69,10 @@ Pas d'écran : un dépôt de fiches Markdown, la mécanique des écrans avec car
 - Modèles de test : l'arrondi est sauté quand la légende n'a aucun seuil numérique (`match`).
 - `tests/test_ecrans_carte.py` : `TestModeleJsRempli` remplit une copie temporaire du modèle JS (juste → vert, faux → rouge, catégoriel → arrondi sauté).
 - `interface.md` : les partages 50/50, 70/30 et la navigation barre / rail sont marqués « * » comme choix du document (non tirés de la page Android citée ; Material 3 non relu).
+
+## Décisions (L5, D-1, 2026-11-16)
+- Le dépôt est à la fois marketplace et plugin (`source: "./"`) : installation identique pour les comptes perso et pro, `/plugin marketplace add Sylad/expertise-gis` puis `/plugin install expertise-gis@expertise-gis` (dépôt public, HTTP 200 sans authentification le 2026-11-16).
+- Un seul skill, `fiches-gis` : chercher la fiche d'un symptôme (mots sans accents ni casse, titre et index comptés double, seuil à la moitié du meilleur score pour qu'un mot commun ne remonte pas toute la collection), puis jouer sa Détection ; écrire le bloc `references:` d'un `cadence.yaml`.
+- Bloc `references:` : une entrée par domaine (`nom`, `url`, `dossier`, `lire_quand`). Adresses du dépôt public par défaut, parce que le bloc est commité dans un projet partagé entre machines ; `--local` (clé `chemin`) pour une session hors ligne. Le schéma exact de la clé `references:` de cadence n'a pas été relu (hors du dépôt) : à aligner si cadence attend d'autres clés.
+- `DOMAINES` (fiches.py) liste chaque dossier de `fiches/` avec ce qu'il couvre ; un dossier ajouté sans entrée fait échouer `test_chaque_dossier_de_fiches_est_un_domaine`.
+- Vérifié : `claude plugin validate .` vert (seul avertissement : pas d'icône), installation réelle dans une configuration isolée (`CLAUDE_CONFIG_DIR`), `plugin details` montre le skill (~160 jetons permanents), script lancé depuis la copie installée.
