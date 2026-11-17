@@ -9,13 +9,15 @@ Deux commandes, sans dépendance :
       Affiche, de la plus pertinente à la moins, le statut (prouvé / à
       reprouver), le chemin local de la fiche et son titre.
 
-  fiches.py references [--domaines a,b] [--racine DOSSIER]
+  fiches.py references [--domaines a,b] [--racine DOSSIER] [--dir DOSSIER]
       Écrit le bloc « references: » à copier dans le cadence.yaml d'un projet,
-      au format que lit cadence run : une liste de { mots: [...], docs: [...] },
-      une entrée par domaine (geoserver, postgis, sld, openlayers, maplibre,
-      symbologie, ecrans-carte). Quand un mot apparaît dans une demande, cadence
-      fait lire les docs ; un doc doit être un fichier présent sur la machine
-      (cadence écarte sans erreur une URL ou un fichier absent).
+      sous la forme unique de cadence (L760) : references: { dir, run: [...] },
+      run étant une liste de { mots: [...], docs: [...] }, une entrée par domaine
+      (geoserver, postgis, sld, openlayers, maplibre, symbologie, ecrans-carte).
+      Quand un mot apparaît dans une demande, cadence run fait lire les docs ; un
+      doc doit être un fichier présent sur la machine (cadence écarte sans erreur
+      une URL ou un fichier absent). dir (dossier des documents de cadence ref)
+      n'est écrit que si --dir est donné : il est propre au projet.
       Les docs visent une copie stable : lancé depuis la copie installée du
       plugin (…/plugins/cache/<place>/<plugin>/<version>/, purgée à chaque mise
       à jour), le script écrit le clone de la place de marché
@@ -215,16 +217,23 @@ def raccourcir(chemin, accueil=None):
         return chemin.as_posix()
 
 
-def references(rac, domaines=None, racine_docs=None):
+def references(rac, domaines=None, racine_docs=None, dir_ref=None):
     """Le bloc YAML « references: » de cadence pour les domaines demandés (tous par défaut).
 
-    Format lu par cadence run (aiguiller) : une liste de { mots: [...], docs: [...] }.
-    racine_docs : la copie que les docs visent (par défaut racine_stable(rac))."""
+    Forme unique lue par cadence run et cadence ref (L760, scripts/references.mjs de cadence) :
+    references: { dir, run: [{ mots: [...], docs: [...] }] }. Une liste directement sous
+    references: est l'ancienne forme de cadence run : cadence la lit encore mais affiche un
+    message de migration, d'où la clé run.
+    racine_docs : la copie que les docs visent (par défaut racine_stable(rac)).
+    dir_ref : references.dir (dossier des documents de cadence ref), écrit s'il est donné."""
     noms = list(DOMAINES) if not domaines else domaines
     inconnus = [n for n in noms if n not in DOMAINES]
     if inconnus:
         raise ValueError(f"domaine(s) inconnu(s) : {', '.join(inconnus)} "
                          f"(connus : {', '.join(DOMAINES)})")
+    if dir_ref is not None and not dir_ref.strip():
+        # cadence refuse un dir vide (« references.dir : chemin attendu »).
+        raise ValueError("--dir : chemin attendu (vide)")
     base = Path(racine_docs) if racine_docs else racine_stable(rac)
     lignes = [
         "# expertise-gis : pièges prouvés des outils de carte, une fiche par piège",
@@ -232,13 +241,17 @@ def references(rac, domaines=None, racine_docs=None):
         "# dans la demande fait lire les docs à cadence run ; l'index est rangé par symptôme.",
         "references:",
     ]
+    if dir_ref is not None:
+        lignes += ["  # cadence ref : dossier de ses documents, hors de tout dépôt Git",
+                   f"  dir: {json.dumps(dir_ref.strip(), ensure_ascii=False)}"]
+    lignes.append("  run:")
     for nom in noms:
         _, quand, mots_cles = DOMAINES[nom]
         docs = [raccourcir(base / d) for d in docs_du_domaine(nom)]
         lignes += [
-            f"  # expertise-gis/{nom} : {quand} ({taille(rac, nom)})",
-            f"  - mots: {json.dumps(mots_cles, ensure_ascii=False)}",
-            f"    docs: {json.dumps(docs, ensure_ascii=False)}",
+            f"    # expertise-gis/{nom} : {quand} ({taille(rac, nom)})",
+            f"    - mots: {json.dumps(mots_cles, ensure_ascii=False)}",
+            f"      docs: {json.dumps(docs, ensure_ascii=False)}",
         ]
     return "\n".join(lignes) + "\n"
 
@@ -247,7 +260,7 @@ def docs_absents(texte):
     """Les docs du bloc qui ne sont pas des fichiers sur cette machine."""
     absents = []
     for ligne in texte.splitlines():
-        m = re.match(r"^    docs: (.+)$", ligne)
+        m = re.match(r"^      docs: (.+)$", ligne)
         if m:
             absents += [d for d in json.loads(m.group(1))
                         if not Path(os.path.expanduser(d)).is_file()]
@@ -265,6 +278,8 @@ def principal(argv=None):
     r.add_argument("--racine", default=None,
                    help="copie visée par les docs (défaut : clone de la place de marché, "
                         "ou ce clone)")
+    r.add_argument("--dir", default=None, dest="dir_ref",
+                   help="references.dir de cadence ref (dossier de ses documents), propre au projet")
     # Ancien nom (0.1.0) : écrit désormais la copie stable, comme le défaut.
     r.add_argument("--local", action="store_true", help=argparse.SUPPRESS)
     sous.add_parser("domaines", help="domaines connus et nombre de fiches")
@@ -284,7 +299,7 @@ def principal(argv=None):
         domaines = [d.strip() for d in args.domaines.split(",") if d.strip()]
         cible = Path(os.path.expanduser(args.racine)).resolve() if args.racine else None
         try:
-            bloc = references(rac, domaines, cible)
+            bloc = references(rac, domaines, cible, args.dir_ref)
         except ValueError as e:
             print(e, file=sys.stderr)
             return 2

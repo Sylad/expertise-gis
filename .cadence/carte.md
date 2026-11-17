@@ -89,3 +89,9 @@ Pas d'écran : un dépôt de fiches Markdown, la mécanique des écrans avec car
 - Tests : `test_front_seulement_en_expression` (sans cadence) ; via la vraie `aiguiller`, `test_demande_frontend_ne_declenche_pas_la_symbologie` (frontend, front-end, front end, « le front de la page », « les fronts des deux applis » → léger) et `test_expressions_de_fronts_declenchent_la_symbologie`.
 - Version du plugin laissée à 0.1.0 (pas encore publiée sous une autre version).
 - Non traité (note de la revue, pas un constat) : « couche » / « carte » du domaine `ecrans-carte` restent larges, choix assumé pour un projet de carte.
+
+## Décisions (L9, forme unique de references:, 2026-11-17)
+- `fiches.py references` écrit `references:` puis `run:` (entrées `- mots` / `docs` indentées dessous) : la forme unique de cadence L760, lue par `cadence run` et `cadence ref` sans message de migration. Plus de liste directement sous `references:`.
+- `dir` n'est écrit qu'avec `--dir <dossier>` (propre au projet, comme le dossier des documents de `cadence ref`) ; un `--dir` vide est refusé (code 2), comme cadence le refuse.
+- SKILL : on garde le `dir` d'un `references:` existant et on ajoute sous son `run:` ; une ancienne liste se déplace sous `run:`. Remplace la consigne « ne colle rien sur la forme objet » de L5.
+- Tests : `bloc_references` lit la nouvelle forme ; `TestLuParCadence` passe par la copie de cadence en service (`~/.local/share/cadence/service`) avant le dépôt voisin, dont le `dist/` peut précéder L760 (constaté : `dist/config.js` du 12-11 refusait `references.run`). Essais : `referencesDuDepot` sans `migration`, `referencesDir` sans avis et `dir` résolu sous `~`, témoin de l'ancienne liste qui déclenche la migration.

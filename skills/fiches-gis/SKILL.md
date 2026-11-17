@@ -47,22 +47,24 @@ python3 "<dossier du skill>/scripts/fiches.py" references --domaines geoserver,s
   charts, ses styles) : GeoServer → `geoserver,sld` ; PostGIS → `postgis` ; OpenLayers →
   `openlayers` ; MapLibre → `maplibre` ; cartes OACI/OMM → `symbologie` ; tout écran avec
   carte → `ecrans-carte`. Sans `--domaines` : tous.
-- Le bloc a le format que lit `cadence run` : une liste de `{ mots: [...], docs: [...] }`.
-  Quand un mot apparaît dans une demande (sans accents ni casse, en mot entier), cadence fait
-  lire les `docs` en entier. Un doc doit être un **fichier présent sur la machine** : cadence
+- Le bloc a la forme unique de `references:` dans cadence (L760), lue par `cadence run` comme
+  par `cadence ref` : `references: { dir, run: [{ mots: [...], docs: [...] }] }`. Quand un mot
+  de `run` apparaît dans une demande (sans accents ni casse, en mot entier), cadence fait lire
+  les `docs` en entier. Un doc doit être un **fichier présent sur la machine** : cadence
   écarte sans erreur une URL ou un fichier absent, et les fiches cessent d'être lues sans que
-  personne ne le voie.
+  personne ne le voie. `dir` (dossier des documents de `cadence ref`, hors de tout dépôt Git)
+  est propre au projet : il n'est écrit qu'avec `--dir <dossier>`.
 - Les `docs` visent le clone de la place de marché,
   `~/.claude/plugins/marketplaces/expertise-gis/…` : sans numéro de version, il survit à
   `claude plugin update` (la copie `plugins/cache/<place>/<plugin>/<version>/` d'où tourne le
   script est purgée à la mise à jour), et `~` le rend identique sur toute machine où le
   plugin est installé. `--racine <dossier>` vise un autre clone. Code de sortie 3 : un doc
   est absent ici ; le dire avant de coller.
-- Colle le bloc dans le `cadence.yaml` du projet. S'il a déjà une liste `references:`, ajoute
-  seulement les entrées qui manquent (repère : le commentaire `# expertise-gis/<domaine>`),
-  sans dupliquer la clé ni toucher aux autres. Si `references:` y est un objet `{ dir: … }`
-  (celui de `cadence ref`), ne colle rien : les deux formes ne cohabitent pas dans cadence,
-  dis-le. Montre le diff avant d'écrire.
+- Colle le bloc dans le `cadence.yaml` du projet, sans dupliquer de clé. Si `references:`
+  existe déjà : garde son `dir` ; sous son `run:`, ajoute seulement les entrées qui manquent
+  (repère : le commentaire `# expertise-gis/<domaine>`), sans toucher aux autres. Si
+  `references:` y est encore une liste (ancienne forme de `cadence run`, que cadence lit avec
+  un message de migration), déplace cette liste sous `run:`. Montre le diff avant d'écrire.
 
 ## Règles
 

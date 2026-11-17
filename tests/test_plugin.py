@@ -4,8 +4,10 @@
 - le skill fiches-gis a son en-tête et cite son script ;
 - chaque domaine de fiches du dépôt est connu du script, et inversement ;
 - « chercher » retrouve la bonne fiche pour des symptômes connus ;
-- « references » écrit le bloc que lit cadence (liste de { mots, docs }, docs = fichiers
-  locaux sans numéro de version), validé par la vraie fonction aiguiller de cadence.
+- « references » écrit le bloc sous la forme unique de cadence (L760) :
+  references: { dir?, run: [{ mots, docs }] }, docs = fichiers locaux sans numéro de version ;
+  lu par le vrai code de cadence run (aiguiller) et de cadence ref (referencesDir), sans
+  message de migration ni refus.
 
 Lancer : python3 -m unittest discover -s tests -v
 """
@@ -37,23 +39,40 @@ def charger_script():
 F = charger_script()
 
 
-def entrees_references(texte):
-    """Lecture minimale du bloc produit, sans PyYAML : [{"mots": [...], "docs": [...]}].
+def bloc_references(texte):
+    """Lecture minimale du bloc produit, sans PyYAML : {"dir"?: ..., "run": [{"mots", "docs"}]}.
 
-    Chaque valeur est une liste en flux écrite en JSON, donc lisible par json.loads ;
-    les commentaires (« # … ») sont ignorés, comme le ferait un lecteur YAML."""
+    Forme unique de cadence (L760) : references: { dir, run: [{ mots, docs }] }. Chaque valeur
+    est écrite en JSON (texte ou liste en flux), donc lisible par json.loads ; les commentaires
+    (« # … ») sont ignorés, comme le ferait un lecteur YAML."""
     lignes = [l for l in texte.splitlines() if not l.lstrip().startswith("#")]
     assert "references:" in lignes, texte
-    entrees = []
+    bloc, entrees = {}, None
     for ligne in lignes[lignes.index("references:") + 1:]:
-        m = re.match(r"^  - (\w+): (.+)$", ligne)
+        m = re.match(r"^  (\w+):(?: (.+))?$", ligne)
         if m:
+            cle, valeur = m.groups()
+            assert cle not in bloc, f"clé en double : {cle}"
+            if cle == "run":
+                assert valeur is None, ligne
+                bloc["run"] = entrees = []
+            else:
+                bloc[cle] = json.loads(valeur)
+            continue
+        m = re.match(r"^    - (\w+): (.+)$", ligne)
+        if m:
+            assert entrees is not None, f"entrée hors de run: {ligne!r}"
             entrees.append({m.group(1): json.loads(m.group(2))})
             continue
-        m = re.match(r"^    (\w+): (.+)$", ligne)
+        m = re.match(r"^      (\w+): (.+)$", ligne)
         assert m and entrees, f"ligne inattendue : {ligne!r}"
         entrees[-1][m.group(1)] = json.loads(m.group(2))
-    return entrees
+    return bloc
+
+
+def entrees_references(texte):
+    """Les entrées de references.run : [{"mots": [...], "docs": [...]}]."""
+    return bloc_references(texte)["run"]
 
 
 def schema_cadence(entrees):
@@ -64,11 +83,14 @@ def schema_cadence(entrees):
 
 
 def depot_cadence():
-    """Le dépôt de cadence (lu, jamais modifié) : CADENCE_RACINE, sinon un voisin nommé cadence."""
-    candidats = [os.environ.get("CADENCE_RACINE", "")] + [
+    """La copie de cadence à essayer (lue, jamais modifiée) : CADENCE_RACINE, sinon la copie en
+    service (~/.local/share/cadence/service, celle que lance la commande cadence), sinon un
+    voisin nommé cadence. Le dist/ d'un dépôt voisin peut être plus ancien que ses sources."""
+    service = Path(os.environ.get("XDG_DATA_HOME") or Path.home() / ".local/share") / "cadence/service"
+    candidats = [os.environ.get("CADENCE_RACINE", ""), str(service)] + [
         str(d / "cadence") for d in (RACINE.parent, RACINE.parent.parent)]
     for c in candidats:
-        if c and (Path(c) / "v2" / "dist" / "run" / "aiguillage.js").exists():
+        if c and all((Path(c) / f).exists() for f in ("v2/dist/run/aiguillage.js", "dist/ref/store.js")):
             return Path(c)
     return None
 
@@ -177,8 +199,8 @@ class TestChercher(unittest.TestCase):
 
 
 class TestReferences(unittest.TestCase):
-    """Le bloc est celui que lit cadence (v2/src/run/aiguillage.ts, aiguiller) :
-    une liste de { mots, docs }, chaque doc un fichier présent sur la machine.
+    """Le bloc est celui que lit cadence (scripts/references.mjs, forme unique de L760) :
+    references: { dir?, run: [{ mots, docs }] }, chaque doc un fichier présent sur la machine.
     Cadence écarte sans erreur un doc absent ou une URL : le test l'interdit."""
 
     def bloc(self, *args, **kw):
@@ -193,6 +215,26 @@ class TestReferences(unittest.TestCase):
             self.assertEqual(set(e), {"mots", "docs"}, e)
             self.assertTrue(e["mots"] and all(isinstance(m, str) and m for m in e["mots"]), e)
             self.assertTrue(e["docs"], e)
+
+    def test_forme_unique_objet_dir_run(self):
+        """Plus de liste directement sous references: (ancienne forme de cadence run, L760)."""
+        texte = self.bloc()
+        self.assertNotRegex(texte, r"(?m)^  - ", "liste directement sous references: (ancienne forme)")
+        bloc = bloc_references(texte)
+        self.assertEqual(set(bloc), {"run"}, "sans --dir, seule la clé run est écrite")
+        self.assertTrue(set(bloc) <= {"dir", "run"})
+
+    def test_dir_ecrit_si_demande(self):
+        bloc = bloc_references(self.bloc(dir_ref="~/kb/references"))
+        self.assertEqual(bloc["dir"], "~/kb/references")
+        self.assertEqual(len(bloc["run"]), len(F.DOMAINES))
+        for vide in ("", "   "):
+            with self.assertRaises(ValueError):
+                self.bloc(dir_ref=vide)
+        sortie = subprocess.run([sys.executable, str(SCRIPT), "references", "--domaines", "sld",
+                                 "--racine", str(RACINE), "--dir", "~/kb/references"],
+                                capture_output=True, text=True, check=True).stdout
+        self.assertEqual(bloc_references(sortie)["dir"], "~/kb/references")
 
     def test_docs_sont_des_fichiers_locaux_existants(self):
         for e in entrees_references(self.bloc()):
@@ -282,9 +324,10 @@ class TestReferences(unittest.TestCase):
             import yaml
         except ImportError:
             self.skipTest("PyYAML absent : la lecture minimale ci-dessus suffit")
-        donnees = yaml.safe_load(self.bloc())
-        self.assertTrue(schema_cadence(donnees["references"]))
-        self.assertEqual(donnees["references"], entrees_references(self.bloc()))
+        for kw in ({}, {"dir_ref": "~/kb/references"}):
+            donnees = yaml.safe_load(self.bloc(**kw))
+            self.assertTrue(schema_cadence(donnees["references"]["run"]))
+            self.assertEqual(donnees["references"], bloc_references(self.bloc(**kw)))
 
     def test_ligne_de_commande(self):
         sortie = subprocess.run([sys.executable, str(SCRIPT), "references", "--domaines",
@@ -295,7 +338,9 @@ class TestReferences(unittest.TestCase):
 
 @unittest.skipUnless(shutil.which("node"), "Node absent")
 class TestLuParCadence(unittest.TestCase):
-    """Le bloc passé à la vraie fonction aiguiller de cadence (v2/dist/run/aiguillage.js)."""
+    """Le bloc lu par le vrai code de cadence : cadence run (v2/dist/run/aiguillage.js,
+    referencesDuDepot et aiguiller) et cadence ref (dist/ref/store.js, referencesDir), qui
+    passent tous deux par scripts/references.mjs. Aucun message de migration, aucun refus."""
 
     def setUp(self):
         self.cadence = depot_cadence()
@@ -311,6 +356,55 @@ class TestLuParCadence(unittest.TestCase):
             sortie = subprocess.run(["node", "-e", code], capture_output=True, text=True, cwd=projet)
         self.assertEqual(sortie.returncode, 0, sortie.stderr)
         return json.loads(sortie.stdout)
+
+    def node(self, bloc, code):
+        """Écrit bloc dans un cadence.yaml jetable et lance code (ESM) ; renvoie le JSON écrit."""
+        with tempfile.TemporaryDirectory() as tmp:
+            projet = Path(tmp) / "projet"
+            projet.mkdir()
+            (projet / "cadence.yaml").write_text(bloc, encoding="utf-8")
+            env = dict(os.environ, HOME=tmp, XDG_DATA_HOME=str(Path(tmp) / "xdg"))
+            sortie = subprocess.run(["node", "--input-type=module", "-e", code, str(projet), tmp],
+                                    capture_output=True, text=True, cwd=projet, env=env)
+        self.assertEqual(sortie.returncode, 0, sortie.stderr)
+        return json.loads(sortie.stdout), tmp
+
+    def lu_par_run(self, bloc):
+        module = (self.cadence / "v2/dist/run/aiguillage.js").as_uri()
+        code = (f"const m = await import({json.dumps(module)});"
+                "process.stdout.write(JSON.stringify(m.referencesDuDepot(process.argv[1])));")
+        return self.node(bloc, code)[0]
+
+    def lu_par_ref(self, bloc):
+        module = (self.cadence / "dist/ref/store.js").as_uri()
+        code = (f"const m = await import({json.dumps(module)});"
+                "const avis = [];"
+                "const projet = process.argv[1];"
+                "const dir = m.referencesDir(projet, projet + '/cadence.yaml', process.env, a => avis.push(a));"
+                "process.stdout.write(JSON.stringify({ dir, avis }));")
+        return self.node(bloc, code)
+
+    def test_cadence_run_lit_le_bloc_sans_migration(self):
+        for kw in ({}, {"dir_ref": "~/kb/references"}):
+            with self.subTest(**kw):
+                lu = self.lu_par_run(F.references(RACINE, racine_docs=RACINE, **kw))
+                self.assertNotIn("migration", lu, lu)
+                self.assertEqual(len(lu["run"]), len(F.DOMAINES))
+                self.assertEqual([e["mots"] for e in lu["run"]], [m for *_, m in F.DOMAINES.values()])
+
+    def test_cadence_ref_lit_le_bloc_sans_migration(self):
+        lu, accueil = self.lu_par_ref(F.references(RACINE, racine_docs=RACINE))
+        self.assertEqual(lu["avis"], [])
+        self.assertEqual(lu["dir"], str(Path(accueil) / "xdg/cadence/references"))
+        lu, accueil = self.lu_par_ref(F.references(RACINE, racine_docs=RACINE, dir_ref="~/kb/references"))
+        self.assertEqual(lu["avis"], [])
+        self.assertEqual(lu["dir"], str(Path(accueil) / "kb/references"))
+
+    def test_ancienne_forme_temoin_de_migration(self):
+        """Témoin : la liste directe sous references: (forme de la 0.1.x) déclenche le message de migration."""
+        ancien = "references:\n  - mots: [\"sld\"]\n    docs: [\"x.md\"]\n"
+        self.assertIn("migration", self.lu_par_run(ancien))
+        self.assertTrue(self.lu_par_ref(ancien)[0]["avis"])
 
     def test_bloc_lu_et_docs_retenus(self):
         bloc = F.references(RACINE, racine_docs=RACINE)

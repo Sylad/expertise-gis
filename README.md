@@ -14,7 +14,7 @@ Une fiche par piège : symptôme, cause, détection, geste, version, source. Rie
 - `.claude-plugin/` — le dépôt est à la fois une marketplace et un plugin Claude Code.
 - `docs/format-fiche.md` — le format d'une fiche et les règles du dépôt public.
 - `tests/test_fiches.py` — vérifie chaque fiche (sections, statut, source, liens, index) et l'absence de termes privés dans tous les fichiers suivis.
-- `tests/test_plugin.py` — vérifie les manifestes du plugin, le skill, la recherche par symptôme et le bloc `references:`, passé à la fonction `aiguiller` de cadence quand son dépôt est à côté (`CADENCE_RACINE`) et Node présent.
+- `tests/test_plugin.py` — vérifie les manifestes du plugin, le skill, la recherche par symptôme et le bloc `references:`, lu par le code de `cadence run` (`aiguiller`) et de `cadence ref` (`referencesDir`) de la copie en service (`~/.local/share/cadence/service`, sinon `CADENCE_RACINE` ou un dépôt voisin) quand Node est présent.
 - `tests/test_ecrans_carte.py` — vérifie les 13 invariants et les règles sourcées d'`ecrans-carte/`, et fait tourner les gabarits (Python, et JavaScript par `node --test` si Node est présent).
 
 ```bash
@@ -42,8 +42,9 @@ python3 <dossier du skill>/scripts/fiches.py chercher capabilities lentes
 python3 <dossier du skill>/scripts/fiches.py references --domaines geoserver,sld,ecrans-carte
 ```
 
-Le bloc `references:` a le format que lit `cadence run` : une liste de
-`{ mots: [...], docs: [...] }` ; un mot de la liste dans une demande fait lire les `docs`.
+Le bloc `references:` a la forme unique de cadence, lue par `cadence run` et `cadence ref` :
+`references: { dir, run: [{ mots: [...], docs: [...] }] }` ; un mot de `run` dans une demande
+fait lire les `docs`. `dir` (dossier de `cadence ref`) n'est écrit qu'avec `--dir <dossier>`.
 Ce sont des fichiers locaux (cadence écarte sans erreur une URL ou un fichier absent), pris
 dans le clone de la place de marché, `~/.claude/plugins/marketplaces/expertise-gis/` : sans
 numéro de version, il survit aux mises à jour du plugin. `--racine <dossier>` vise un autre
