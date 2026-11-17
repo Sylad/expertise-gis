@@ -96,8 +96,9 @@ lots:
     finished: 2026-11-17
   - id: L12
     title: "Verser en fiche la note de montée GeoServer 2.28 → 3.0.1 envoyée au compte pro le 17-11 (maritime docs/notes-montee/2026-11-17-montee-geoserver-3-0-1.md) : compléter fiches/geoserver/montee-2-28-3-a-3-0-2.md ou une fiche voisine, au format des fiches, chaque point avec sa nature de source, rien de propre à un projet (D-1 parent)"
-    status: doing
+    status: done
     estimate: 0.25
     created: 2026-11-17
     started: 2026-11-17
-    review: { date: 2026-11-17, verdict: "non conforme (2 mineurs) : recoupement « matrice » absent de la fiche 3.0.2 ; nature [notes de travail] non donnée par la note au Geste 15 ; 82 tests verts", commit: 84bcb0568d7464f9a68dd3c0f209087c1d3a80ae }
+    review: { date: 2026-11-17, verdict: "conforme : les 2 mineurs corrigés en 6cad6ce (recoupement matrice, nature du Geste 15), relus par le lead ; joué sur mini-blue (essai D-10)", commit: 6cad6ce120eba8272ec49e49772afdb5e5c19d42 }
+    finished: 2026-11-17
