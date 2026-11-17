@@ -29,7 +29,7 @@ marches est une déduction. Les pièges TypeScript 6, Node et NestJS ont leur fi
    refusé ; `disableHostCheck` refusé par le schéma. [notes de version]
 7. `npm install` refusé ou `ng` qui s'arrête : Node ou TypeScript hors des plages de la
    majeure visée (voir Versions concernées). [registre npm, mesure du 2026-11-17]
-8. Plus de cible `lint`, et le `eslint --fix` du crochet de pré-commit plante au premier
+8. Pas de script `lint`, et le `eslint --fix` du crochet de pré-commit plante au premier
    commit d'un `.ts`. [notes de version]
 
 ## Cause
@@ -42,7 +42,8 @@ marches est une déduction. Les pièges TypeScript 6, Node et NestJS ont leur fi
    [doc Angular] [CHANGELOG Angular 22.0.0, relu ici]
 3. 22.0.0 : « Component with undefined `changeDetection` property are now `OnPush` by
    default ». [CHANGELOG Angular 22.0.0, relu ici]
-4. La spec générée ne fournit pas ce que le composant racine réel injecte. [notes de version]
+4. Le composant racine réel demande un fournisseur que la spec générée ne déclare pas.
+   [notes de version]
 5. Délai par défaut de Vitest (5 s) plus court que le chargement d'Angular sous charge.
    [commit]
 6. Le serveur de dev de `@angular/build` vérifie l'hôte ; `disableHostCheck` était l'option du
@@ -51,20 +52,26 @@ marches est une déduction. Les pièges TypeScript 6, Node et NestJS ont leur fi
    en 21.2, `>=6.0 <6.1` (22) ; Node `^20.19 || ^22.12 || >=24` jusqu'en 21,
    `^22.22.3 || ^24.15.0 || >=26.0.0` en 22. [registre npm, mesure du 2026-11-17]
 8. ESLint 9 et suivants ignorent `.eslintrc.json` (configuration « flat » seulement) ; le
-   squelette 22 vient avec ESLint 10. [notes de version]
+   squelette 22 vient avec ESLint 10. [notes de version] [commit]
 
 ## Détection
 1. La suite Vitest le révèle : TestBed lève `ExpressionChangedAfterItHasBeenCheckedError` sur
    un gabarit modifié sans notification. Contrôle final : `zone.js` absent des dépendances,
    des `polyfills` des cibles `build` **et** `test` d'`angular.json`, et des bundles produits
-   (`grep -rl --include='*.js' zone.js dist/` vide ; les bundles sont sous
-   `dist/<projet>/browser/`). [doc Angular] [notes de version]
-2. `grep -rn '\$safeNavigationMigration' src/` après `ng update` vers 22. [doc Angular]
-3. `grep -rL --include='*.ts' changeDetection src/` sur les composants : ceux qui n'en déclarent pas
-   deviennent OnPush. [CHANGELOG Angular 22.0.0, relu ici]
-4. `npm test` sur un projet neuf. [notes de version]
-5. Lancer la suite pendant un build d'image en parallèle. [commit]
-6. Ouvrir l'application de dev par le nom d'hôte de destination. [notes de version]
+   [doc Angular] [notes de version]. Commande : `grep -rl --include='*.js' zone.js dist/`
+   doit être vide (les bundles sont sous `dist/<projet>/browser/`). [déduction, jouée le
+   2026-11-17 avec GNU grep sur une arborescence témoin]
+2. Après `ng update` vers 22, les expressions enveloppées dans
+   `$safeNavigationMigration(...)` [doc Angular] se listent par
+   `grep -rn '\$safeNavigationMigration' src/`. [déduction]
+3. Composants sans `changeDetection` déclaré, qui deviennent OnPush [CHANGELOG Angular
+   22.0.0, relu ici] : `grep -rl --include='*.ts' '@Component' src/ | xargs -r grep -L
+   changeDetection` (les seuls composants, pas les services ni les specs). [déduction, jouée
+   le 2026-11-17 avec GNU grep sur une arborescence témoin]
+4. `npm test` sur un projet neuf. [déduction, d'après le symptôme 4]
+5. Lancer la suite pendant un build d'image en parallèle. [déduction, d'après le symptôme 5]
+6. Ouvrir l'application de dev par le nom d'hôte de destination. [déduction, d'après le
+   symptôme 6]
 7. `npm view @angular/core@<majeure> engines` et
    `npm view @angular/compiler-cli@<majeure> peerDependencies.typescript`.
    [registre npm, mesure du 2026-11-17]
@@ -92,7 +99,7 @@ marches est une déduction. Les pièges TypeScript 6, Node et NestJS ont leur fi
    [notes de version]
 6. `testTimeout: 30_000` et `hookTimeout: 30_000` dans le fichier Vitest relié par
    `runnerConfig` ; un test bloqué échoue toujours, à 30 s. [commit, notes de version]
-7. `serve.options.allowedHosts: true` (ou la liste des hôtes) dans `angular.json`.
+7. `serve.options.allowedHosts: true` dans `angular.json`.
    [notes de version]
 8. Karma → Vitest (expérimental sur un projet existant, exige le constructeur
    `application`) : la cible `test` de `@angular/build:unit-test` n'accepte plus `polyfills`,
@@ -142,4 +149,5 @@ applications nées en 22) ; Angular 20.3.35, 21.2.26, 22.2.6 (plages relues au r
   `npm view @angular/compiler-cli@{20.3,21.0.0,21,22} peerDependencies.typescript`.
 
 ## Statut
-prouvé — sauf l'ordre des marches et le point 2 du Geste, déductions jamais jouées.
+prouvé — sauf l'ordre des marches et le point 2 du Geste, déductions jamais jouées ; les
+commandes de détection sont ajoutées ici (`[déduction]`), la note n'en donne pas.

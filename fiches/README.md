@@ -106,7 +106,7 @@ gabarits de tests légende = rendu) sont dans [`ecrans-carte/`](../ecrans-carte/
 - ✅ Angular 20 → 22 : écran figé sans zone.js, `?.` qui rend `undefined`, OnPush par défaut, `NG0201`, `403 Blocked request` → [montee-20-a-22-zoneless-signal-forms](angular/montee-20-a-22-zoneless-signal-forms.md)
 - ✅ TypeScript 6 : `TS5101` sur `baseUrl`, `TS2882` sur un import à effet de bord d'un fichier qui existe → [montee-5-9-a-6-baseurl-et-imports-a-effet-de-bord](typescript/montee-5-9-a-6-baseurl-et-imports-a-effet-de-bord.md)
 - ✅ Node 24 : contrôle « Node ≥ 22.12 » vert, CLI Angular 22 qui refuse le Node → [montee-node-24-plages-engines-des-outils](nodejs/montee-node-24-plages-engines-des-outils.md)
-- ✅ NestJS 12 : alias `paths` introuvables à l'exécution, `__dirname is not defined`, `nest-winston` refusé → [montee-12-modules-es](nestjs/montee-12-modules-es.md)
+- ✅ NestJS 12 : alias `paths` introuvables à l'exécution, `__dirname is not defined`, `nest-winston` 1.x refusé → [montee-12-modules-es](nestjs/montee-12-modules-es.md)
 
 ## PostgreSQL / PostGIS / TimescaleDB
 

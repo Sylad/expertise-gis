@@ -5,34 +5,35 @@ Fiche de montée de version. Natures de source entre crochets : [commit] / [note
 [registre npm, mesure du 2026-11-17] = recontrôlé pour cette fiche.
 
 ## Symptôme
-1. Un contrôle de prérequis du projet (« Node ≥ 22.12 ») passe, puis `ng` ou `npm ci`
-   refuse le Node présent : la CLI 22 exige `^22.22.3 || ^24.15.0 || >=26.0.0`.
+1. Un contrôle de prérequis codé en dur (« Node ≥ 22.12 ») passe, puis la CLI Angular 22
+   refuse le Node présent : elle exige `^22.22.3 || ^24.15.0 || >=26.0.0`.
    [notes de version] [registre npm, mesure du 2026-11-17]
 2. Chaque exécution de CI avertit d'un forçage sur Node 24 des actions `checkout` /
    `setup-node` v4. [notes de version]
-3. La porte de tests lancée par un script (hook, tâche planifiée) échoue ou passe sous un
-   autre Node que celui du développeur. [commit]
+3. Un script de test lancé hors du shell interactif tourne sous le Node du `PATH` courant,
+   pas sous celui de `.nvmrc`. [commit]
 
 ## Cause
 1. La plage `engines.node` change à chaque majeure de l'outil : Angular 20 et 21 acceptent
    `^20.19.0 || ^22.12.0 || >=24.0.0`, Angular 22 (core et CLI)
    `^22.22.3 || ^24.15.0 || >=26.0.0` ; un seuil recopié une fois devient faux.
    [registre npm, mesure du 2026-11-17]
-2. Les actions v4 visent Node 20, déprécié par le service de CI. [notes de version]
-3. Un script lancé hors du shell interactif prend le Node du `PATH` courant, pas celui de
-   `.nvmrc` (nvm n'est chargé que par le shell interactif). [commit]
+2. Les actions v4 visent Node 20, déprécié. [notes de version]
+3. Hors du shell interactif, c'est le `PATH` courant qui choisit le Node ; rien n'y lit
+   `.nvmrc`. [commit]
 
 ## Détection
 1. `npm view @angular/cli@<majeure> engines.node` et
    `node -p "require('@angular/cli/package.json').engines.node"` dans le projet, comparés à
    `node --version`. [registre npm, mesure du 2026-11-17]
-2. Journal de la CI : avertissement de forçage de version de Node. [notes de version]
-3. `node --version` écrit en tête de la porte de tests, comparé à `.nvmrc`. [commit]
+2. Journal de la CI : avertissement de forçage de version de Node. [déduction, d'après le
+   symptôme 2]
+3. `node --version` écrit en tête de la porte de tests, comparé à `.nvmrc`. [déduction]
 
 ## Geste
 1. Lire la plage `engines.node` de l'outil installé au lieu d'un seuil codé en dur ;
-   `.nvmrc` = la majeure validée (24) ; `engines.node` du projet recopié de la CLI ; Dockerfile
-   et CI suivent `.nvmrc`. [notes de version]
+   `.nvmrc` = la majeure validée (24) ; Dockerfile et CI suivent `.nvmrc`. [notes de version]
+   `engines.node` du projet recopié de la CLI. [commit]
 2. Actions `checkout` / `setup-node` en v7. [notes de version]
 3. La porte de tests met explicitement le Node de `.nvmrc` en tête du `PATH`. [commit]
 4. Monter Node **avant** Angular 22 : 20 et 21 acceptent déjà Node 24, 22 refuse un

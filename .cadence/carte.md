@@ -109,3 +109,10 @@ Pas d'écran : un dépôt de fiches Markdown, la mécanique des écrans avec car
 - Nouvelle nature `[fiche <slug>]` (règle dans `docs/format-fiche.md`, test `test_nature_empruntee_a_une_fiche_existe` : le slug existe).
 - Angular : Détections 1 et 3 en `grep -r --include` (jouées sur une arborescence témoin) ; `test_commandes_sans_globstar` refuse `**/` dans toute commande d'une fiche.
 - `.termes-prives` recréé dans ce clone (ignoré par git), sans le nom de l'auteur, qui figure à dessein dans les manifestes du plugin.
+
+## Décisions (seconde revue L11, 2026-11-17)
+- Chaque point des cinq fiches de montée relu contre la section « pro — 2026-11-17 13:20 » de la note. Une détection que la note ne donne pas (commande, reproduction du symptôme) porte `[déduction]`, éventuellement « d'après le symptôme / la cause n » ; une précision absente de la note est retirée (GeoServer Détection 4 « refus nommant le champ », Angular Geste 7 « liste des hôtes », Node « nvm », « npm ci refuse », « service de CI ») ; `[code source]` sans relecture propre remplacé par la nature de la note (`[commit] [notes de version]`, GEOS-12235).
+- TypeScript Détection 3 : le TS2882 apparaît sur un clone neuf (le dossier de travail le cache) ; `CI=1` sert à l'attribuer au cache.
+- NestJS : `nest-winston` 2.0.0 (2026-09-14) accepte `@nestjs/common ^12` au registre ; le refus vécu est attribué aux 1.x (déduction), titre et index disent « 1.x ».
+- Commandes rejouées avec GNU grep (`/usr/bin/grep`, le `grep` de session est ugrep) : NestJS Détection 2 voit aussi les guillemets doubles, Angular Détection 3 ne liste que les fichiers `@Component`.
+- Aucun test ajouté : la justesse d'une nature se juge contre la note, qui n'est pas dans le dépôt.

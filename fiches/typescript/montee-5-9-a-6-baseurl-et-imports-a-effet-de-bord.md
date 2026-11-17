@@ -35,14 +35,20 @@ minimal.
    [mesure du 2026-11-17]
 2. `grep -n baseUrl tsconfig*.json` et, dans `paths`, toute valeur qui ne commence pas par
    `./`. [mesure du 2026-11-17]
-3. Rejouer le build sur un clone neuf, ou avec `CI=1` (désactive tout le cache de
-   `@angular/build` pour une commande) : si l'erreur disparaît, c'est le cache. [commit]
+3. Valider sur un **clone neuf** (`npm ci`, `npm run build`, tests, lint), pas seulement
+   dans le dossier de travail : c'est sur le clone neuf que le TS2882 apparaît, le dossier
+   de travail le cachait. Un worktree git partage le cache du dépôt principal (cause 3).
+   [commit] Pour attribuer l'erreur au cache : rejouer la même commande avec `CI=1`, qui
+   désactive tout le cache de `@angular/build` pour une commande [commit] ; si le TS2882
+   disparaît alors que le fichier généré existe, c'est un vieux diagnostic rejoué.
+   [déduction]
 
 ## Geste
 1. Retirer `baseUrl` et écrire les `paths` relatifs au tsconfig :
    `"@core/*": ["./src/app/core/*"]`, dans chaque tsconfig (racine, app, spec). La forme
-   relative compile sous 5.9, 6.0 et 7.0 : la faire dès la 5.9. `"ignoreDeprecations": "6.0"`
-   ne fait que reporter à la 7. [commit] [mesure du 2026-11-17]
+   relative est vérifiée propre sous 5.9 et 7.0.2 [commit], et sous 6.0.3 [mesure du
+   2026-11-17] ; la faire dès la 5.9 [déduction]. `"ignoreDeprecations": "6.0"` ne fait que
+   reporter à la 7 (texte du TS5101). [mesure du 2026-11-17]
 2. Cache qui rejoue : `"incremental": false` dans `tsconfig.json` (les autres caches restent ;
    aucune différence de durée de build mesurée) ; un test unitaire garde l'option. [commit]
 3. Script qui édite un tsconfig : ancrer sur `"compilerOptions": {`, pas sur une clé générée.
