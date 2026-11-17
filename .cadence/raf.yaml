@@ -68,6 +68,11 @@ lots:
     finished: 2026-11-16
   - id: L9
     title: "fiches.py references : écrire le bloc sous la forme unique de references: de cadence (L760, clé run:) — suite de la revue de L760 du 16-11"
-    status: todo
+    status: done
     estimate: 0.1
     created: 2026-11-16
+    started: 2026-11-17
+    review: { date: 2026-11-17, verdict: "conforme : 0 bloquant ; forme { dir, run } lue sans migration par le code en service ; mineur : README.md:17 ordre de recherche de cadence ≠ code (test_plugin.py:89)", commit: 0a96f4c5a8ffe29bcadcf9098c1ea801be89d116 }
+    notes:
+      - { date: 2026-11-17, text: "mineur de revue : README.md:17 donne un ordre de recherche de cadence différent du code (test_plugin.py:89)" }
+    finished: 2026-11-17
