@@ -88,8 +88,9 @@ lots:
     finished: 2026-11-17
   - id: L11
     title: Verser en fiches la note de montée du compte pro (Angular 20→22, GeoServer →3.0.2, boîte 2026-11-17-montee-angular-20.md), au format des fiches existantes, sources citées (D-9 parent)
-    status: doing
+    status: done
     estimate: 0.25
     created: 2026-11-17
     started: 2026-11-17
-    review: { date: 2026-11-17, verdict: "non conforme : seconde revue — 2 majeurs (points [commit]/[notes de version] absents de la note dans 4 fiches ; Détection 3 TypeScript contraire à la note)", commit: 4d7224d2ac5ac84c03cec8ae7402a3ba48b9a9dd }
+    review: { date: 2026-11-17, verdict: "conforme : troisième revue — chaque point des 5 fiches relu contre la note du pro, natures justes, Détection 3 TypeScript dans le sens de la note ; 81 tests ; note : GeoServer D7 à marquer [déduction]", commit: 7840e6c5fabbf2da5c44b96099038259607cd84f }
+    finished: 2026-11-17
