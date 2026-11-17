@@ -136,7 +136,7 @@ MONTEES = {
 SECTIONS_A_POINTS = ("Symptôme", "Cause", "Détection", "Geste")
 NATURE = re.compile(
     r"\[[^\]]*\b(?:commit|notes de version|doc|mesure|runbook|notes de dépannage|"
-    r"conventions du projet|code source|registre npm|CHANGELOG|ticket|déduction)\b[^\]]*\](?!\()")
+    r"conventions du projet|code source|registre npm|CHANGELOG|ticket|fiche|déduction)\b[^\]]*\](?!\()")
 
 
 def points(texte):
@@ -328,6 +328,25 @@ class TestFiches(unittest.TestCase):
         self.assertRegex("- x [registre npm, mesure du 2026-11-17]", NATURE)
         self.assertNotRegex("- voir [la doc](https://angular.dev)", NATURE)
         self.assertNotRegex("- rien", NATURE)
+        self.assertRegex("- x [fiche search-path-schema-sans-usage-ignore]", NATURE)
+
+    def test_nature_empruntee_a_une_fiche_existe(self):
+        """Correction de la revue L11 : un point repris d'une autre fiche du dépôt
+        porte [fiche <slug>], et ce slug désigne une fiche existante."""
+        slugs = {f.stem for f in FICHES.rglob("*.md")}
+        for chemin in MONTEES:
+            texte = (FICHES / chemin).read_text(encoding="utf-8")
+            for slug in re.findall(r"\[fiche ([a-z0-9-]+)\]", texte):
+                with self.subTest(fiche=chemin, slug=slug):
+                    self.assertIn(slug, slugs)
+
+    def test_commandes_sans_globstar(self):
+        """Correction de la revue L11 : bash sans `shopt -s globstar` lit `**` comme `*` ;
+        une commande d'une fiche ne descend dans les dossiers que par `grep -r`/`find`."""
+        for fiche in FICHES.rglob("*.md"):
+            for code in re.findall(r"`([^`\n]+)`", fiche.read_text(encoding="utf-8")):
+                with self.subTest(fiche=fiche.name, code=code):
+                    self.assertNotIn("**/", code)
 
     def test_statut_de_l_index_egal_a_la_fiche(self):
         index = INDEX.read_text(encoding="utf-8")

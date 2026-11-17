@@ -57,9 +57,10 @@ marches est une déduction. Les pièges TypeScript 6, Node et NestJS ont leur fi
 1. La suite Vitest le révèle : TestBed lève `ExpressionChangedAfterItHasBeenCheckedError` sur
    un gabarit modifié sans notification. Contrôle final : `zone.js` absent des dépendances,
    des `polyfills` des cibles `build` **et** `test` d'`angular.json`, et des bundles produits
-   (`grep -l zone.js dist/**/*.js` vide). [doc Angular] [notes de version]
+   (`grep -rl --include='*.js' zone.js dist/` vide ; les bundles sont sous
+   `dist/<projet>/browser/`). [doc Angular] [notes de version]
 2. `grep -rn '\$safeNavigationMigration' src/` après `ng update` vers 22. [doc Angular]
-3. `grep -rLn 'changeDetection' src/**/*.ts` sur les composants : ceux qui n'en déclarent pas
+3. `grep -rL --include='*.ts' changeDetection src/` sur les composants : ceux qui n'en déclarent pas
    deviennent OnPush. [CHANGELOG Angular 22.0.0, relu ici]
 4. `npm test` sur un projet neuf. [notes de version]
 5. Lancer la suite pendant un build d'image en parallèle. [commit]

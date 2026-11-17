@@ -42,9 +42,12 @@ la bibliothèque nommée au titre), au même gabarit : chaque section Symptôme,
 Geste est une liste numérotée (le n° d'un symptôme renvoie à sa cause et à son geste), et
 **chaque point dit la nature de sa source entre crochets** : `[commit]`, `[notes de version]`,
 `[runbook]`, `[notes de dépannage]`, `[mesure]`, `[doc …]`, `[code source …]`, `[ticket …]`,
-`[CHANGELOG …]`, `[registre npm …]`, `[conventions du projet]`, ou `[déduction]` pour ce qui
-n'a été ni lu ni joué. Ce qu'on a recontrôlé soi-même le dit (`relu ici`, `mesure du AAAA-MM-JJ`).
-Contrôlé par `test_fiches_de_montee`.
+`[CHANGELOG …]`, `[registre npm …]`, `[conventions du projet]`, `[fiche <slug>]` pour un point
+repris d'une autre fiche de ce dépôt (le slug doit exister), ou `[déduction]` pour ce qui
+n'a été ni lu ni joué. Une nature venue de la note (`[commit]`, `[runbook]`…) ne s'écrit que
+sur ce que la note dit vraiment ; un point ajouté porte sa propre nature. Ce qu'on a recontrôlé soi-même le dit (`relu ici`, `mesure du AAAA-MM-JJ`).
+Contrôlé par `test_fiches_de_montee` ; `test_commandes_sans_globstar` refuse `**/` dans
+une commande (bash sans `globstar` le lit comme `*`).
 
 ## Les sept sections
 

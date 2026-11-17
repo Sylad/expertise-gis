@@ -2,13 +2,16 @@
 
 Fiche de montée de version. Natures de source entre crochets : [notes de version] = notes
 d'un générateur de projets NestJS remis à niveau sur `@nestjs/cli@latest` ;
-[registre npm, mesure du 2026-11-17] = recontrôlé pour cette fiche. Une seule nature de
+[registre npm, mesure du 2026-11-17] et [mesure du 2026-11-17] = recontrôlé pour cette fiche ;
+[déduction] = ajouté ici, absent de la note. Une seule nature de
 source pour l'essentiel : aucune application NestJS existante montée en 12 n'est attestée.
 
 ## Symptôme
 1. Le build passe, l'exécution échoue sur un import d'alias (`@logger/…`) : module
    introuvable. [notes de version]
-2. `__dirname is not defined` ; imports relatifs sans extension refusés. [notes de version]
+2. `ReferenceError: __dirname is not defined in ES module scope` ; import relatif sans
+   extension refusé : `Error [ERR_MODULE_NOT_FOUND]: Cannot find module '…/b'`.
+   [mesure du 2026-11-17, Node 22.23 avec `"type": "module"`]
 3. `npm install` refuse `nest-winston` (peer dependency sur NestJS < 12) ; même refus pour
    toute bibliothèque tierce qui n'a pas publié de version compatible. [notes de version]
 
@@ -17,14 +20,16 @@ source pour l'essentiel : aucune application NestJS existante montée en 12 n'es
    `@nestjs/core` 12) avec TypeScript 6, Vitest et oxlint ; `nest build` laisse les alias
    `paths` tels quels, et Node ne les résout pas en ESM.
    [notes de version] [registre npm, mesure du 2026-11-17]
-2. En ESM, ni `__dirname` ni la résolution sans extension. [notes de version]
+2. En ESM, ni `__dirname` ni la résolution sans extension. [doc Node, modules ES]
+   [mesure du 2026-11-17]
 3. `nest-winston` n'est plus maintenu. [notes de version]
 
 ## Détection
 1. `node dist/main.js` (pas seulement `nest build`) après tout changement d'alias.
    [notes de version]
-2. `grep -rn '__dirname\|from '\''\./[^'\'']*'\''' src/` sur les imports sans `.js`.
-   [notes de version]
+2. `grep -rnE "__dirname|from '\.{1,2}/[^']*'" src/ | grep -vE "from '[^']*\.js'"` :
+   `__dirname` et imports relatifs sans `.js` seulement. [déduction, commande jouée le
+   2026-11-17 sur un fichier témoin]
 3. `npm ls --all 2>&1 | grep -i 'peer'` ou `npm view <bibliothèque> peerDependencies`.
    [registre npm, mesure du 2026-11-17]
 
