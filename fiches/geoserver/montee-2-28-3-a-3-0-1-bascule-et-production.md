@@ -155,8 +155,8 @@ des comportements de 3.0.1, pas forcément des régressions.
     moteur raster ayant changé (ImageN) [commit]. Derrière un CDN, en-tête
     `geowebcache-cache-result` lu avec un paramètre non déclaré dans les `parameterFilters` :
     `MISS` puis `HIT`, et `HIT` sur chaque réplica [notes de travail] [mesure] [fiche
-    cdn-rejoue-en-tete-gwc]. Non mesurés : durée d'indisponibilité, retour arrière réel.
-    [notes de travail]
+    cdn-rejoue-en-tete-gwc]. Non mesurés : durée d'indisponibilité, retour arrière réel en
+    2.28 (non attestés, dit la note).
 
 ## Versions concernées
 GeoServer 2.28.3 → 3.0.1 (vécu, bascule le 2026-09-08 puis production jusqu'au 2026-11) ;

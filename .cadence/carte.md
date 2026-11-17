@@ -124,3 +124,8 @@ Pas d'écran : un dépôt de fiches Markdown, la mécanique des écrans avec car
 - Fiche 3.0.2 : renvoi en tête, nuances aux Symptôme 8, Geste 10 et Geste 21 (`[fiche …]`), versions 2.28.3 ajoutées ; fiches de piège voisines non modifiées.
 - Test : `MONTEES` + la voisine ; `test_seconde_note_geoserver_situee`.
 - `.termes-prives` absent du clone : copié depuis le dépôt principal (ignoré par git).
+
+## Décisions (correction de la revue L12, 2026-11-17)
+- Fiche 3.0.2, Geste 12 : la matrice couche × style complète trois fois et le rendu au pixel, repris de la seconde note `[fiche montee-2-28-3-a-3-0-1-bascule-et-production]`, avec la réserve « même recette probable, pas une confirmation indépendante ». Le recoupement annoncé par la Source de la voisine existe donc dans la fiche.
+- Voisine, Geste 15 : « Non mesurés » ne porte plus `[notes de travail]` (la note ne donne aucune nature à cette ligne) mais le mot de la note, « non attestés », sans crochets (pas de nature neuve).
+- Test `test_corrections_revue_l12`. `.termes-prives` recopié depuis le dépôt principal (ignoré par git).

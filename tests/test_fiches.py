@@ -345,6 +345,18 @@ class TestFiches(unittest.TestCase):
         self.assertRegex(voisine, r"(?i)pas une confirmation indépendante")
         self.assertIn("](montee-2-28-3-a-3-0-1-bascule-et-production.md)", existante)
 
+    def test_corrections_revue_l12(self):
+        """Revue L12 : la matrice couche × style, annoncée comme recoupement, figure
+        dans la fiche 3.0.2 ; « Non mesurés » du Geste 15 ne porte pas [notes de
+        travail], que la note ne lui donne pas, mais son mot : « non attesté »."""
+        voisine = (FICHES / "geoserver/montee-2-28-3-a-3-0-1-bascule-et-production.md").read_text(encoding="utf-8")
+        existante = (FICHES / "geoserver/montee-2-28-3-a-3-0-2.md").read_text(encoding="utf-8")
+        self.assertIn("matrice couche × style", existante)
+        geste = sections(voisine)[1]["Geste"]
+        fin = " ".join(geste[geste.index("Non mesurés"):].split())
+        self.assertNotIn("[notes de travail]", fin)
+        self.assertIn("non attesté", fin)
+
     def test_nature_empruntee_a_une_fiche_existe(self):
         """Correction de la revue L11 : un point repris d'une autre fiche du dépôt
         porte [fiche <slug>], et ce slug désigne une fiche existante."""
