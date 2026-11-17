@@ -1,6 +1,6 @@
 ---
 name: fiches-gis
-description: Trouve et sert les fiches d'expertise-gis — pièges prouvés de GeoServer, GeoTools, GeoWebCache, PostGIS, SLD, OpenLayers, MapLibre, symbologie OACI/OMM (SIGWX, fronts, modèle de station, SIGMET) et les 13 invariants d'un écran avec carte — et écrit le bloc « references: » prêt à copier dans le cadence.yaml d'un projet. À utiliser AVANT de diagnostiquer un symptôme de carte (image vide ou fausse, erreur WMS, TIME faux, capabilities lentes, style ignoré, objets mal placés, légende fausse, barbules ou fronts mal dessinés), et quand on demande « ajoute les références GIS au cadence.yaml », « quelles fiches pour ce projet ».
+description: Trouve et sert les fiches d'expertise-gis — pièges prouvés de GeoServer, GeoTools, GeoWebCache, PostGIS, SLD, OpenLayers, MapLibre, symbologie OACI/OMM (SIGWX, fronts, modèle de station, SIGMET), montées de version (Angular, TypeScript, Node, NestJS, GeoServer) et les 13 invariants d'un écran avec carte — et écrit le bloc « references: » prêt à copier dans le cadence.yaml d'un projet. À utiliser AVANT de diagnostiquer un symptôme de carte (image vide ou fausse, erreur WMS, TIME faux, capabilities lentes, style ignoré, objets mal placés, légende fausse, barbules ou fronts mal dessinés), et quand on demande « ajoute les références GIS au cadence.yaml », « quelles fiches pour ce projet ».
 ---
 
 # fiches-gis
@@ -45,8 +45,9 @@ python3 "<dossier du skill>/scripts/fiches.py" references --domaines geoserver,s
 
 - Choisis les domaines d'après la pile du projet (lis son `package.json`, `pom.xml`, ses
   charts, ses styles) : GeoServer → `geoserver,sld` ; PostGIS → `postgis` ; OpenLayers →
-  `openlayers` ; MapLibre → `maplibre` ; cartes OACI/OMM → `symbologie` ; tout écran avec
-  carte → `ecrans-carte`. Sans `--domaines` : tous.
+  `openlayers` ; MapLibre → `maplibre` ; cartes OACI/OMM → `symbologie` ; front Angular /
+  TypeScript / Node / NestJS → `angular,typescript,nodejs,nestjs` (fiches de montée de
+  version) ; tout écran avec carte → `ecrans-carte`. Sans `--domaines` : tous.
 - Le bloc a la forme unique de `references:` dans cadence (L760), lue par `cadence run` comme
   par `cadence ref` : `references: { dir, run: [{ mots: [...], docs: [...] }] }`. Quand un mot
   de `run` apparaît dans une demande (sans accents ni casse, en mot entier), cadence fait lire

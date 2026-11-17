@@ -1,12 +1,12 @@
 # expertise-gis
 
-Savoir générique et prouvé sur les outils de carte (GeoServer, GeoTools, PostGIS, OpenLayers, MapLibre, symbologie OACI/OMM) et sur la mécanique des écrans avec carte, partagé par des sessions Claude.
+Savoir générique et prouvé sur les outils de carte (GeoServer, GeoTools, PostGIS, OpenLayers, MapLibre, symbologie OACI/OMM), sur les montées de version de leur pile (Angular, TypeScript, Node, NestJS, GeoServer) et sur la mécanique des écrans avec carte, partagé par des sessions Claude.
 
 Une fiche par piège : symptôme, cause, détection, geste, version, source. Rien de propre à un projet, un client ou un employeur.
 
 ## Contenu
 
-- `fiches/<domaine>/<slug>.md` — les fiches (`geoserver`, `postgis`, `sld`, `openlayers`, `maplibre`…, et `symbologie/<sous-domaine>/` pour la symbologie OACI/OMM), indexées par symptôme dans [`fiches/README.md`](fiches/README.md).
+- `fiches/<domaine>/<slug>.md` — les fiches (`geoserver`, `postgis`, `sld`, `openlayers`, `maplibre`, `angular`, `typescript`, `nodejs`, `nestjs`…, et `symbologie/<sous-domaine>/` pour la symbologie OACI/OMM), indexées par symptôme dans [`fiches/README.md`](fiches/README.md).
 - `ecrans-carte/` — la mécanique des écrans avec carte : les 13 invariants (`invariants.md`), les règles d'interface utilisable sur carte et leurs contrôles (`interface.md`), des gabarits de tests légende = rendu, mesure des boîtes et contraste, sans dépendance, à copier dans un projet (`gabarits/`).
 - `skills/fiches-gis/` — le skill du plugin Claude Code : trouve la fiche d'un symptôme
   (`scripts/fiches.py chercher …`) et écrit le bloc `references:` à copier dans le

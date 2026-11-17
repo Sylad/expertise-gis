@@ -259,6 +259,10 @@ class TestReferences(unittest.TestCase):
                              ("openlayers", "décalage OpenLayers en 4326"),
                              ("maplibre", "globe MapLibre vide"),
                              ("symbologie", "barbules à l'envers sur la SIGWX"),
+                             ("angular", "montée Angular 22 sans zone.js"),
+                             ("typescript", "TypeScript 6 refuse baseUrl"),
+                             ("nodejs", "passer à Node 24 partout"),
+                             ("nestjs", "NestJS 12 en modules ES"),
                              ("ecrans-carte", "la légende ne suit pas la carte")]:
             texte = F.normaliser(demande)
             self.assertTrue(any(re.search(rf"(^|[^\w]){re.escape(F.normaliser(m))}($|[^\w])", texte)

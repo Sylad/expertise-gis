@@ -100,6 +100,14 @@ gabarits de tests légende = rendu) sont dans [`ecrans-carte/`](../ecrans-carte/
 - ✅ Lignes de courant agglutinées, différentes d'une tuile à l'autre ; isotaches à 10,29 → [lignes-de-courant-jobard-lefer-et-isotaches](sld/lignes-de-courant-jobard-lefer-et-isotaches.md)
 - ✅ Modèle de station : hampe orpheline, température sans point de rosée → [modele-de-station-desencombrement-atomique](maplibre/modele-de-station-desencombrement-atomique.md)
 
+## Montées de version (une fiche par bibliothèque, chaque point avec sa source)
+
+- ✅ GeoServer 3.0.2 : réplicas en boucle « CP subsystem is a licensed feature », `ip.blacklist` sans effet derrière un proxy, « relation resources already exists » à la migration → [montee-2-28-3-a-3-0-2](geoserver/montee-2-28-3-a-3-0-2.md)
+- ✅ Angular 20 → 22 : écran figé sans zone.js, `?.` qui rend `undefined`, OnPush par défaut, `NG0201`, `403 Blocked request` → [montee-20-a-22-zoneless-signal-forms](angular/montee-20-a-22-zoneless-signal-forms.md)
+- ✅ TypeScript 6 : `TS5101` sur `baseUrl`, `TS2882` sur un import à effet de bord d'un fichier qui existe → [montee-5-9-a-6-baseurl-et-imports-a-effet-de-bord](typescript/montee-5-9-a-6-baseurl-et-imports-a-effet-de-bord.md)
+- ✅ Node 24 : contrôle « Node ≥ 22.12 » vert, CLI Angular 22 qui refuse le Node → [montee-node-24-plages-engines-des-outils](nodejs/montee-node-24-plages-engines-des-outils.md)
+- ✅ NestJS 12 : alias `paths` introuvables à l'exécution, `__dirname is not defined`, `nest-winston` refusé → [montee-12-modules-es](nestjs/montee-12-modules-es.md)
+
 ## PostgreSQL / PostGIS / TimescaleDB
 
 - ✅ Tables créées dans `public` au lieu du schéma voulu → [search-path-schema-sans-usage-ignore](postgis/search-path-schema-sans-usage-ignore.md)

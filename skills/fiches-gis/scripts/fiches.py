@@ -13,7 +13,8 @@ Deux commandes, sans dépendance :
       Écrit le bloc « references: » à copier dans le cadence.yaml d'un projet,
       sous la forme unique de cadence (L760) : references: { dir, run: [...] },
       run étant une liste de { mots: [...], docs: [...] }, une entrée par domaine
-      (geoserver, postgis, sld, openlayers, maplibre, symbologie, ecrans-carte).
+      (geoserver, postgis, sld, openlayers, maplibre, symbologie, angular,
+      typescript, nodejs, nestjs, ecrans-carte).
       Quand un mot apparaît dans une demande, cadence run fait lire les docs ; un
       doc doit être un fichier présent sur la machine (cadence écarte sans erreur
       une URL ou un fichier absent). dir (dossier des documents de cadence ref)
@@ -85,6 +86,26 @@ DOMAINES = {
          "front froid", "fronts froids", "front chaud", "fronts chauds", "front occlus", "fronts occlus",
          "front stationnaire", "fronts stationnaires", "front quasi stationnaire", "fronts quasi stationnaires",
          "cold front", "warm front", "occluded front", "stationary front", "symboles de fronts"],
+    ),
+    "angular": (
+        "fiches/angular",
+        "Angular : montées de version (zoneless, OnPush par défaut, Signal Forms, Vitest, ESLint)",
+        ["angular", "zoneless", "ng update", "signal forms"],
+    ),
+    "typescript": (
+        "fiches/typescript",
+        "TypeScript : montées de version (baseUrl, paths, imports à effet de bord)",
+        ["typescript", "tsconfig", "baseurl"],
+    ),
+    "nodejs": (
+        "fiches/nodejs",
+        "Node.js : montées de version et plages engines des outils (nvmrc, CI)",
+        ["nodejs", "nvmrc", "node 24", "node 22"],
+    ),
+    "nestjs": (
+        "fiches/nestjs",
+        "NestJS : montées de version (modules ES, alias, logger)",
+        ["nestjs"],
     ),
     "ecrans-carte": (
         "ecrans-carte",

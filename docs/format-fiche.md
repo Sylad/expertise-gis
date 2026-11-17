@@ -35,6 +35,17 @@ technique (versions, topologie), jamais le nom d'un projet, d'un client ou d'un 
 prouvé
 ```
 
+## Fiche de montée de version
+
+Une montée de version a **une fiche par bibliothèque** (`fiches/<bibliothèque>/montee-<de>-a-<vers>….md`,
+la bibliothèque nommée au titre), au même gabarit : chaque section Symptôme, Cause, Détection et
+Geste est une liste numérotée (le n° d'un symptôme renvoie à sa cause et à son geste), et
+**chaque point dit la nature de sa source entre crochets** : `[commit]`, `[notes de version]`,
+`[runbook]`, `[notes de dépannage]`, `[mesure]`, `[doc …]`, `[code source …]`, `[ticket …]`,
+`[CHANGELOG …]`, `[registre npm …]`, `[conventions du projet]`, ou `[déduction]` pour ce qui
+n'a été ni lu ni joué. Ce qu'on a recontrôlé soi-même le dit (`relu ici`, `mesure du AAAA-MM-JJ`).
+Contrôlé par `test_fiches_de_montee`.
+
 ## Les sept sections
 
 ## Symptôme

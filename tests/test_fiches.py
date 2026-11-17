@@ -124,6 +124,45 @@ def versions_vecues(texte, motif):
     return [int(m) for m in motif.findall(texte)]
 
 
+# Montées de version (L11) : une fiche par bibliothèque, chaque point avec la
+# nature de sa source entre crochets ([commit], [doc Angular], [mesure]…).
+MONTEES = {
+    "angular/montee-20-a-22-zoneless-signal-forms.md": "Angular",
+    "typescript/montee-5-9-a-6-baseurl-et-imports-a-effet-de-bord.md": "TypeScript",
+    "nodejs/montee-node-24-plages-engines-des-outils.md": "Node",
+    "nestjs/montee-12-modules-es.md": "NestJS",
+    "geoserver/montee-2-28-3-a-3-0-2.md": "GeoServer",
+}
+SECTIONS_A_POINTS = ("Symptôme", "Cause", "Détection", "Geste")
+NATURE = re.compile(
+    r"\[[^\]]*\b(?:commit|notes de version|doc|mesure|runbook|notes de dépannage|"
+    r"conventions du projet|code source|registre npm|CHANGELOG|ticket|déduction)\b[^\]]*\](?!\()")
+
+
+def points(texte):
+    """Points d'une section : chaque puce (ou élément numéroté) avec ses lignes de
+    suite, hors blocs de code."""
+    resultat, courant, dans_code = [], None, False
+    for ligne in texte.splitlines():
+        if ligne.lstrip().startswith("```"):
+            dans_code = not dans_code
+            continue
+        if dans_code:
+            continue
+        if re.match(r"^\s*(?:-|\d+\.)\s+", ligne):
+            if courant is not None:
+                resultat.append(courant)
+            courant = ligne
+        elif courant is not None and ligne.strip():
+            courant += " " + ligne.strip()
+        elif not ligne.strip() and courant is not None:
+            resultat.append(courant)
+            courant = None
+    if courant is not None:
+        resultat.append(courant)
+    return resultat
+
+
 class TestFiches(unittest.TestCase):
     def test_il_y_a_des_fiches(self):
         self.assertTrue(fiches(), "aucune fiche dans fiches/")
@@ -265,6 +304,30 @@ class TestFiches(unittest.TestCase):
             "OpenLayers 9 (vécu) ; OpenLayers 10.11 relu", ol), [9])
         self.assertEqual(versions_vecues(
             "OpenLayers 10.11.0 (code relu et mesure scriptée le 2026-11-16)", ol), [10])
+
+    def test_fiches_de_montee(self):
+        """L11 : une fiche de montée par bibliothèque, chaque point des sections
+        Symptôme, Cause, Détection et Geste cite la nature de sa source."""
+        for chemin, nom in MONTEES.items():
+            fiche = FICHES / chemin
+            with self.subTest(fiche=chemin):
+                self.assertTrue(fiche.exists(), "fiche de montée absente")
+                texte = fiche.read_text(encoding="utf-8")
+                self.assertIn(nom, texte.splitlines()[0], "la bibliothèque est nommée au titre")
+                _, contenu = sections(texte)
+                for s in SECTIONS_A_POINTS:
+                    pts = points(contenu.get(s, ""))
+                    self.assertTrue(pts, f"section « {s} » sans point")
+                    for pt in pts:
+                        self.assertRegex(pt, NATURE, f"point sans nature de source ({s}) : {pt[:90]}")
+
+    def test_points_et_nature(self):
+        self.assertEqual(points("- a [commit]\n  suite\n- b\n\n```\n- code\n```\n1. c [mesure]"),
+                         ["- a [commit] suite", "- b", "1. c [mesure]"])
+        self.assertRegex("- x [doc Angular, relu ici]", NATURE)
+        self.assertRegex("- x [registre npm, mesure du 2026-11-17]", NATURE)
+        self.assertNotRegex("- voir [la doc](https://angular.dev)", NATURE)
+        self.assertNotRegex("- rien", NATURE)
 
     def test_statut_de_l_index_egal_a_la_fiche(self):
         index = INDEX.read_text(encoding="utf-8")
