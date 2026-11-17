@@ -86,3 +86,9 @@ lots:
     notes:
       - { date: 2026-11-17, text: "mineur de revue : fiche Barnes:66 « environ 700 » stations au lieu de 604–668 par créneau de 30 min" }
     finished: 2026-11-17
+  - id: L11
+    title: Verser en fiches la note de montée du compte pro (Angular 20→22, GeoServer →3.0.2, boîte 2026-11-17-montee-angular-20.md), au format des fiches existantes, sources citées (D-9 parent)
+    status: doing
+    estimate: 0.25
+    created: 2026-11-17
+    started: 2026-11-17
