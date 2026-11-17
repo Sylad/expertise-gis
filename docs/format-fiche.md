@@ -41,7 +41,7 @@ Une montée de version a **une fiche par bibliothèque** (`fiches/<bibliothèque
 la bibliothèque nommée au titre), au même gabarit : chaque section Symptôme, Cause, Détection et
 Geste est une liste numérotée (le n° d'un symptôme renvoie à sa cause et à son geste), et
 **chaque point dit la nature de sa source entre crochets** : `[commit]`, `[notes de version]`,
-`[runbook]`, `[notes de dépannage]`, `[mesure]`, `[doc …]`, `[code source …]`, `[ticket …]`,
+`[runbook]`, `[notes de dépannage]`, `[notes de travail]`, `[lecture du code]`, `[mesure]`, `[doc …]`, `[code source …]`, `[ticket …]`,
 `[CHANGELOG …]`, `[registre npm …]`, `[conventions du projet]`, `[fiche <slug>]` pour un point
 repris d'une autre fiche de ce dépôt (le slug doit exister), ou `[déduction]` pour ce qui
 n'a été ni lu ni joué. Une nature venue de la note (`[commit]`, `[runbook]`…) ne s'écrit que

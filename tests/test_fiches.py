@@ -132,11 +132,13 @@ MONTEES = {
     "nodejs/montee-node-24-plages-engines-des-outils.md": "Node",
     "nestjs/montee-12-modules-es.md": "NestJS",
     "geoserver/montee-2-28-3-a-3-0-2.md": "GeoServer",
+    "geoserver/montee-2-28-3-a-3-0-1-bascule-et-production.md": "GeoServer",
 }
 SECTIONS_A_POINTS = ("Symptôme", "Cause", "Détection", "Geste")
 NATURE = re.compile(
     r"\[[^\]]*\b(?:commit|notes de version|doc|mesure|runbook|notes de dépannage|"
-    r"conventions du projet|code source|registre npm|CHANGELOG|ticket|fiche|déduction)\b[^\]]*\](?!\()")
+    r"conventions du projet|code source|registre npm|CHANGELOG|ticket|fiche|déduction|"
+    r"notes de travail|lecture du code)\b[^\]]*\](?!\()")
 
 
 def points(texte):
@@ -329,6 +331,19 @@ class TestFiches(unittest.TestCase):
         self.assertNotRegex("- voir [la doc](https://angular.dev)", NATURE)
         self.assertNotRegex("- rien", NATURE)
         self.assertRegex("- x [fiche search-path-schema-sans-usage-ignore]", NATURE)
+        self.assertRegex("- x [notes de travail]", NATURE)
+        self.assertRegex("- x [commit] [lecture du code]", NATURE)
+
+    def test_seconde_note_geoserver_situee(self):
+        """L12 : la fiche voisine tirée de la seconde note GeoServer dit ce qui recoupe
+        et ce qui contredit la fiche de montée existante, et celle-ci renvoie à elle."""
+        voisine = (FICHES / "geoserver/montee-2-28-3-a-3-0-1-bascule-et-production.md").read_text(encoding="utf-8")
+        existante = (FICHES / "geoserver/montee-2-28-3-a-3-0-2.md").read_text(encoding="utf-8")
+        self.assertIn("](montee-2-28-3-a-3-0-2.md)", voisine)
+        self.assertRegex(voisine, r"(?i)recoupe")
+        self.assertRegex(voisine, r"(?i)contredit")
+        self.assertRegex(voisine, r"(?i)pas une confirmation indépendante")
+        self.assertIn("](montee-2-28-3-a-3-0-1-bascule-et-production.md)", existante)
 
     def test_nature_empruntee_a_une_fiche_existe(self):
         """Correction de la revue L11 : un point repris d'une autre fiche du dépôt

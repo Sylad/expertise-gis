@@ -116,3 +116,11 @@ Pas d'écran : un dépôt de fiches Markdown, la mécanique des écrans avec car
 - NestJS : `nest-winston` 2.0.0 (2026-09-14) accepte `@nestjs/common ^12` au registre ; le refus vécu est attribué aux 1.x (déduction), titre et index disent « 1.x ».
 - Commandes rejouées avec GNU grep (`/usr/bin/grep`, le `grep` de session est ugrep) : NestJS Détection 2 voit aussi les guillemets doubles, Angular Détection 3 ne liste que les fichiers `@Component`.
 - Aucun test ajouté : la justesse d'une nature se juge contre la note, qui n'est pas dans le dépôt.
+
+## Décisions (L12, seconde note de montée GeoServer, 2026-11-17)
+- Fiche voisine `geoserver/montee-2-28-3-a-3-0-1-bascule-et-production` plutôt qu'un ajout à `montee-2-28-3-a-3-0-2` (déjà 21 gestes) : 11 symptômes (cascade WMS à 180 s par fuite de baux du client HTTP de GeoTools 35.1, message de dimension TIME changé, erreur OWS sur deux lignes, `recalculate`, harvest de dossier en 202, `rasterManagers`, process imbriqués, couche absente du catalogue neuf, `$$`, SPI NetCDF et verrous JDBCConfig en 2.28.3) et 15 gestes, dont modules Java 17 sur JVM 21 et `@PostConstruct` non vérifié.
+- Natures exactes de la note : `[commit]` (sha retiré, propre au dépôt de l'émetteur), `[notes de travail]`, `[mesure]`, `[lecture du code]` ; les deux dernières ajoutées à `NATURE` et à `docs/format-fiche.md`. Une détection absente de la note → `[déduction]` ou `[fiche <slug>]`. Rien n'a été relu ici.
+- Source de la voisine : ce qui recoupe (mot pour mot, même recette probable : **pas une confirmation indépendante**) et ce qui contredit la fiche 3.0.2 (palier 2.28.5 jamais en production, versions 2.28.3, 500 « Unknown layer » et JSON indenté non observés, `context.xml` non vérifié lu, plugins Java 17), plus les écarts avec les fiches de piège voisines (202 au lieu de 200, autre cause et autre geste pour `rasterManagers`, récidive NetCDF malgré `indexer.properties`).
+- Fiche 3.0.2 : renvoi en tête, nuances aux Symptôme 8, Geste 10 et Geste 21 (`[fiche …]`), versions 2.28.3 ajoutées ; fiches de piège voisines non modifiées.
+- Test : `MONTEES` + la voisine ; `test_seconde_note_geoserver_situee`.
+- `.termes-prives` absent du clone : copié depuis le dépôt principal (ignoré par git).

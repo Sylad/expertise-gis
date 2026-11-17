@@ -103,6 +103,7 @@ gabarits de tests légende = rendu) sont dans [`ecrans-carte/`](../ecrans-carte/
 ## Montées de version (une fiche par bibliothèque, chaque point avec sa source)
 
 - ✅ GeoServer 3.0.2 : réplicas en boucle « CP subsystem is a licensed feature », `ip.blacklist` sans effet derrière un proxy, « relation resources already exists » à la migration → [montee-2-28-3-a-3-0-2](geoserver/montee-2-28-3-a-3-0-2.md)
+- ✅ GeoServer 3.0.1 en production : cascade WMS à 180 s (baux HTTP qui fuient), « Could not find a match for 'time' value », erreur OWS sur deux lignes, harvest de dossier en 202 sans indexation → [montee-2-28-3-a-3-0-1-bascule-et-production](geoserver/montee-2-28-3-a-3-0-1-bascule-et-production.md)
 - ✅ Angular 20 → 22 : écran figé sans zone.js, `?.` qui rend `undefined`, OnPush par défaut, `NG0201`, `403 Blocked request` → [montee-20-a-22-zoneless-signal-forms](angular/montee-20-a-22-zoneless-signal-forms.md)
 - ✅ TypeScript 6 : `TS5101` sur `baseUrl`, `TS2882` sur un import à effet de bord d'un fichier qui existe → [montee-5-9-a-6-baseurl-et-imports-a-effet-de-bord](typescript/montee-5-9-a-6-baseurl-et-imports-a-effet-de-bord.md)
 - ✅ Node 24 : contrôle « Node ≥ 22.12 » vert, CLI Angular 22 qui refuse le Node → [montee-node-24-plages-engines-des-outils](nodejs/montee-node-24-plages-engines-des-outils.md)
