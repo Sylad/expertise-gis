@@ -87,11 +87,18 @@ gabarits de tests légende = rendu) sont dans [`ecrans-carte/`](../ecrans-carte/
 
 - ✅ Transformation maison : `data` nul ou « Parameter data is missing » → [transformation-raster-coverage-source-non-injecte](geoserver/transformation-raster-coverage-source-non-injecte.md)
 - ✅ Transformation sur vecteur : emprise infinie ou attribut nul → [transformation-vecteur-invertquery](geoserver/transformation-vecteur-invertquery.md)
-- 🔁 Transformations imbriquées : l'intérieure ne reçoit rien → [transformations-imbriquees-sans-injection](sld/transformations-imbriquees-sans-injection.md)
+- ✅ Transformations imbriquées : l'intérieure ne reçoit rien, « Parameter data is missing » → [transformations-imbriquees-sans-injection](sld/transformations-imbriquees-sans-injection.md)
 - ✅ Processus absent des capabilities WPS, « Unable to find function » → [processfactory-bean-spring-seul-ignore](geoserver/processfactory-bean-spring-seul-ignore.md)
 - ✅ `MultipleBeansException`, `GWC.get()` nul, application qui ne démarre pas → [plugin-java-recherche-de-beans](geoserver/plugin-java-recherche-de-beans.md)
 - 🔁 `DispatcherCallback` qui ne se déclenche jamais → [dispatchercallback-init-service-et-requete-nuls](geoserver/dispatchercallback-init-service-et-requete-nuls.md)
 - ✅ Messages INFO d'un module invisibles → [journal-plugin-hors-org-geoserver-filtre](geoserver/journal-plugin-hors-org-geoserver-filtre.md)
+
+## Représenter un champ (interpolation, lignes de courant, désencombrement)
+
+- ✅ Champ d'observations éparses : IDW refuse les points, valeurs inventées au large, isoligne « falaise » → [barnes-observations-eparses-en-transformation-de-rendu](sld/barnes-observations-eparses-en-transformation-de-rendu.md)
+- ✅ Valeurs sur grille illisibles, ou interpolées alors que la légende dit « lues » → [valeurs-sur-grille-pas-fixe-et-collision](maplibre/valeurs-sur-grille-pas-fixe-et-collision.md)
+- ✅ Lignes de courant agglutinées, différentes d'une tuile à l'autre ; isotaches à 10,29 → [lignes-de-courant-jobard-lefer-et-isotaches](sld/lignes-de-courant-jobard-lefer-et-isotaches.md)
+- ✅ Modèle de station : hampe orpheline, température sans point de rosée → [modele-de-station-desencombrement-atomique](maplibre/modele-de-station-desencombrement-atomique.md)
 
 ## PostgreSQL / PostGIS / TimescaleDB
 

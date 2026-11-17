@@ -77,7 +77,7 @@ lots:
       - { date: 2026-11-17, text: "mineur de revue : README.md:17 donne un ordre de recherche de cadence différent du code (test_plugin.py:89)" }
     finished: 2026-11-17
   - id: L10
-    title: "Quatre fiches génériques des modes de représentation d'AetherWX (D-7 parent, demande du compte pro du 17-11) : (1) analyse de Barnes sur observations éparses en transformation de rendu (paramètres, NaN hors portée, process unique Barnes+Contour, mesures) ; (2) éclaircissement des valeurs sur grille (pas fixe multiple de la maille native, désencombrement par collision côté client) ; (3) lignes de courant Jobard & Lefer (RK4, dSep, graines, budget) et isotaches ; (4) désencombrement atomique du modèle de station (glouton déterministe, emprise réservée, grille de hachage)"
+    title: "Quatre fiches génériques des modes de représentation d'une carte météo (D-7 parent, demande du compte pro du 17-11) : (1) analyse de Barnes sur observations éparses en transformation de rendu (paramètres, NaN hors portée, process unique Barnes+Contour, mesures) ; (2) éclaircissement des valeurs sur grille (pas fixe multiple de la maille native, désencombrement par collision côté client) ; (3) lignes de courant Jobard & Lefer (RK4, dSep, graines, budget) et isotaches ; (4) désencombrement atomique du modèle de station (glouton déterministe, emprise réservée, grille de hachage)"
     status: doing
     estimate: 0.5
     created: 2026-11-17
