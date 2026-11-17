@@ -92,3 +92,4 @@ lots:
     estimate: 0.25
     created: 2026-11-17
     started: 2026-11-17
+    review: { date: 2026-11-17, verdict: "non conforme : seconde revue — 2 majeurs (points [commit]/[notes de version] absents de la note dans 4 fiches ; Détection 3 TypeScript contraire à la note)", commit: 4d7224d2ac5ac84c03cec8ae7402a3ba48b9a9dd }
