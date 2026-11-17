@@ -100,3 +100,4 @@ lots:
     estimate: 0.25
     created: 2026-11-17
     started: 2026-11-17
+    review: { date: 2026-11-17, verdict: "non conforme (2 mineurs) : recoupement « matrice » absent de la fiche 3.0.2 ; nature [notes de travail] non donnée par la note au Geste 15 ; 82 tests verts", commit: 84bcb0568d7464f9a68dd3c0f209087c1d3a80ae }
