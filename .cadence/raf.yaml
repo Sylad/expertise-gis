@@ -50,9 +50,10 @@ lots:
     finished: 2026-11-16
   - id: L6
     title: Reprendre les mémoires de dépannage d'un autre compte (GeoServer 8 entrées, OpenLayers 4) par l'échange entre sessions, au même format (D-1)
-    status: todo
+    status: doing
     estimate: 0.5
     created: 2026-11-16
+    started: 2026-11-19
   - id: L7
     title: "Banc : 20 questions à réponse connue, session sans puis avec les fiches ; garder les fiches seulement si elles font gagner (D-1)"
     status: todo
