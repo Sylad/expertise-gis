@@ -107,8 +107,11 @@ lots:
     finished: 2026-11-17
   - id: L13
     title: "Suites de la revue de L6 : rendre aux fiches G3, G1, G7, O1, O2 la lettre des notes du compte pro (message « store … sees no table (HTTP 000000) », référence labeling.md:441-443, « regarder l'image ») et marquer en déduction les ajouts (409 par rejeu, borne des reprises, « ou XYZ », « OpenLayers n'y est pour rien ») ; D-1.json remis à 2 espaces ; test ou hook commit-msg qui compare les messages de commit à .termes-prives"
-    status: todo
+    status: done
     estimate: 0.5
     created: 2026-11-19
     notes:
       - { date: 2026-11-19, text: "19-11, Sylvain : l'historique public garde le nom d'hôte (8b400a8, 68acfc1) — « laisse comme ça, c'est juste un nom d'hôte » ; pas de réécriture. Le garde sur les messages de commit reste pour la suite." }
+    started: 2026-11-19
+    review: { date: 2026-11-19, verdict: "conforme : citations du pro mot pour mot, ajouts marqués en déduction, D-1.json même contenu à 2 espaces, hook commit-msg refuse un terme privé (test) ; 96 tests verts ; note : .cadence/carte.md:146 périmée sur D-1.json", commit: 393572b68325ec66a4172806a7828596e55b576d }
+    finished: 2026-11-19
