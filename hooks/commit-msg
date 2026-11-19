@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+"""Hook commit-msg : refuse un message de commit qui contient un terme privé.
+
+Le dépôt est public : un message de commit est publié comme un fichier. Les termes
+viennent, comme pour tests/test_fiches.py, d'EXPERTISE_GIS_TERMES_PRIVES (séparés
+par des virgules) puis du fichier .termes-prives à la racine du dépôt (une
+expression par ligne, « # » pour un commentaire, ignoré par git). Dans un worktree
+qui n'a pas ce fichier, celui du clone principal sert. Sans liste, le commit est
+refusé : on ne peut rien garantir.
+
+Installation : sh hooks/installer.sh (une fois par clone).
+"""
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+MESSAGE_SANS_LISTE = (
+    "aucune liste de termes privés : créer le fichier .termes-prives à la "
+    "racine (une expression par ligne, ignoré par git) ou définir "
+    "EXPERTISE_GIS_TERMES_PRIVES=\"terme1,terme2\""
+)
+CISEAUX = "# ------------------------ >8 ------------------------"
+
+
+def termes_prives(racine, env):
+    """Liste des termes privés : variable d'env puis fichier .termes-prives."""
+    termes = [t.strip() for t in env.get("EXPERTISE_GIS_TERMES_PRIVES", "").split(",")
+              if t.strip()]
+    fichier = Path(racine) / ".termes-prives"
+    if fichier.exists():
+        for ligne in fichier.read_text(encoding="utf-8").splitlines():
+            ligne = ligne.strip()
+            if ligne and not ligne.startswith("#"):
+                termes.append(ligne)
+    return termes
+
+
+def texte_commite(message):
+    """Ce que git garde du message : sans les lignes « # » ni ce qui suit les ciseaux."""
+    lignes = []
+    for ligne in message.splitlines():
+        if ligne.strip() == CISEAUX:
+            break
+        if not ligne.startswith("#"):
+            lignes.append(ligne)
+    return "\n".join(lignes)
+
+
+def termes_trouves(message, termes):
+    bas = message.lower()
+    return [t for t in termes if t.lower() in bas]
+
+
+def git(*args):
+    sortie = subprocess.run(["git", *args], capture_output=True, text=True)
+    return sortie.stdout.strip() if sortie.returncode == 0 else ""
+
+
+def racines():
+    """Racine du worktree courant, puis celle du clone principal."""
+    vues = []
+    haut = git("rev-parse", "--show-toplevel")
+    vues.append(Path(haut) if haut else Path.cwd())
+    commun = git("rev-parse", "--path-format=absolute", "--git-common-dir")
+    if commun and Path(commun).name == ".git":
+        vues.append(Path(commun).parent)
+    return vues
+
+
+def liste_du_depot(env):
+    termes = termes_prives(Path("/nonexistent"), env)
+    for racine in racines():
+        if (racine / ".termes-prives").exists():
+            return termes_prives(racine, env)
+    return termes
+
+
+def main(argv):
+    if len(argv) != 2:
+        print("usage : commit-msg <fichier du message>", file=sys.stderr)
+        return 2
+    termes = liste_du_depot(os.environ)
+    if not termes:
+        print(f"commit refusé : {MESSAGE_SANS_LISTE}", file=sys.stderr)
+        return 1
+    message = texte_commite(Path(argv[1]).read_text(encoding="utf-8", errors="replace"))
+    trouves = termes_trouves(message, termes)
+    if trouves:
+        print("commit refusé : terme privé dans le message (dépôt public) : "
+              + ", ".join(trouves), file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

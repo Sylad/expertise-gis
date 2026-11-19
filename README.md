@@ -15,6 +15,7 @@ Une fiche par piège : symptôme, cause, détection, geste, version, source. Rie
 - `docs/format-fiche.md` — le format d'une fiche et les règles du dépôt public.
 - `tests/test_fiches.py` — vérifie chaque fiche (sections, statut, source, liens, index) et l'absence de termes privés dans tous les fichiers suivis.
 - `tests/test_plugin.py` — vérifie les manifestes du plugin, le skill, la recherche par symptôme et le bloc `references:`, lu par le code de `cadence run` (`aiguiller`) et de `cadence ref` (`referencesDir`) de la copie en service (`~/.local/share/cadence/service`, sinon `CADENCE_RACINE` ou un dépôt voisin) quand Node est présent.
+- `hooks/commit-msg` et `hooks/installer.sh` — refusent un message de commit qui contient un terme privé ; `tests/test_messages_de_commit.py` le prouve sur un vrai `git commit` et relit tout l'historique.
 - `tests/test_ecrans_carte.py` — vérifie les 13 invariants et les règles sourcées d'`ecrans-carte/`, et fait tourner les gabarits (Python, et JavaScript par `node --test` si Node est présent).
 
 ```bash
@@ -51,3 +52,5 @@ numéro de version, il survit aux mises à jour du plugin. `--racine <dossier>` 
 clone ; le script sort avec le code 3 si un doc manque sur la machine.
 
 Termes privés (projets, machines, noms de société…) : aucun n'est écrit dans un fichier suivi par git. Le test les lit dans un fichier `.termes-prives` à la racine (une expression par ligne, ignoré par git) ou dans `EXPERTISE_GIS_TERMES_PRIVES="a,b"`. Sans liste, il échoue en disant quoi faire.
+
+Les messages de commit sont publiés eux aussi : une fois par clone, `sh hooks/installer.sh` pose un hook `commit-msg` qui refuse un message contenant un de ces termes (un worktree sans `.termes-prives` lit celui du clone principal ; sans liste, le commit est refusé). Deux commits de plan déjà publiés portent un nom d'hôte : laissés tels quels (décision du 2026-11-19, pas de réécriture de l'historique), seules exceptions admises par le test.

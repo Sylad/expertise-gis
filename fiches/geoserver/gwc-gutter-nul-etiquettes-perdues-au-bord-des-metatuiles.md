@@ -9,7 +9,7 @@ montre tous les noms, chacun à l'est de son point.
 ## Cause
 La couche tuilée a `<gutter>0</gutter>` et des métatuiles 4×4. GeoTools ne peint pas une
 étiquette qui dépasse l'image rendue (`LabelCacheImpl.java:1419-1422`, sauf `partials` ; doc
-`labeling.md`, option `partials`) : elle est déplacée dans la limite du `maxDisplacement` du
+`labeling.md:441-443`, option `partials`) : elle est déplacée dans la limite du `maxDisplacement` du
 style (20 px, angles E puis W dans le cas vécu ; recherche : `LabelCacheImpl.java:1289-1305`)
 ou abandonnée, le point restant dessiné. Au bord de la métatuile, il n'y a pas de marge pour
 la placer. Preuve (notes) : métatuiles voisines élargies de 100 px puis rognées → noms
@@ -37,10 +37,12 @@ notes de dépannage reçues le 2026-11-19 ; code relu ici le 2026-11-19 au tag G
 ## Source
 - https://github.com/geotools/geotools/blob/35.2/modules/library/render/src/main/java/org/geotools/renderer/label/LabelCacheImpl.java#L1419-L1422
 - https://github.com/geotools/geotools/blob/35.2/modules/library/render/src/main/java/org/geotools/renderer/label/LabelCacheImpl.java#L1289-L1305
-- https://github.com/geoserver/geoserver/blob/3.0.2/doc/en/user/styling/sld/reference/labeling.md (`partials`,
-  `maxDisplacement`)
-- https://github.com/geoserver/geoserver/blob/3.0.2/doc/en/user/geowebcache/webadmin/defaults.md
-  (métatuiles et gutter par défaut des couches tuilées)
+- https://github.com/geoserver/geoserver/blob/3.0.2/doc/en/user/styling/sld/reference/labeling.md?plain=1#L441-L443
+  (`partials`, référence `labeling.md:441-443` des notes ; `maxDisplacement` plus bas dans
+  le même fichier)
+- https://github.com/geoserver/geoserver/blob/3.0.2/doc/en/user/geowebcache/webadmin/defaults.md?plain=1#L137-L139
+  (« Default gutter size », à utiliser avec les métatuiles contre les étiquettes coupées au
+  bord des tuiles ; relu ici le 2026-11-19)
 - Notes de dépannage d'un autre compte, cas « G7 », reçues le 2026-11-19.
 
 ## Statut

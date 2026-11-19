@@ -19,7 +19,8 @@ ne règle pas ces fentes, et, allumée, elle n'en crée pas non plus.
 
 ## Détection
 - Refaire le GetMap hors de l'application, en EPSG:3034 et EPSG:3995, puis en EPSG:4326 :
-  compter les pixels blancs isolés entre la couleur de l'océan et celle des terres. Des
+  compter les pixels blancs isolés entre la couleur de l'océan et celle des terres, et
+  « regarder l'image » (les notes demandent les deux). Des
   pixels en 3034 / 3995 et aucun en 4326 = piège (pour écarter le client, voir
   [fentes-en-projection-conique-chercher-cote-serveur](../openlayers/fentes-en-projection-conique-chercher-cote-serveur.md)).
 - Contre-épreuve (déduction, non jouée par les notes) : la même requête sur la table non
@@ -27,7 +28,8 @@ ne règle pas ces fentes, et, allumée, elle n'en crée pas non plus.
 
 ## Geste
 Densifier les morceaux après la découpe (`ST_Segmentize` sur le résultat de
-`ST_Subdivide`, pas en degrés pour une géométrie en EPSG:4326), ou découper autrement.
+`ST_Subdivide`), ou découper autrement. Unité de la longueur maximale (déduction, absente
+des notes) : en degrés sur une `geometry` en EPSG:4326, en mètres via `::geography`.
 Preuve d'effet attendue : le même comptage de pixels blancs tombe à zéro en 3034 et 3995
 (les notes donnent le geste, pas la mesure après correction).
 

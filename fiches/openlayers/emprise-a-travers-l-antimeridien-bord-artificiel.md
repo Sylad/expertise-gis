@@ -7,9 +7,11 @@ chacun avec un trait vertical à ±180° qui n'existe pas. Une emprise qui finit
 laisse en plus une moitié vide le long de la coupure.
 
 ## Cause
-Pour dessiner l'emprise, le code de l'application la coupe à ±180° en deux rectangles et
-trace **tous** leurs côtés, y compris ceux créés par la coupure. OpenLayers n'y est pour rien :
-c'est le passage d'une emprise « ouest > est » à des géométries qui crée ces côtés.
+Pour dessiner l'emprise, « le code qui dessine le contour » (mots des notes) la coupe à
+±180° en deux rectangles et trace **tous** leurs côtés, y compris ceux créés par la coupure.
+OpenLayers n'y est pour rien (déduction : les notes ne disent pas que ce code est hors
+d'OpenLayers) : c'est le passage d'une emprise « ouest > est » à des géométries qui crée ces
+côtés.
 
 ## Détection
 Tests unitaires de la fonction qui construit le contour, avec des emprises 170° → −180° et
@@ -23,7 +25,7 @@ les tests de la détection passent et le trait à ±180° disparaît de la carte
 
 ## Versions concernées
 OpenLayers 10.11.0 (vécu, rapporté par les notes de dépannage reçues le 2026-11-19).
-Indépendant de la version : le défaut est dans le code de l'application.
+Indépendant de la version si le défaut est hors d'OpenLayers (déduction, voir Cause).
 
 ## Source
 - Notes de dépannage d'un autre compte, cas « O2 », reçues le 2026-11-19 (vécu, corrigé et

@@ -393,6 +393,58 @@ class TestFiches(unittest.TestCase):
         montee = (FICHES / "geoserver/montee-2-28-3-a-3-0-2.md").read_text(encoding="utf-8")
         self.assertIn("interface-web-403-ajax-derriere-une-passerelle.md", montee)
 
+    def test_lettre_des_notes_revue_l6(self):
+        """L13 (revue L6) : les citations des notes du compte pro sont reprises mot
+        pour mot, et chaque ajout de notre cru porte « déduction » dans sa phrase."""
+        def phrase(texte, motif):
+            """La phrase (jusqu'au point ou à la ligne vide) qui contient le motif."""
+            i = texte.find(motif)
+            self.assertGreaterEqual(i, 0, f"absent : {motif}")
+            debut = max(texte.rfind(". ", 0, i), texte.rfind("\n\n", 0, i), 0)
+            fins = [j for j in (texte.find(". ", i), texte.find("\n\n", i)) if j >= 0]
+            return texte[debut:min(fins) if fins else len(texte)]
+
+        cas = {
+            "geoserver/rest-chargement-pendant-un-deploiement-progressif.md": {
+                "cite": ["store … sees no table (HTTP 000000)"],
+                "deduit": ["(`409`)", "jusqu'à une borne", "conditionner aussi les magasins"],
+                "interdit": ["« ne voit aucune table »"],
+            },
+            "postgis/st-subdivide-fentes-blanches-apres-reprojection.md": {
+                "cite": ["« regarder l'image »"],
+                "deduit": ["::geography"],
+                "interdit": ["pas en degrés pour une géométrie"],
+            },
+            "geoserver/gwc-gutter-nul-etiquettes-perdues-au-bord-des-metatuiles.md": {
+                "cite": ["labeling.md:441-443",
+                         "labeling.md?plain=1#L441-L443",
+                         "defaults.md?plain=1#L137-L139"],
+                "deduit": [],
+                "interdit": [],
+            },
+            "openlayers/fentes-en-projection-conique-chercher-cote-serveur.md": {
+                "cite": [],
+                "deduit": ["source XYZ"],
+                "interdit": [],
+            },
+            "openlayers/emprise-a-travers-l-antimeridien-bord-artificiel.md": {
+                "cite": ["« le code qui dessine le contour »"],
+                "deduit": ["OpenLayers n'y est pour rien", "le défaut est hors d'OpenLayers"],
+                "interdit": ["code de l'application"],
+            },
+        }
+        for chemin, attendu in cas.items():
+            texte = (FICHES / chemin).read_text(encoding="utf-8")
+            for motif in attendu["cite"]:
+                with self.subTest(fiche=chemin, cite=motif):
+                    self.assertIn(motif, texte)
+            for motif in attendu["deduit"]:
+                with self.subTest(fiche=chemin, deduit=motif):
+                    self.assertIn("déduction", phrase(texte, motif))
+            for motif in attendu["interdit"]:
+                with self.subTest(fiche=chemin, interdit=motif):
+                    self.assertNotIn(motif, texte)
+
     def test_nature_empruntee_a_une_fiche_existe(self):
         """Correction de la revue L11 : un point repris d'une autre fiche du dépôt
         porte [fiche <slug>], et ce slug désigne une fiche existante."""

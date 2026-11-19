@@ -13,8 +13,9 @@ donc dans l'image servie, par exemple des polygones découpés sans densificatio
 Le mécanisme (projection égale ou absente = aucune reprojection client) est relu dans le
 code : [source-wms-projection-de-la-vue](source-wms-projection-de-la-vue.md).
 
-À l'inverse, une source WMTS ou XYZ sur une grille EPSG:900913 posée sur une vue 3034 est,
-elle, reprojetée dans le navigateur (`ol/reproj`) : là, le client peut être en cause.
+À l'inverse, une source WMTS sur une grille EPSG:900913 posée sur une vue 3034 est, elle,
+reprojetée dans le navigateur (`ol/reproj`) : là, le client peut être en cause. Même chose
+pour une source XYZ (déduction, les notes ne parlent que de WMTS).
 
 ## Détection
 Dans l'onglet réseau, relever le GetMap (vérifier `CRS=` = code de la vue), puis le refaire
