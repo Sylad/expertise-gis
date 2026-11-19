@@ -1,11 +1,13 @@
-# Source WMS hors EPSG:3857 : `projection` dit qui reprojette, la grille vient de la vue, l'ordre des axes reste à vérifier
+# Source WMS hors EPSG:3857 : `projection` dit qui reprojette, la grille vient de la vue, un CRS nord d'abord veut `+axis=neu` en WMS 1.3.0
 
 ## Symptôme
 La vue n'est pas en EPSG:3857 (EPSG:4326, LAEA EPSG:3035, polaire…) et un raster WMS est faux :
 - tuiles posées au mauvais endroit (patchwork de rectangles) sur une `TileWMS` qui a reçu
   un `tileGrid` construit pour une autre projection, sans option `projection` ;
 - image cisaillée ou décalée par rapport au trait de côte (vécu en EPSG:3035, WMS 1.3.0) :
-  la cause de ce cas n'a pas été isolée, voir « Cause ».
+  la cause de ce cas n'a pas été isolée, voir « Cause » ;
+- image décalée ou vide en Lambert conique Europe (EPSG:3034, WMS 1.3.0) : symptôme évité
+  d'avance par `+axis=neu` (notes de dépannage reçues le 2026-11-19, cas « O3 »).
 
 En EPSG:3857 tout est juste, d'où un piège qui n'apparaît qu'au changement de projection.
 
@@ -25,13 +27,19 @@ Lue dans le code d'OpenLayers 10.11.0 et mesurée (script Node, voir « Détecti
 - **Un `tileGrid` fourni sans `projection` sert pour toute vue** (`source/TileImage.js:175`) :
   une grille EPSG:3857 posée sur une vue EPSG:3035 donne des BBOX en mètres Mercator étiquetées
   `CRS=EPSG:3035`, donc des tuiles rendues ailleurs : c'est le patchwork.
-- **Ordre des axes (hypothèse pour le cisaillement vécu, non mesurée côté serveur).** En
-  WMS 1.3.0, OpenLayers n'inverse la BBOX que si l'orientation des axes de la projection
-  commence par `ne` (`source/wms.js:44-58`). Une projection enregistrée par proj4 sans
-  `+axis=neu` est `enu` (défaut documenté de `Projection`) ; or EPSG:3035 est
-  nord d'abord dans le registre EPSG, et WMS 1.3.0 suit l'ordre des axes du CRS. Un serveur
-  qui applique cet ordre lit alors la BBOX à l'envers. Que ce soit la cause du cisaillement
-  vécu n'est pas démontré.
+- **Ordre des axes.** En WMS 1.3.0, OpenLayers n'inverse la BBOX que si l'orientation des
+  axes de la projection commence par `ne` (`source/wms.js:44-58`). Une projection
+  enregistrée par proj4 sans `+axis=neu` est `enu` (défaut documenté de `Projection`) ; la
+  chaîne proj4 d'epsg.io ne donne pas l'ordre des axes. Or EPSG:3035 et EPSG:3034 sont nord
+  d'abord dans le registre EPSG (système de coordonnées 4500 : northing, easting), et
+  EPSG:3995 est est d'abord (rien à ajouter). **Côté GeoServer** (3.0.2, relu ici le
+  2026-11-19), `WMS.toInternalSRS` réécrit en 1.3.0 le code `EPSG:xxxx` en URN OGC
+  (`urn:ogc:def:crs:EPSG::3034`), qui suit l'ordre du registre : la BBOX est lue nord
+  d'abord (`WMS.java:981-997`). Une BBOX est d'abord est donc lue à l'envers. proj4 n'inverse
+  les axes que sur demande (`enforceAxis`), ce qu'OpenLayers ne fait jamais : la carte se
+  dessine toujours est d'abord, `+axis=neu` ne sert qu'à écrire la BBOX 1.3.0 nord d'abord.
+  Que ce soit la cause du cisaillement vécu en EPSG:3035 reste non démontré (cas non
+  rejoué).
 
 ## Détection
 Dans l'onglet réseau, lire `CRS`, `BBOX` et `VERSION` des GetMap :
@@ -59,16 +67,20 @@ cible : l'écart doit rester nul.
   serveur ne sert pas celle de la vue : OpenLayers reprojette alors côté client
   (plus de calcul, bords à vérifier).
 - Ne passer un `tileGrid` à `TileWMS` qu'avec la `projection` dans laquelle il est défini.
-- En WMS 1.3.0 avec un CRS nord d'abord, enregistrer la projection avec `+axis=neu` (ou
-  demander en WMS 1.1.1, ordre est-nord) ; preuve d'effet : la BBOX envoyée commence par le
+- En WMS 1.3.0 avec un CRS nord d'abord (EPSG:3035, EPSG:3034), ajouter `+axis=neu` à la
+  définition proj4 et l'enregistrer (`register(proj4)`) avant toute recherche de la
+  projection (ou demander en WMS 1.1.1, ordre est-nord) ; preuve d'effet : la BBOX envoyée commence par le
   nord et le trait de côte se superpose.
 - La projection de la vue doit être connue d'OpenLayers : voir
   [projection-personnalisee-non-enregistree](projection-personnalisee-non-enregistree.md).
 
 ## Versions concernées
 OpenLayers 10.11.0 (code relu et mesure scriptée le 2026-11-16, tableau ci-dessus) ;
-OpenLayers 10.6 (cisaillement observé en EPSG:3035, cause non isolée). Comportement du
-serveur WMS face à une BBOX est d'abord sous un CRS nord d'abord : non vérifié.
+OpenLayers 10.6 (cisaillement observé en EPSG:3035, cause non isolée) ; OpenLayers 10.11.0
+avec proj4 2.22.0 et `+axis=neu` en EPSG:3034 (vécu, image d'une zone connue regardée,
+rapporté par les notes de dépannage reçues le 2026-11-19). GeoServer 3.0.2 : lecture nord
+d'abord de la BBOX 1.3.0 relue dans le code (`WMS.toInternalSRS`) ; autres serveurs WMS non
+vérifiés.
 
 ## Source
 - https://github.com/openlayers/openlayers/blob/v10.11.0/src/ol/source/Image.js#L225-L237
@@ -79,9 +91,14 @@ serveur WMS face à une BBOX est d'abord sous un CRS nord d'abord : non vérifi�
 - https://openlayers.org/en/latest/apidoc/module-ol_proj_Projection-Projection.html
   (`axisOrientation` : « defaults to 'enu' »)
 - https://epsg.io/3035 (axes : northing (Y), puis easting (X))
+- https://epsg.io/3034 (système de coordonnées 4500 : northing, easting)
+- https://github.com/geoserver/geoserver/blob/3.0.2/src/wms-core/src/main/java/org/geoserver/wms/WMS.java#L981-L997
+- Notes de dépannage d'un autre compte, cas « O3 », reçues le 2026-11-19 (fusionné ici :
+  même piège que cette fiche).
 - vécu 2026-05-14 (OpenLayers 10, vue LAEA EPSG:3035, GetMap servis en EPSG:3857 avec
   reprojection client : rendu juste).
 
 ## Statut
-à reprouver : le mécanisme d'OpenLayers est prouvé par le code et la mesure, mais la cause
-du cisaillement vécu (ordre des axes ?) n'est pas démontrée côté serveur.
+à reprouver : le mécanisme est prouvé des deux côtés (OpenLayers par le code et la mesure,
+GeoServer 3.0.2 par le code), mais le cisaillement vécu en EPSG:3035 n'a pas été rejoué avec
+et sans `+axis=neu` pour en établir la cause.

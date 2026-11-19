@@ -357,6 +357,42 @@ class TestFiches(unittest.TestCase):
         self.assertNotIn("[notes de travail]", fin)
         self.assertIn("non attesté", fin)
 
+    def test_memoires_de_depannage_l6(self):
+        """L6 : les mémoires de dépannage reçues le 2026-11-19 (G1–G7, O1–O4) ont
+        chacune leur fiche, sauf O3 fusionnée dans la fiche existante de l'ordre des
+        axes ; les fiches qui se répondent se citent dans les deux sens."""
+        nouvelles = {
+            "G1": "postgis/st-subdivide-fentes-blanches-apres-reprojection.md",
+            "G2": "geoserver/cog-s3-certificat-servi-expire-pool-bloque.md",
+            "G3": "geoserver/rest-chargement-pendant-un-deploiement-progressif.md",
+            "G4": "geoserver/interface-web-403-ajax-derriere-une-passerelle.md",
+            "G5": "geoserver/raster-float-style-par-defaut-etire-par-tuile.md",
+            "G6": "geoserver/densification-wms-eteinte-bords-en-cordes.md",
+            "G7": "geoserver/gwc-gutter-nul-etiquettes-perdues-au-bord-des-metatuiles.md",
+            "O1": "openlayers/fentes-en-projection-conique-chercher-cote-serveur.md",
+            "O2": "openlayers/emprise-a-travers-l-antimeridien-bord-artificiel.md",
+            "O4": "openlayers/web-mercator-extent-de-vue-bloque-le-glissement.md",
+        }
+        for cas, chemin in nouvelles.items():
+            with self.subTest(cas=cas):
+                self.assertTrue((FICHES / chemin).exists(), f"fiche {cas} absente")
+        texte = {cas: (FICHES / c).read_text(encoding="utf-8") for cas, c in nouvelles.items()
+                 if (FICHES / c).exists()}
+
+        def cite(de, vers):
+            return Path(nouvelles[vers]).name in texte.get(de, "")
+        for de, vers in (("G1", "O1"), ("O1", "G1"), ("G6", "G1"), ("G1", "G6")):
+            with self.subTest(lien=f"{de} → {vers}"):
+                self.assertTrue(cite(de, vers), f"{de} ne renvoie pas à {vers}")
+        # O3 fusionnée : la fiche existante de l'ordre des axes porte EPSG:3034 et la
+        # lecture côté GeoServer ; aucune autre fiche n'est créée pour elle.
+        axes = (FICHES / "openlayers/source-wms-projection-de-la-vue.md").read_text(encoding="utf-8")
+        self.assertIn("EPSG:3034", axes)
+        self.assertIn("toInternalSRS", axes)
+        # G4 répond au point CSRF de la fiche de montée 3.0.2.
+        montee = (FICHES / "geoserver/montee-2-28-3-a-3-0-2.md").read_text(encoding="utf-8")
+        self.assertIn("interface-web-403-ajax-derriere-une-passerelle.md", montee)
+
     def test_nature_empruntee_a_une_fiche_existe(self):
         """Correction de la revue L11 : un point repris d'une autre fiche du dépôt
         porte [fiche <slug>], et ce slug désigne une fiche existante."""

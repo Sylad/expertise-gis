@@ -19,6 +19,10 @@ gabarits de tests légende = rendu) sont dans [`ecrans-carte/`](../ecrans-carte/
 - ✅ Légende (`GetLegendGraphic`) en exception, carte correcte → [getlegendgraphic-attributs-nuls](sld/getlegendgraphic-attributs-nuls.md)
 - ✅ Chaîne construite (WKT) mal formée, espace disparu → [literal-espace-seul-vide](sld/literal-espace-seul-vide.md)
 - ✅ Décoration `legend` qui couvre la carte, « Could not find decoration layout » → [decoration-legend-sans-filtre-de-couches](geoserver/decoration-legend-sans-filtre-de-couches.md)
+- ✅ Fentes blanches entre océan et terre en Lambert ou polaire, image propre en EPSG:4326 → [st-subdivide-fentes-blanches-apres-reprojection](postgis/st-subdivide-fentes-blanches-apres-reprojection.md)
+- ✅ Bords de polygones en segments droits hors EPSG:4326, frontière tracée en double → [densification-wms-eteinte-bords-en-cordes](geoserver/densification-wms-eteinte-bords-en-cordes.md)
+- ✅ Noms de villes absents ou posés sur leur point le long des bords de métatuile WMTS → [gwc-gutter-nul-etiquettes-perdues-au-bord-des-metatuiles](geoserver/gwc-gutter-nul-etiquettes-perdues-au-bord-des-metatuiles.md)
+- ✅ Plus aucune image COG, « Connection Manager failed to acquire a connection » → [cog-s3-certificat-servi-expire-pool-bloque](geoserver/cog-s3-certificat-servi-expire-pool-bloque.md)
 
 ## Le raster est pixelisé ou en escalier
 
@@ -26,6 +30,7 @@ gabarits de tests légende = rendu) sont dans [`ecrans-carte/`](../ecrans-carte/
 - 🔁 Classes de couleur en marches malgré la VendorOption `interpolation` → [interpolation-avant-ou-apres-colormap](geoserver/interpolation-avant-ou-apres-colormap.md)
 - 🔁 Transformation qui produit des blocs, reçoit une couverture suréchantillonnée → [lecture-native-coverage-reading-transformation](geoserver/lecture-native-coverage-reading-transformation.md)
 - 🔁 `ChannelSelection` ou `ContrastEnhancement` sans effet → [ordre-des-elements-rastersymbolizer](sld/ordre-des-elements-rastersymbolizer.md)
+- ✅ Raster Float32 au style par défaut : marche de luminosité entre tuiles voisines → [raster-float-style-par-defaut-etire-par-tuile](geoserver/raster-float-style-par-defaut-etire-par-tuile.md)
 
 ## Le temps (dimension TIME, animation) est faux
 
@@ -66,6 +71,7 @@ gabarits de tests légende = rendu) sont dans [`ecrans-carte/`](../ecrans-carte/
 - ✅ 500 « already exists » juste après un DELETE, réplicas incohérents → [replicas-convergence-du-catalogue](geoserver/replicas-convergence-du-catalogue.md)
 - ✅ Harvest en 500 « rasterManagers is null » une fois sur N → [imagemosaic-rastermanagers-null-sur-un-replica](geoserver/imagemosaic-rastermanagers-null-sur-un-replica.md)
 - ✅ Emprise des capabilities restée l'ancienne, tuiles jamais en cache → [imagemosaic-emprise-declaree-figee](geoserver/imagemosaic-emprise-declaree-figee.md)
+- ✅ Job de chargement REST en `BackoffLimitExceeded` pendant un `helm upgrade`, 409 et 000 → [rest-chargement-pendant-un-deploiement-progressif](geoserver/rest-chargement-pendant-un-deploiement-progressif.md)
 
 ## Données vecteur (WFS, filtres)
 
@@ -77,6 +83,7 @@ gabarits de tests légende = rendu) sont dans [`ecrans-carte/`](../ecrans-carte/
 
 - ✅ Ancien mot de passe admin toujours accepté → [mot-de-passe-admin-jdbcstore](geoserver/mot-de-passe-admin-jdbcstore.md)
 - ✅ `EncryptionOperationNotPossibleException` sur tous les magasins PostGIS → [cle-maitre-perdue-mots-de-passe-illisibles](geoserver/cle-maitre-perdue-mots-de-passe-illisibles.md)
+- ✅ Interface web derrière une passerelle : `403 (Forbidden)` sur chaque action Ajax → [interface-web-403-ajax-derriere-une-passerelle](geoserver/interface-web-403-ajax-derriere-une-passerelle.md)
 
 ## Cache et CDN
 
@@ -119,7 +126,8 @@ gabarits de tests légende = rendu) sont dans [`ecrans-carte/`](../ecrans-carte/
 
 ## Carte côté client : objets mal placés ou absents (OpenLayers, MapLibre)
 
-- 🔁 Raster WMS cisaillé ou tuiles mal posées hors de EPSG:3857 → [source-wms-projection-de-la-vue](openlayers/source-wms-projection-de-la-vue.md)
+- 🔁 Raster WMS cisaillé, décalé ou vide en EPSG:3035 / EPSG:3034 (WMS 1.3.0), tuiles mal posées hors de EPSG:3857 → [source-wms-projection-de-la-vue](openlayers/source-wms-projection-de-la-vue.md)
+- ✅ Fentes blanches dans le fond de carte en Lambert ou polaire : client ou serveur ? → [fentes-en-projection-conique-chercher-cote-serveur](openlayers/fentes-en-projection-conique-chercher-cote-serveur.md)
 - ✅ Entités vecteur décalées dès que la vue n'est pas en EPSG:3857 → [entites-mal-placees-hors-3857](openlayers/entites-mal-placees-hors-3857.md)
 - ✅ Étiquette de zone posée hors de la forme → [etiquette-de-polygone-hors-de-la-forme](maplibre/etiquette-de-polygone-hors-de-la-forme.md)
 - ✅ Vue en EPSG:3035 ou autre : `View` en erreur, carte vide → [projection-personnalisee-non-enregistree](openlayers/projection-personnalisee-non-enregistree.md)
@@ -144,6 +152,11 @@ gabarits de tests légende = rendu) sont dans [`ecrans-carte/`](../ecrans-carte/
 
 - ✅ Animation WMS : rafales de « source image could not be decoded » → [animation-wms-instants-sans-granule](maplibre/animation-wms-instants-sans-granule.md)
 - ✅ Carte figée au dézoom avec des milliers de points → [milliers-de-points-carte-figee](openlayers/milliers-de-points-carte-figee.md)
+
+## Carte côté client : navigation et antiméridien
+
+- ✅ Web Mercator : la carte glisse à peine de côté, centre bloqué au dézoom → [web-mercator-extent-de-vue-bloque-le-glissement](openlayers/web-mercator-extent-de-vue-bloque-le-glissement.md)
+- ✅ Contour d'une emprise qui traverse l'antiméridien : trait artificiel à ±180° → [emprise-a-travers-l-antimeridien-bord-artificiel](openlayers/emprise-a-travers-l-antimeridien-bord-artificiel.md)
 
 ## Carte côté client : couches WebGL personnalisées (MapLibre)
 

@@ -100,5 +100,5 @@ lots:
     estimate: 0.25
     created: 2026-11-17
     started: 2026-11-17
-    review: { date: 2026-11-17, verdict: "conforme : les 2 mineurs corrigés en 6cad6ce (recoupement matrice, nature du Geste 15), relus par le lead ; joué sur mini-blue (essai D-10)", commit: 6cad6ce120eba8272ec49e49772afdb5e5c19d42 }
+    review: { date: 2026-11-17, verdict: "conforme : les 2 mineurs corrigés en 6cad6ce (recoupement matrice, nature du Geste 15), relus par le lead ; joué sur la machine d'outillage (essai D-10)", commit: 6cad6ce120eba8272ec49e49772afdb5e5c19d42 }
     finished: 2026-11-17

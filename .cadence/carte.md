@@ -129,3 +129,13 @@ Pas d'écran : un dépôt de fiches Markdown, la mécanique des écrans avec car
 - Fiche 3.0.2, Geste 12 : la matrice couche × style complète trois fois et le rendu au pixel, repris de la seconde note `[fiche montee-2-28-3-a-3-0-1-bascule-et-production]`, avec la réserve « même recette probable, pas une confirmation indépendante ». Le recoupement annoncé par la Source de la voisine existe donc dans la fiche.
 - Voisine, Geste 15 : « Non mesurés » ne porte plus `[notes de travail]` (la note ne donne aucune nature à cette ligne) mais le mot de la note, « non attestés », sans crochets (pas de nature neuve).
 - Test `test_corrections_revue_l12`. `.termes-prives` recopié depuis le dépôt principal (ignoré par git).
+
+## Décisions (L6, mémoires de dépannage reçues le 2026-11-19)
+- Pièces : `geoserver.md` (G1–G7) et `openlayers.md` (O1–O4) du compte pro. Le titre du lot disait 8 entrées GeoServer : le pro en a écarté une (LayerNotDefined, propre à son environnement).
+- 10 fiches neuves, une par cas : G1 en `postgis/` (cause et geste dans les données : `ST_Subdivide` sans `ST_Segmentize`), G2–G7 en `geoserver/`, O1, O2, O4 en `openlayers/` ; nouvelle section d'index « navigation et antiméridien ».
+- Doublons : O3 (`+axis=neu`, EPSG:3034) fusionnée dans `openlayers/source-wms-projection-de-la-vue` (même piège) : côté GeoServer, `WMS.toInternalSRS` (lu ici) lit la BBOX 1.3.0 nord d'abord ; la fiche reste « à reprouver » (cisaillement vécu en 3035 non rejoué). G4 (CSRF Wicket) prouve les pistes « non appliquées » du point 7 de `montee-2-28-3-a-3-0-2`, qui renvoie à elle. O1 gardée à part (symptôme différent), son mécanisme renvoie à la fiche existante.
+- Liens : G1↔O1, G6↔G1 dans les deux sens ; G3 → `replicas-convergence-du-catalogue`, G5 → `ordre-des-elements-rastersymbolizer`.
+- Références fichier:ligne relues ici le 2026-11-19 aux tags GeoServer 3.0.2, GeoTools 35.2, Wicket 10.11.0, OpenLayers 10.11.0 (écarts de ±2 lignes corrigés aux nôtres) ; mesures et preuves `curl` / Playwright des notes non rejouées. Ce qui vient de moi sans être dans la note est marqué « déduction » ou « explication probable ».
+- Liens de doc vers `github.com/geoserver/geoserver/blob/3.0.2/doc/…` : `docs.geoserver.org/latest/en/user/…*.html` répond 404 le 2026-11-19 (y compris des liens de fiches plus anciennes, non corrigés : hors lot).
+- `.cadence/raf.yaml` : un nom de machine dans un verdict de revue (commit de plan de L12) faisait échouer `test_aucun_terme_interdit` ; remplacé par « la machine d'outillage ». `.termes-prives` recopié depuis le dépôt principal (ignoré par git).
+- Test `test_memoires_de_depannage_l6`.
