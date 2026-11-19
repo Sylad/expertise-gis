@@ -110,3 +110,5 @@ lots:
     status: todo
     estimate: 0.5
     created: 2026-11-19
+    notes:
+      - { date: 2026-11-19, text: "19-11, Sylvain : l'historique public garde le nom d'hôte (8b400a8, 68acfc1) — « laisse comme ça, c'est juste un nom d'hôte » ; pas de réécriture. Le garde sur les messages de commit reste pour la suite." }
