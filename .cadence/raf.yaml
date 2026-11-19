@@ -50,10 +50,12 @@ lots:
     finished: 2026-11-16
   - id: L6
     title: Reprendre les mémoires de dépannage d'un autre compte (GeoServer 8 entrées, OpenLayers 4) par l'échange entre sessions, au même format (D-1)
-    status: doing
+    status: done
     estimate: 0.5
     created: 2026-11-16
     started: 2026-11-19
+    review: { date: 2026-11-19, verdict: "conforme (revue 19-11, 7 mineurs : fidélité G3/G1/G7/O1/O2 non marquée en déduction, D-1.json réindenté, termes privés dans des messages de commit) → L13", commit: 25a231a3a46f6fe9422ab67068a6e3091183964c }
+    finished: 2026-11-19
   - id: L7
     title: "Banc : 20 questions à réponse connue, session sans puis avec les fiches ; garder les fiches seulement si elles font gagner (D-1)"
     status: todo
@@ -103,3 +105,8 @@ lots:
     started: 2026-11-17
     review: { date: 2026-11-17, verdict: "conforme : les 2 mineurs corrigés en 6cad6ce (recoupement matrice, nature du Geste 15), relus par le lead ; joué sur la machine d'outillage (essai D-10)", commit: 6cad6ce120eba8272ec49e49772afdb5e5c19d42 }
     finished: 2026-11-17
+  - id: L13
+    title: "Suites de la revue de L6 : rendre aux fiches G3, G1, G7, O1, O2 la lettre des notes du compte pro (message « store … sees no table (HTTP 000000) », référence labeling.md:441-443, « regarder l'image ») et marquer en déduction les ajouts (409 par rejeu, borne des reprises, « ou XYZ », « OpenLayers n'y est pour rien ») ; D-1.json remis à 2 espaces ; test ou hook commit-msg qui compare les messages de commit à .termes-prives"
+    status: todo
+    estimate: 0.5
+    created: 2026-11-19
